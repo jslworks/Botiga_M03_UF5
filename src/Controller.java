@@ -15,6 +15,17 @@ import err.StockInsuficientException;
 
 public class Controller {
 
+	// Definición colores para prints
+	public static final String TEXT_RESET = "\u001B[0m";
+	public static final String TEXT_BLACK = "\u001B[30m";
+	public static final String TEXT_RED = "\u001B[31m";
+	public static final String TEXT_GREEN = "\u001B[32m";
+	public static final String TEXT_YELLOW = "\u001B[33m";
+	public static final String TEXT_BLUE = "\u001B[34m";
+	public static final String TEXT_PURPLE = "\u001B[35m";
+	public static final String TEXT_CYAN = "\u001B[36m";
+	public static final String TEXT_WHITE = "\u001B[37m";
+
 	static Logger logger = Logger.getLogger("MyLog");
 
 	private ProductDAO<Product> prodDAO = new ProductDAO<Product>();
@@ -24,6 +35,9 @@ public class Controller {
 	public void run() {
 
 		prodDAO.abrirFichero();
+		System.out.println(TEXT_GREEN + "Resultado carga");
+		mostrarProductos(prodDAO);
+		System.out.println(TEXT_RESET);
 
 		try {
 
@@ -94,7 +108,7 @@ public class Controller {
 										if (inputResponse.contains(","))
 											inputResponse.replace(",", ".");
 										price = Double.parseDouble(inputResponse);
-										keyboard.nextLine();
+										// keyboard.nextLine();
 
 										System.out.println("Stock del producto:");
 										stock = keyboard.nextInt();
@@ -201,8 +215,7 @@ public class Controller {
 
 									break;
 								case 5: // Mostrar todos
-									Persistable p = prodDAO;
-									print(p);
+									mostrarProductos(prodDAO);
 									break;
 								case 6: // Agregar stock
 									// Selecciona m�todo manual o autom�tico
@@ -500,12 +513,10 @@ public class Controller {
 									print(p);
 									break;
 							}
-
 						} while (option2 != 0);
 						break;
 				}
 			} while (option != 0);
-
 			keyboard.close();
 		} catch (RuntimeException ex) {
 			logger.log(Level.SEVERE, "Problema greu", ex);
@@ -515,7 +526,15 @@ public class Controller {
 			ex.printStackTrace();
 		} finally {
 			ProductDAO.guardarFichero();
+			System.out.println(TEXT_GREEN + "Resultado guardado");
+			mostrarProductos(prodDAO);
+			System.out.println(TEXT_RESET);
 		}
+	}
+
+	public static void mostrarProductos(ProductDAO<Product> prodDAO) {
+		Persistable p = prodDAO;
+		print(p);
 	}
 
 	public static void print(Persistable obj) {
