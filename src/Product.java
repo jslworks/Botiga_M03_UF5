@@ -1,8 +1,11 @@
 
+import java.io.Serializable;
 import java.util.Objects;
 import err.StockInsuficientException;
 
-public class Product implements Identificable{
+public class Product implements Identificable, Serializable{
+
+    private static final long serialVersionUID = 14L;
 
     private Integer idProduct;
     private String name;
