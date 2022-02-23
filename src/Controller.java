@@ -40,7 +40,8 @@ public class Controller {
 			String dni, name, surnames;
 			String locality, province, zipCode, direction;
 
-			int idproduct, price, percentatgeDiscount, stock;
+			int idproduct, stock;
+			double price, percentatgeDiscount;
 			Product producto = new Product(1, "papa", 1, 5);
 
 			int option, option2, option3;
@@ -89,7 +90,10 @@ public class Controller {
 								name = keyboard.nextLine();
 
 								System.out.println("Preu del producto:");
-								price = keyboard.nextInt();
+								inputResponse = keyboard.nextLine();
+								if(inputResponse.contains(","))	inputResponse.replace(",", ".");
+								price = Double.parseDouble(inputResponse);
+								keyboard.nextLine();
 
 								System.out.println("Stock del producto:");
 								stock = keyboard.nextInt();
@@ -102,8 +106,13 @@ public class Controller {
 
 							if (option3 == 2) {
 								System.out.println("Percentatge de descompte del pack:");
-								percentatgeDiscount = keyboard.nextInt();
-								keyboard.nextLine();
+								inputResponse = keyboard.nextLine();
+								if(inputResponse.contains(",")){
+									inputResponse.replace(",", ".");
+									percentatgeDiscount = Double.parseDouble(inputResponse);
+								}else{
+									percentatgeDiscount = keyboard.nextDouble();
+								}
 
 								System.out.println("ID del producto:");
 								idproduct = keyboard.nextInt();
@@ -113,7 +122,13 @@ public class Controller {
 								name = keyboard.nextLine();
 
 								System.out.println("Preu del pack:");
-								price = keyboard.nextInt();
+								inputResponse = keyboard.nextLine();
+								if(inputResponse.contains(",")){
+									inputResponse.replace(",", ".");
+									price = Double.parseDouble(inputResponse);
+								}else{
+									price = keyboard.nextDouble();
+								}
 
 								ArrayList<Integer> packList = new ArrayList<>();
 								Pack p = new Pack(packList, percentatgeDiscount, idproduct, name, price);
@@ -157,7 +172,12 @@ public class Controller {
 								name = keyboard.nextLine();
 
 								System.out.println("Preu del producto:");
-								price = keyboard.nextInt();
+								if(inputResponse.contains(",")){
+									inputResponse.replace(",", ".");
+									price = Double.parseDouble(inputResponse);
+								}else{
+									price = keyboard.nextDouble();
+								}
 
 								System.out.println("Stock del producto:");
 								stock = keyboard.nextInt();
@@ -221,7 +241,6 @@ public class Controller {
 									System.out.println(producto);
 								}
 							}
-
 							break;
 						case 7: // Quitar stock
 							// Selecciona metodo manual o automatico

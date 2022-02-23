@@ -9,7 +9,7 @@ public class Product implements Identificable, Serializable{
 
     private Integer idProduct;
     private String name;
-    private int price;
+    private double price;
     private int stock;
 
     @Override
@@ -25,7 +25,7 @@ public class Product implements Identificable, Serializable{
         return name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -42,7 +42,7 @@ public class Product implements Identificable, Serializable{
         this.name = n;
     }
 
-    public void setPrice(int p) {
+    public void setPrice(double p) {
         this.price = p;
     }
 
@@ -64,14 +64,14 @@ public class Product implements Identificable, Serializable{
     }
     
     //El constructors del produte
-    public Product(int idproduct, String nom, int price, int stock) {
+    public Product(int idproduct, String nom, double price, int stock) {
         this.idProduct = idproduct;
         this.name = nom;
         this.price = price;
         this.stock = stock;
     }
 
-    public Product(int idproduct, String nom, int price) {
+    public Product(int idproduct, String nom, double price) {
         this.idProduct = idproduct;
         this.name = nom;
         this.price = price;

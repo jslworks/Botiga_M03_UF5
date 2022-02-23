@@ -6,19 +6,19 @@ import java.util.Objects;
 public final class Pack extends Product {
 
     private ArrayList<Integer> list = new ArrayList<>();
-    private int percentageDiscount = 0;
+    private double percentageDiscount = 0.0;
 
-    public Pack(ArrayList<Integer> list, int percentatgeDiscount, int idproduct, String name, int price) {
+    public Pack(ArrayList<Integer> list, double percentatgeDiscount, int idproduct, String name, double price) {
         super(idproduct, name, price);
         this.list = list;
         this.percentageDiscount = percentatgeDiscount;
     }
 
-    public int getPercetatgeDescompte() {
+    public double getPercetatgeDescompte() {
         return percentageDiscount;
     }
 
-    public void setPercetatgeDescompte(int percetatgeDescompte) {
+    public void setPercetatgeDescompte(double percetatgeDescompte) {
         this.percentageDiscount = percetatgeDescompte;
     }
 

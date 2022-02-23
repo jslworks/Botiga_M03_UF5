@@ -48,7 +48,7 @@ public class ProductDAO<T> implements Persistable<T> {
 
     }
 
-    public void modifyProduct(int i, String n, int p, int s) {
+    public void modifyProduct(int i, String n, double p, int s) {
         Product prod = (Product) productes.get(i);
         prod.setName(n);
         prod.setPrice(p);
