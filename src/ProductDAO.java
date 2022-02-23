@@ -1,5 +1,5 @@
 
-
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 public class ProductDAO<T> implements Persistable<T> {
 
@@ -54,7 +53,7 @@ public class ProductDAO<T> implements Persistable<T> {
         prod.setPrice(p);
         prod.setStock(s);
     }
-    
+
     public void modifyProduct(Product producto) {
         Product prod = (Product) productes.get(producto.getId());
         prod.setName(producto.getName());
@@ -71,37 +70,39 @@ public class ProductDAO<T> implements Persistable<T> {
         llistaprod.add(productes.toString());
         return llistaprod;
     }
-    
+
     public static void guardarFichero() {
-    	try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
-    		oos.writeObject(productes);
-    	} catch (IOException e) {
-    		System.out.println("Error al guardarr l'arxiu: " + e);
-    	}
-    }
-    
-    
-    @SuppressWarnings("unchecked")
-	public static void abrirFichero() {
-    	File file = new File("productes.dat");
-    	
-    	try {
-    		file.createNewFile();
-    	} catch (IOException e) {
-    		System.out.println(" " + e);
-    	}
-    	
-    	try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-    		productes = (HashMap<Integer, Product>) ois.readObject();
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	} catch (ClassNotFoundException e) {
-    		System.out.println("La classe no existeix: " + e);
-    	}
-    	
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
+            oos.writeObject(productes);
+        } catch (IOException e) {
+            System.out.println("Error al guardarr l'arxiu: " + e);
+        } finally {
+            System.out.println("productes.dat guardado correctamente");
+        }
     }
 
-    //Implementacio de la Interficie amb variable generica
+    public static void abrirFichero() {
+        File file = new File("productes.dat");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            System.out.println(" " + e);
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            productes = (HashMap<Integer, Product>) ois.readObject();
+        } catch (EOFException eofe) {
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (ClassNotFoundException cnfe) {
+            System.out.println("La classe no existeix: " + cnfe);
+        } finally {
+            System.out.println("productes.dat cargado correctamente");
+        }
+
+    }
+
+    // Implementacio de la Interficie amb variable generica
     @Override
     public void save(Object obj) {
         if (obj != null && obj instanceof Product) {
