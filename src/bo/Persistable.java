@@ -1,3 +1,4 @@
+package bo;
 
 import java.util.HashMap;
 

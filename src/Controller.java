@@ -10,6 +10,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.logging.*;
 
+import bo.Address;
+import bo.Client;
+import bo.Pack;
+import bo.Persistable;
+import bo.Product;
+import bo.Supplier;
+import dao.DAO;
+import dao.ProductDAO;
 import err.StockInsuficientException;
 
 public class Controller {
@@ -53,7 +61,7 @@ public class Controller {
 			// Variables
 			Scanner keyboard = new Scanner(System.in);
 			int option, option2, option3;
-			String inputResponse = "";
+			String inputResponse = "", nombreFichero = "";
 			boolean ok = false;
 
 			int idperson;
@@ -193,13 +201,15 @@ public class Controller {
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
 									inputResponse = keyboard.nextLine();
-
 									if (inputResponse.equalsIgnoreCase("S")) {
+										System.out.print("Nombre fichero: ");
+										nombreFichero = keyboard.nextLine();
 										try (DataInputStream dis = new DataInputStream(
-												new BufferedInputStream(new FileInputStream("comanda_rebuda.txt")))) {
+												new BufferedInputStream(new FileInputStream(nombreFichero)))) {
 
 											while (dis.available() > 0) {
-												idproduct = Integer.parseInt(dis.readUTF());
+												// idproduct = Integer.parseInt(dis.readUTF());
+												idproduct = dis.readInt();
 												stock = dis.readInt();
 												producto = prodDAO.searchProduct(idproduct);
 												if (prodDAO.searchProduct(idproduct) != null) {
@@ -277,11 +287,10 @@ public class Controller {
 									}
 									break;
 								case 8: // Mantenimiento de productos
-									 
 									System.out.println("COMANDA PRODUCTO");
 									System.out.print("Nombre fichero: ");
-									inputResponse = keyboard.nextLine();
-									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(inputResponse)));
+									nombreFichero = keyboard.nextLine();
+									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombreFichero)));
 									do{
 										// Obtener datos
 										System.out.print("ID producto: ");
@@ -296,7 +305,6 @@ public class Controller {
 										} else {
 											System.out.println("El producto no existe");
 										}
-										
 										System.out.println("¿Continuar? (S/n)");
 										inputResponse = keyboard.nextLine();
 									}while(inputResponse.equalsIgnoreCase("S"));

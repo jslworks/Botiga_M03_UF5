@@ -1,6 +1,10 @@
+package dao;
 
 
 import java.util.HashMap;
+
+import bo.Identificable;
+import bo.Persistable;
 
 public class DAO<T extends Identificable> implements Persistable<T> {
     

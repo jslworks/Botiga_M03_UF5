@@ -1,3 +1,4 @@
+package bo;
 
 import java.io.Serializable;
 import java.util.Objects;

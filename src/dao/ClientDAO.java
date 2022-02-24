@@ -1,5 +1,10 @@
+package dao;
 
 import java.util.HashMap;
+
+import bo.Address;
+import bo.Client;
+import bo.Persistable;
 
 public class ClientDAO<T> implements Persistable<T> {
 

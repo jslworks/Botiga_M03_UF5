@@ -1,7 +1,13 @@
+package dao;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import bo.Address;
+import bo.Persistable;
+import bo.Product;
+import bo.Supplier;
 
 public class SupplierDAO<T> implements Persistable<T> {
 
