@@ -59,7 +59,7 @@ public class Controller {
 			fh.close();
 
 			// Variables
-			Scanner keyboard = new Scanner(System.in);
+			// Scanner keyboard = new Scanner(System.in);
 			int option, option2, option3;
 			String inputResponse = "", nombreFichero = "";
 			boolean ok = false;
@@ -69,7 +69,7 @@ public class Controller {
 			String locality, province, zipCode, direction;
 
 			int idproduct, stock;
-			double price, percentatgeDiscount;
+			double price;
 			Product producto = new Product(1, "Patata", 1, 5);
 
 			do {
@@ -82,64 +82,18 @@ public class Controller {
 								case 1: // Agregar nuevo
 									System.out.println("1.Agregar un producto");
 									System.out.println("2.Agregar un pack");
-									option3 = keyboard.nextInt();
+									int seleccion = new Scanner(System.in).nextInt();
+									String type = seleccion == 1 ? "producto" : "pack";
 
-									if (option3 == 1) {
-										System.out.println("PRODUCTO:");
-										// Obtener datos
-										System.out.print("ID: ");
-										idproduct = keyboard.nextInt();
-										keyboard.nextLine();
-										System.out.print("Nombre: ");
-										name = keyboard.nextLine();
-										System.out.print("Precio: ");
-										inputResponse = keyboard.nextLine();
-										if (inputResponse.contains(","))
-											inputResponse.replace(",", ".");
-										price = Double.parseDouble(inputResponse);
-										System.out.print("Stock: ");
-										stock = keyboard.nextInt();
-										// Agregando producto
-										Product p = new Product(idproduct, name, price, stock);
-										prodDAO.save(p);
-									}
-									if (option3 == 2) {
-										System.out.println("PACK:");
-										// Obtener datos
-										System.out.println("% descuento: ");
-										inputResponse = keyboard.nextLine();
-										if (inputResponse.contains(",")) {
-											inputResponse.replace(",", ".");
-											percentatgeDiscount = Double.parseDouble(inputResponse);
-										} else {
-											percentatgeDiscount = keyboard.nextDouble();
-										}
-										System.out.println("ID: ");
-										idproduct = keyboard.nextInt();
-										keyboard.nextLine();
-										System.out.println("Nombre: ");
-										name = keyboard.nextLine();
-										System.out.println("Precio:");
-										inputResponse = keyboard.nextLine();
-										if (inputResponse.contains(",")) {
-											inputResponse.replace(",", ".");
-											price = Double.parseDouble(inputResponse);
-										} else {
-											price = keyboard.nextDouble();
-										}
-										// Generando pack
-										ArrayList<Integer> packList = new ArrayList<>();
-										Pack p = new Pack(packList, percentatgeDiscount, idproduct, name, price);
-										prodDAO.save(p);
-									}
+									prodDAO.agregarProducto_pack(type);
 									break;
 								case 2: // Buscar
 									System.out.println("1.Buscar un producto");
 									System.out.println("2.Buscar un pack");
-									option3 = keyboard.nextInt();
+									option3 = new Scanner(System.in).nextInt();
 									if (option3 == 1) {
 										System.out.print("ID producto: ");
-										idproduct = keyboard.nextInt();
+										idproduct = new Scanner(System.in).nextInt();
 										if (prodDAO.search(idproduct) != null) {
 											Product productos = (Product) prodDAO.search(idproduct);
 											System.out.println(productos.toString());
@@ -149,7 +103,7 @@ public class Controller {
 									}
 									if (option3 == 2) {
 										System.out.print("ID pack: ");
-										idproduct = keyboard.nextInt();
+										idproduct = new Scanner(System.in).nextInt();
 										if (prodDAO.search(idproduct) != null) {
 											Pack pck = (Pack) prodDAO.search(idproduct);
 											System.out.println(pck.toString());
@@ -162,21 +116,21 @@ public class Controller {
 									System.out.println("MODIFICAR PRODUCTO");
 									// Obtener datos
 									System.out.print("ID: ");
-									idproduct = keyboard.nextInt();
-									keyboard.nextLine();
+									idproduct = new Scanner(System.in).nextInt();
+									// keyboard.nextLine();
 									if (prodDAO.search(idproduct) != null) {
 										System.out.print("Nombre:");
-										name = keyboard.nextLine();
+										name = new Scanner(System.in).nextLine();
 
 										System.out.print("Precio: ");
 										if (inputResponse.contains(",")) {
 											inputResponse.replace(",", ".");
 											price = Double.parseDouble(inputResponse);
 										} else {
-											price = keyboard.nextDouble();
+											price = new Scanner(System.in).nextDouble();
 										}
 										System.out.print("Stock: ");
-										stock = keyboard.nextInt();
+										stock = new Scanner(System.in).nextInt();
 
 										// Modificando
 										prodDAO.modifyProduct(idproduct, name, price, stock);
@@ -190,8 +144,8 @@ public class Controller {
 								case 4: // Eliminar
 									System.out.println("ELIMINAR PRODUCTO O PACK: ");
 									System.out.println("ID :");
-									idproduct = keyboard.nextInt();
-									keyboard.nextLine();
+									idproduct = new Scanner(System.in).nextInt();
+									// keyboard.nextLine();
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
@@ -200,10 +154,10 @@ public class Controller {
 								case 6: // Agregar stock
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
-									inputResponse = keyboard.nextLine();
+									inputResponse = new Scanner(System.in).nextLine();
 									if (inputResponse.equalsIgnoreCase("S")) {
 										System.out.print("Nombre fichero: ");
-										nombreFichero = keyboard.nextLine();
+										nombreFichero = new Scanner(System.in).nextLine();
 										try (DataInputStream dis = new DataInputStream(
 												new BufferedInputStream(new FileInputStream(nombreFichero)))) {
 
@@ -211,8 +165,8 @@ public class Controller {
 												// idproduct = Integer.parseInt(dis.readUTF());
 												idproduct = dis.readInt();
 												stock = dis.readInt();
-												producto = prodDAO.searchProduct(idproduct);
-												if (prodDAO.searchProduct(idproduct) != null) {
+												producto = prodDAO.search(idproduct);
+												if (producto != null) {
 													producto.putStock(stock);
 												}
 											}
@@ -222,14 +176,14 @@ public class Controller {
 									} else {
 										System.out.println("STOCK PRODUCTO");
 										System.out.print("ID: ");
-										idproduct = keyboard.nextInt();
-										producto = prodDAO.searchProduct(idproduct);
-										if (producto == null) {
+										idproduct = new Scanner(System.in).nextInt();
+										producto = prodDAO.search(idproduct);
+										if (producto != null) {
 											System.out.println("El producto no existe");
 										} else {
 											System.out.println("Agregar stock al producto (" + producto.getId() + ") "
 													+ producto.getName());
-											int addStock = keyboard.nextInt();
+											int addStock = new Scanner(System.in).nextInt();
 											producto.putStock(addStock);
 
 											prodDAO.modifyProduct(producto);
@@ -239,7 +193,7 @@ public class Controller {
 								case 7: // Quitar stock
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
-									inputResponse = keyboard.nextLine();
+									inputResponse = new Scanner(System.in).nextLine();
 
 									if (inputResponse.equalsIgnoreCase("S")) {
 										try (DataInputStream dis = new DataInputStream(
@@ -248,8 +202,8 @@ public class Controller {
 											while (dis.available() > 0) {
 												idproduct = Integer.parseInt(dis.readUTF());
 												stock = dis.readInt();
-												producto = prodDAO.searchProduct(idproduct);
-												if (prodDAO.searchProduct(idproduct) != null) {
+												producto = prodDAO.search(idproduct);
+												if (producto != null) {
 													producto.takeStock(stock);
 												}
 											}
@@ -258,8 +212,8 @@ public class Controller {
 										}
 									} else {
 										System.out.println("Id del producto:");
-										idproduct = keyboard.nextInt();
-										producto = prodDAO.searchProduct(idproduct);
+										idproduct = new Scanner(System.in).nextInt();
+										producto = prodDAO.search(idproduct);
 										if (producto == null) {
 											System.out.println("El producto no existeix");
 										} else {
@@ -268,7 +222,7 @@ public class Controller {
 												System.out
 														.println("Quitar stock al producto (" + producto.getId() + ") "
 																+ producto.getName());
-												takeStock = keyboard.nextInt();
+												takeStock = new Scanner(System.in).nextInt();
 												try {
 													producto.takeStock(takeStock);
 													ok = true;
@@ -289,24 +243,24 @@ public class Controller {
 								case 8: // Mantenimiento de productos
 									System.out.println("COMANDA PRODUCTO");
 									System.out.print("Nombre fichero: ");
-									nombreFichero = keyboard.nextLine();
+									nombreFichero = new Scanner(System.in).nextLine();
 									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombreFichero)));
 									do{
 										// Obtener datos
 										System.out.print("ID producto: ");
-										idproduct = keyboard.nextInt();
-										producto = prodDAO.searchProduct(idproduct);
+										idproduct = new Scanner(System.in).nextInt();
+										producto = prodDAO.search(idproduct);
 										if (producto != null) {
 											System.out.print("Cantidad: ");
-											stock = keyboard.nextInt();
-											keyboard.nextLine();
+											stock = new Scanner(System.in).nextInt();
+											// keyboard.nextLine();
 											dos.writeInt(idproduct);
 											dos.writeInt(stock);
 										} else {
 											System.out.println("El producto no existe");
 										}
 										System.out.println("¿Continuar? (S/n)");
-										inputResponse = keyboard.nextLine();
+										inputResponse = new Scanner(System.in).nextLine();
 									}while(inputResponse.equalsIgnoreCase("S"));
 									dos.close();
 									break;
@@ -329,22 +283,22 @@ public class Controller {
 									System.out.println("CLIENTE");
 									// Obtener datos
 									System.out.print("ID: ");
-									idperson = keyboard.nextInt();
-									keyboard.nextLine();
+									idperson = new Scanner(System.in).nextInt();
+									// keyboard.nextLine();
 									System.out.print("DNI: ");
-									dni = keyboard.nextLine();
+									dni = new Scanner(System.in).nextLine();
 									System.out.print("Nombre: ");
-									name = keyboard.nextLine();
+									name = new Scanner(System.in).nextLine();
 									System.out.print("Apellidos: ");
-									surnames = keyboard.nextLine();
+									surnames = new Scanner(System.in).nextLine();
 									System.out.print("Localidad: ");
-									locality = keyboard.nextLine();
+									locality = new Scanner(System.in).nextLine();
 									System.out.print("Provincia: ");
-									province = keyboard.nextLine();
+									province = new Scanner(System.in).nextLine();
 									System.out.print("CP: ");
-									zipCode = keyboard.nextLine();
+									zipCode = new Scanner(System.in).nextLine();
 									System.out.print("Direccion: ");
-									direction = keyboard.nextLine();
+									direction = new Scanner(System.in).nextLine();
 									// Generar cliente
 									Address a = new Address(locality, province, zipCode, direction);
 									Client cl = new Client(idperson, dni, name, surnames, a);
@@ -352,7 +306,7 @@ public class Controller {
 									break;
 								case 2: // Buscar cliente
 									System.out.print("ID del cliente: ");
-									idperson = keyboard.nextInt();
+									idperson = new Scanner(System.in).nextInt();
 									if (clie.search(idperson) != null) {
 										Client client = (Client) clie.search(idperson);
 										System.out.println(client.toString());
@@ -364,23 +318,23 @@ public class Controller {
 									System.out.println("MODIFICAR CLIENTE");
 									// Obtener datos
 									System.out.print("ID : ");
-									idperson = keyboard.nextInt();
-									keyboard.nextLine();
+									idperson = new Scanner(System.in).nextInt();
+									// keyboard.nextLine();
 									if (clie.search(idperson) != null) {
 										System.out.print("DNI: ");
-										dni = keyboard.nextLine();
+										dni = new Scanner(System.in).nextLine();
 										System.out.print("Nombre: ");
-										name = keyboard.nextLine();
+										name = new Scanner(System.in).nextLine();
 										System.out.print("Apellidos: ");
-										surnames = keyboard.nextLine();
+										surnames = new Scanner(System.in).nextLine();
 										System.out.print("Localidad: ");
-										locality = keyboard.nextLine();
+										locality = new Scanner(System.in).nextLine();
 										System.out.print("Provincia: ");
-										province = keyboard.nextLine();
+										province = new Scanner(System.in).nextLine();
 										System.out.print("CP: ");
-										zipCode = keyboard.nextLine();
+										zipCode = new Scanner(System.in).nextLine();
 										System.out.print("Direccion: ");
-										direction = keyboard.nextLine();
+										direction = new Scanner(System.in).nextLine();
 										// Modificando
 										Address ad = new Address(locality, province, zipCode, direction);
 										Client c = new Client(idperson, dni, name, surnames, ad);
@@ -391,7 +345,7 @@ public class Controller {
 									break;
 								case 4: // Eliminar cliente
 									System.out.print("ID del cliente: ");
-									idperson = keyboard.nextInt();
+									idperson = new Scanner(System.in).nextInt();
 									clie.delete(idperson);
 									break;
 								case 5: // Mostrar todos los clientess
@@ -412,22 +366,22 @@ public class Controller {
 									System.out.println("PROVEEDOR");
 									// Obtener datos
 									System.out.print("ID: ");
-									idperson = keyboard.nextInt();
-									keyboard.nextLine();
+									idperson = new Scanner(System.in).nextInt();
+									// keyboard.nextLine();
 									System.out.print("DNI: ");
-									dni = keyboard.nextLine();
+									dni = new Scanner(System.in).nextLine();
 									System.out.print("Nombre: ");
-									name = keyboard.nextLine();
+									name = new Scanner(System.in).nextLine();
 									System.out.print("Apellidos: ");
-									surnames = keyboard.nextLine();
+									surnames = new Scanner(System.in).nextLine();
 									System.out.print("Localidad: ");
-									locality = keyboard.nextLine();
+									locality = new Scanner(System.in).nextLine();
 									System.out.print("Provincia: ");
-									province = keyboard.nextLine();
+									province = new Scanner(System.in).nextLine();
 									System.out.print("CP: ");
-									zipCode = keyboard.nextLine();
+									zipCode = new Scanner(System.in).nextLine();
 									System.out.print("Direccion: ");
-									direction = keyboard.nextLine();
+									direction = new Scanner(System.in).nextLine();
 									// Generar proveedor
 									Address a = new Address(locality, province, zipCode, direction);
 									Supplier s = new Supplier(idperson, dni, name, surnames, a);
@@ -435,7 +389,7 @@ public class Controller {
 									break;
 								case 2: // Buscar proveedor
 									System.out.print("Id del proveedor: ");
-									idperson = keyboard.nextInt();
+									idperson = new Scanner(System.in).nextInt();
 									if (prov.search(idperson) != null) {
 										Supplier proveidor = (Supplier) prov.search(idperson);
 										System.out.println(proveidor.toString());
@@ -447,23 +401,23 @@ public class Controller {
 									System.out.println("MODIFICAR PROVEEDOR");
 									// Obtener datos
 									System.out.print("ID : ");
-									idperson = keyboard.nextInt();
-									keyboard.nextLine();
+									idperson = new Scanner(System.in).nextInt();
+									// keyboard.nextLine();
 									if (clie.search(idperson) != null) {
 										System.out.print("DNI: ");
-										dni = keyboard.nextLine();
+										dni = new Scanner(System.in).nextLine();
 										System.out.print("Nombre: ");
-										name = keyboard.nextLine();
+										name = new Scanner(System.in).nextLine();
 										System.out.print("Apellidos: ");
-										surnames = keyboard.nextLine();
+										surnames = new Scanner(System.in).nextLine();
 										System.out.print("Localidad: ");
-										locality = keyboard.nextLine();
+										locality = new Scanner(System.in).nextLine();
 										System.out.print("Provincia: ");
-										province = keyboard.nextLine();
+										province = new Scanner(System.in).nextLine();
 										System.out.print("CP: ");
-										zipCode = keyboard.nextLine();
+										zipCode = new Scanner(System.in).nextLine();
 										System.out.print("Direccion: ");
-										direction = keyboard.nextLine();
+										direction = new Scanner(System.in).nextLine();
 										// Modificando
 										Address ad = new Address(locality, province, zipCode, direction);
 										Supplier su = new Supplier(idperson, dni, name, surnames, ad);
@@ -477,7 +431,7 @@ public class Controller {
 									break;
 								case 4: // Eliminar proveedor
 									System.out.print("ID del proveedor:");
-									idperson = keyboard.nextInt();
+									idperson = new Scanner(System.in).nextInt();
 									prov.delete(idperson);
 									break;
 								case 5: // Mostrar todos los proveedores
@@ -494,7 +448,7 @@ public class Controller {
 						break;
 				}
 			} while (option != 0);
-			keyboard.close();
+			// keyboard.close();
 		} catch (RuntimeException ex) {
 			logger.log(Level.SEVERE, "Problema greu", ex);
 		} catch (IOException ex) {

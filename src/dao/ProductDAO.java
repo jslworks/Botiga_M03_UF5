@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import bo.Pack;
 import bo.Persistable;
@@ -18,46 +19,60 @@ public class ProductDAO<T> implements Persistable<T> {
 
     private static HashMap<Integer, Product> productes = new HashMap<>();
 
-    public boolean addProduct(int i, String n, int p, int s) {
-        if (productes.containsKey(i)) {
-            return false;
-        } else {
-            Product prod = new Product(i, n, p, s);
-            productes.put(i, prod);
-            return true;
+    // Funcionalidades para menú
+    public void agregarProducto_pack(String type){
+        int idproduct;
+        String nombre, tmp;
+		double precio;
 
+        // Obtener datos
+        System.out.print("ID: ");
+        idproduct = new Scanner(System.in).nextInt();
+        
+        System.out.print("Nombre: ");
+        nombre = new Scanner(System.in).nextLine();
+        System.out.print("Precio: ");
+        tmp = new Scanner(System.in).nextLine();
+        if (tmp.contains(","))
+            tmp.replace(",", ".");
+        precio = Double.parseDouble(tmp);
+
+        switch (type) {
+            case "producto":
+                agregarProducto(idproduct, nombre, precio);
+                break;
+            case "pack":
+                agregarPack(idproduct, nombre, precio);
+                break;
+            default:
+                break;
         }
     }
 
-    public void addPack(ArrayList<Integer> l, int d, Integer i, String n, int p) {
-        Pack pack = new Pack(l, d, i, n, p);
-        productes.put(i, pack);
+    private void agregarProducto(int idproduct, String nombre, double precio){
+        // Datos especificos Producto
+        System.out.print("Stock: ");
+        int stock = new Scanner(System.in).nextInt();
+        // Agregando producto
+        Product p = new Product(idproduct, nombre, precio, stock);
+        this.save(p);
     }
 
-    public Product searchProduct(int i) {
-        if (productes.containsKey(i)) {
-            return (Product) productes.get(i);
-        } else {
-            return null;
-        }
+    private void agregarPack(int idproduct, String nombre, double precio){
+        // Datos especificos Pack
+        System.out.println("% descuento: ");
+        String tmp = new Scanner(System.in).nextLine();
+        if (tmp.contains(","))
+            tmp.replace(",", ".");
+        double descuento = Double.parseDouble(tmp);
 
+        // Generando pack
+        ArrayList<Integer> packList = new ArrayList<>();
+        Pack p = new Pack(packList, descuento, idproduct, nombre, precio);
+        this.save(p);
     }
 
-    public Pack searchPack(int i) {
-        if (productes.containsKey(i)) {
-            return (Pack) productes.get(i);
-        } else {
-            return null;
-        }
-
-    }
-
-    public void modifyProduct(int i, String n, double p, int s) {
-        Product prod = (Product) productes.get(i);
-        prod.setName(n);
-        prod.setPrice(p);
-        prod.setStock(s);
-    }
+    // Metodos
 
     public void modifyProduct(Product producto) {
         Product prod = (Product) productes.get(producto.getId());
@@ -65,10 +80,6 @@ public class ProductDAO<T> implements Persistable<T> {
         prod.setPrice(producto.getPrice());
         prod.setStock(producto.getStock());
         System.out.println(producto);
-    }
-
-    public void deleteP(int i) {
-        productes.remove(i);
     }
 
     public ArrayList<String> printProduct() {
@@ -140,4 +151,11 @@ public class ProductDAO<T> implements Persistable<T> {
         }
     }
 
+    // Adaptar y dejar de usar
+    public void modifyProduct(int i, String n, double p, int s) {
+        Product prod = (Product) productes.get(i);
+        prod.setName(n);
+        prod.setPrice(p);
+        prod.setStock(s);
+    }
 }
