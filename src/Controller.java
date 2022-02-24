@@ -1,10 +1,13 @@
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.logging.*;
 
 import err.StockInsuficientException;
@@ -184,7 +187,7 @@ public class Controller {
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
-									mostrarProductos(prodDAO);
+									mostrar("productos", prodDAO);
 									break;
 								case 6: // Agregar stock
 									// Selecciona metodo manual o automatico
@@ -273,6 +276,32 @@ public class Controller {
 										}
 									}
 									break;
+								case 8: // Mantenimiento de productos
+									 
+									System.out.println("COMANDA PRODUCTO");
+									System.out.print("Nombre fichero: ");
+									inputResponse = keyboard.nextLine();
+									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(inputResponse)));
+									do{
+										// Obtener datos
+										System.out.print("ID producto: ");
+										idproduct = keyboard.nextInt();
+										producto = prodDAO.searchProduct(idproduct);
+										if (producto != null) {
+											System.out.print("Cantidad: ");
+											stock = keyboard.nextInt();
+											keyboard.nextLine();
+											dos.writeInt(idproduct);
+											dos.writeInt(stock);
+										} else {
+											System.out.println("El producto no existe");
+										}
+										
+										System.out.println("¿Continuar? (S/n)");
+										inputResponse = keyboard.nextLine();
+									}while(inputResponse.equalsIgnoreCase("S"));
+									dos.close();
+									break;
 								case 0:
 									break;
 								default:
@@ -358,7 +387,7 @@ public class Controller {
 									clie.delete(idperson);
 									break;
 								case 5: // Mostrar todos los clientess
-									mostrarClientes(clie);
+									mostrar("clientes", clie);
 									break;
 								case 0:
 									break;
@@ -444,7 +473,7 @@ public class Controller {
 									prov.delete(idperson);
 									break;
 								case 5: // Mostrar todos los proveedores
-									mostrarProveedores(prov);
+									mostrar("proveedores", prov);
 									break;
 								case 0:
 									break;
@@ -547,14 +576,14 @@ public class Controller {
 		System.out.println(p.getMap().toString());
 	}
 
-	public static void mostrarProductos(Object dao, String type) {
-		Persistable p = (DAO) dao;
+	public static void mostrar(String type, Object dao){
+		Persistable p = null;
 		switch (type) {
-			case "productDAO":
+			case "productos":
 				p = (ProductDAO<Product>) dao;
 				break;
-			case "clientDAO":
-			case "provDAO":
+			case "clientes":
+			case "proveedores":
 				p = (DAO) dao;
 				break;
 		}
