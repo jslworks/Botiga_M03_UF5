@@ -2,7 +2,6 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -117,7 +116,6 @@ public class Controller {
 									// Obtener datos
 									System.out.print("ID: ");
 									idproduct = new Scanner(System.in).nextInt();
-									// keyboard.nextLine();
 									if (prodDAO.search(idproduct) != null) {
 										System.out.print("Nombre:");
 										name = new Scanner(System.in).nextLine();
@@ -145,7 +143,6 @@ public class Controller {
 									System.out.println("ELIMINAR PRODUCTO O PACK: ");
 									System.out.println("ID :");
 									idproduct = new Scanner(System.in).nextInt();
-									// keyboard.nextLine();
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
@@ -284,7 +281,6 @@ public class Controller {
 									// Obtener datos
 									System.out.print("ID: ");
 									idperson = new Scanner(System.in).nextInt();
-									// keyboard.nextLine();
 									System.out.print("DNI: ");
 									dni = new Scanner(System.in).nextLine();
 									System.out.print("Nombre: ");
@@ -319,7 +315,6 @@ public class Controller {
 									// Obtener datos
 									System.out.print("ID : ");
 									idperson = new Scanner(System.in).nextInt();
-									// keyboard.nextLine();
 									if (clie.search(idperson) != null) {
 										System.out.print("DNI: ");
 										dni = new Scanner(System.in).nextLine();
@@ -367,7 +362,6 @@ public class Controller {
 									// Obtener datos
 									System.out.print("ID: ");
 									idperson = new Scanner(System.in).nextInt();
-									// keyboard.nextLine();
 									System.out.print("DNI: ");
 									dni = new Scanner(System.in).nextLine();
 									System.out.print("Nombre: ");
@@ -402,7 +396,6 @@ public class Controller {
 									// Obtener datos
 									System.out.print("ID : ");
 									idperson = new Scanner(System.in).nextInt();
-									// keyboard.nextLine();
 									if (clie.search(idperson) != null) {
 										System.out.print("DNI: ");
 										dni = new Scanner(System.in).nextLine();
@@ -448,7 +441,6 @@ public class Controller {
 						break;
 				}
 			} while (option != 0);
-			// keyboard.close();
 		} catch (RuntimeException ex) {
 			logger.log(Level.SEVERE, "Problema greu", ex);
 		} catch (IOException ex) {

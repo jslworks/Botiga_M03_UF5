@@ -33,8 +33,7 @@ public class ProductDAO<T> implements Persistable<T> {
         nombre = new Scanner(System.in).nextLine();
         System.out.print("Precio: ");
         tmp = new Scanner(System.in).nextLine();
-        if (tmp.contains(","))
-            tmp.replace(",", ".");
+        tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
         precio = Double.parseDouble(tmp);
 
         switch (type) {
@@ -62,8 +61,7 @@ public class ProductDAO<T> implements Persistable<T> {
         // Datos especificos Pack
         System.out.println("% descuento: ");
         String tmp = new Scanner(System.in).nextLine();
-        if (tmp.contains(","))
-            tmp.replace(",", ".");
+        tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
         double descuento = Double.parseDouble(tmp);
 
         // Generando pack
@@ -99,18 +97,14 @@ public class ProductDAO<T> implements Persistable<T> {
     }
 
     public static void abrirFichero() {
-        File file = new File("productes.dat");
-        try {
+        try{
+            File file = new File("productes.dat");
             file.createNewFile();
-        } catch (IOException e) {
-            System.out.println(" " + e);
-        }
-
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
             productes = (HashMap<Integer, Product>) ois.readObject();
         } catch (EOFException eofe) {
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            System.out.println(" " + ioe);
         } catch (ClassNotFoundException cnfe) {
             System.out.println("La classe no existeix: " + cnfe);
         } finally {
@@ -144,11 +138,7 @@ public class ProductDAO<T> implements Persistable<T> {
 
     @Override
     public T search(int id) {
-        if (productes.containsKey(id)) {
-            return (T) (Product) productes.get(id);
-        } else {
-            return null;
-        }
+        return productes.containsKey(id) ? (T) (Product) productes.get(id) : null;
     }
 
     // Adaptar y dejar de usar
