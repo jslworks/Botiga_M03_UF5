@@ -59,6 +59,7 @@ public class ProductDAO<T> implements Persistable<T> {
         prod.setName(producto.getName());
         prod.setPrice(producto.getPrice());
         prod.setStock(producto.getStock());
+        System.out.println(producto);
     }
 
     public void deleteP(int i) {
@@ -108,6 +109,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if (obj != null && obj instanceof Product) {
             Product id = (Product) obj;
             productes.put(id.getIdProduct(), (Product) obj);
+            System.out.println("Guardado correctamente");
         }
     }
 
@@ -120,6 +122,7 @@ public class ProductDAO<T> implements Persistable<T> {
     public void delete(int id) {
         if (productes.containsKey(id)) {
             productes.remove(id);
+            System.out.println("Eliminado correctamente");
         }
     }
 
