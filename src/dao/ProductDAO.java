@@ -19,6 +19,7 @@ public class ProductDAO<T> implements Persistable<T> {
 
     private static TreeMap<Integer, Product> mapaProductos = new TreeMap<>();
 
+    // AGREGAR
     public void agregarProducto_pack(String type){
         int idproduct;
         String nombre;
@@ -73,6 +74,16 @@ public class ProductDAO<T> implements Persistable<T> {
         this.save(pack);
     }
 
+    @Override
+    public void save(Object obj) {
+        if (obj != null && obj instanceof Product) {
+            Product id = (Product) obj;
+            mapaProductos.put(id.getIdProduct(), (Product) obj);
+            System.out.println("\u001B[32m" + "Guardado correctamente" + "\u001B[0m");
+        }
+    }
+
+    // BUSCAR
     public void buscarProducto_pack(String type){
         int idprod_Pack;
 
@@ -86,8 +97,13 @@ public class ProductDAO<T> implements Persistable<T> {
             System.out.println("\u001B[31m" + "No existe este " + type + "\u001B[0m");
         }
     }
+
+    @Override
+    public T search(int id) {
+        return mapaProductos.containsKey(id) ? (T) (Product) mapaProductos.get(id) : null;
+    }
         
-    // Metodos
+    // MODIFICAR
 
     public void modifyProduct(Product producto) {
         Product prod = (Product) mapaProductos.get(producto.getId());
@@ -97,12 +113,31 @@ public class ProductDAO<T> implements Persistable<T> {
         System.out.println(producto);
     }
 
+        // Adaptar y dejar de usar
+        public void modifyProduct(int i, String n, double p, int s) {
+            Product prod = (Product) mapaProductos.get(i);
+            prod.setNombre(n);
+            prod.setPrecio(p);
+            prod.setStock(s);
+        }
+
+    // ELIMINAR
+    @Override
+    public void delete(int id) {
+        if (mapaProductos.containsKey(id)) {
+            mapaProductos.remove(id);
+            System.out.println("\u001B[32m" + "Eliminado correctamente" + "\u001B[0m");
+        }
+    }
+
+    // MOSTRAR
     public TreeSet<String> printProduct() {
         TreeSet<String> llistaprod = new TreeSet<String>();
         llistaprod.add(mapaProductos.toString());
         return llistaprod;
     }
-
+    
+    // FICHEROS
     public static void guardarFichero() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
             oos.writeObject(mapaProductos);
@@ -130,39 +165,10 @@ public class ProductDAO<T> implements Persistable<T> {
 
     }
 
-    // Implementacio de la Interficie amb variable generica
-    @Override
-    public void save(Object obj) {
-        if (obj != null && obj instanceof Product) {
-            Product id = (Product) obj;
-            mapaProductos.put(id.getIdProduct(), (Product) obj);
-            System.out.println("\u001B[32m" + "Guardado correctamente" + "\u001B[0m");
-        }
-    }
-
+    // Set/get data
     @Override
     public TreeMap<Integer, T> getMap() {
         return (TreeMap<Integer, T>) mapaProductos;
     }
 
-    @Override
-    public void delete(int id) {
-        if (mapaProductos.containsKey(id)) {
-            mapaProductos.remove(id);
-            System.out.println("\u001B[32m" + "Eliminado correctamente" + "\u001B[0m");
-        }
-    }
-
-    @Override
-    public T search(int id) {
-        return mapaProductos.containsKey(id) ? (T) (Product) mapaProductos.get(id) : null;
-    }
-
-    // Adaptar y dejar de usar
-    public void modifyProduct(int i, String n, double p, int s) {
-        Product prod = (Product) mapaProductos.get(i);
-        prod.setNombre(n);
-        prod.setPrecio(p);
-        prod.setStock(s);
-    }
 }
