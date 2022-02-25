@@ -19,7 +19,6 @@ public class ProductDAO<T> implements Persistable<T> {
 
     private static HashMap<Integer, Product> productes = new HashMap<>();
 
-    // Funcionalidades para menú
     public void agregarProducto_pack(String type){
         int idproduct;
         String nombre, tmp;
@@ -70,6 +69,21 @@ public class ProductDAO<T> implements Persistable<T> {
         this.save(p);
     }
 
+    
+    public void buscarProducto_pack(String type){
+        int idprod_Pack;
+
+        System.out.print("ID: ");
+        idprod_Pack = new Scanner(System.in).nextInt();
+        Object search = this.search(idprod_Pack);
+        
+        if (search != null) {
+            System.out.println(search); // Imprimira producto o pack
+        } else {
+            System.out.println("\u001B[31m" + "No existe este " + type + "\u001B[0m");
+        }
+    }
+        
     // Metodos
 
     public void modifyProduct(Product producto) {
@@ -90,9 +104,9 @@ public class ProductDAO<T> implements Persistable<T> {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
             oos.writeObject(productes);
         } catch (IOException e) {
-            System.out.println("Error al guardarr l'arxiu: " + e);
+            System.out.println("\u001B[31m" + "Error al guardar el archivo: " + e + "\u001B[0m");
         } finally {
-            System.out.println("productes.dat guardado correctamente");
+            System.out.println("\u001B[32m" + "productes.dat guardado correctamente" + "\u001B[0m");
         }
     }
 
@@ -104,11 +118,11 @@ public class ProductDAO<T> implements Persistable<T> {
             productes = (HashMap<Integer, Product>) ois.readObject();
         } catch (EOFException eofe) {
         } catch (IOException ioe) {
-            System.out.println(" " + ioe);
+            System.out.println("\u001B[31m" + ioe + "\u001B[0m");
         } catch (ClassNotFoundException cnfe) {
-            System.out.println("La classe no existeix: " + cnfe);
+            System.out.println("\u001B[31m" + "La classe no existe: " + cnfe + "\u001B[0m");
         } finally {
-            System.out.println("productes.dat cargado correctamente");
+            System.out.println("\u001B[32m" + "productes.dat cargado correctamente" + "\u001B[0m");
         }
 
     }
@@ -119,7 +133,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if (obj != null && obj instanceof Product) {
             Product id = (Product) obj;
             productes.put(id.getIdProduct(), (Product) obj);
-            System.out.println("Guardado correctamente");
+            System.out.println("\u001B[32m" + "Guardado correctamente" + "\u001B[0m");
         }
     }
 
@@ -132,7 +146,7 @@ public class ProductDAO<T> implements Persistable<T> {
     public void delete(int id) {
         if (productes.containsKey(id)) {
             productes.remove(id);
-            System.out.println("Eliminado correctamente");
+            System.out.println("\u001B[32m" + "Eliminado correctamente" + "\u001B[0m");
         }
     }
 

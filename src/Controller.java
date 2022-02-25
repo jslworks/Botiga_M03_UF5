@@ -11,7 +11,6 @@ import java.util.logging.*;
 
 import bo.Address;
 import bo.Client;
-import bo.Pack;
 import bo.Persistable;
 import bo.Product;
 import bo.Supplier;
@@ -45,9 +44,7 @@ public class Controller {
 
 		// Cargamos los datos desde fichero
 		prodDAO.abrirFichero();
-		System.out.println(TEXT_GREEN + "Resultado carga");
-		mostrarProductos(prodDAO);
-		System.out.println(TEXT_RESET);
+		mostrar("productos", prodDAO);
 
 		try {
 			// Logger
@@ -62,6 +59,9 @@ public class Controller {
 			int option, option2, option3;
 			String inputResponse = "", nombreFichero = "";
 			boolean ok = false;
+
+			int seleccion;
+			String type;
 
 			int idperson;
 			String dni, name, surnames;
@@ -79,40 +79,24 @@ public class Controller {
 							option2 = menu("productos");
 							switch (option2) {
 								case 1: // Agregar nuevo
-									System.out.println("1.Agregar un producto");
-									System.out.println("2.Agregar un pack");
-									int seleccion = new Scanner(System.in).nextInt();
-									String type = seleccion == 1 ? "producto" : "pack";
+									System.out.println(TEXT_PURPLE + "AGREGAR NUEVO" + TEXT_RESET);
+									System.out.println(TEXT_PURPLE + "1. Producto");
+									System.out.println("2. Pack" + TEXT_RESET);
+									seleccion = new Scanner(System.in).nextInt();
+									type = seleccion == 1 ? "producto" : "pack";
 
 									prodDAO.agregarProducto_pack(type);
 									break;
 								case 2: // Buscar
-									System.out.println("1.Buscar un producto");
-									System.out.println("2.Buscar un pack");
-									option3 = new Scanner(System.in).nextInt();
-									if (option3 == 1) {
-										System.out.print("ID producto: ");
-										idproduct = new Scanner(System.in).nextInt();
-										if (prodDAO.search(idproduct) != null) {
-											Product productos = (Product) prodDAO.search(idproduct);
-											System.out.println(productos.toString());
-										} else {
-											System.out.println("El producto no existe");
-										}
-									}
-									if (option3 == 2) {
-										System.out.print("ID pack: ");
-										idproduct = new Scanner(System.in).nextInt();
-										if (prodDAO.search(idproduct) != null) {
-											Pack pck = (Pack) prodDAO.search(idproduct);
-											System.out.println(pck.toString());
-										} else {
-											System.out.println("El pack no existe");
-										}
-									}
+									System.out.println(TEXT_PURPLE + "BUSCAR" + TEXT_RESET);
+									System.out.println(TEXT_PURPLE + "1. Producto");
+									System.out.println("2. Pack" + TEXT_RESET);
+									seleccion = new Scanner(System.in).nextInt();
+									type = seleccion == 1 ? "producto" : "pack";
+									prodDAO.buscarProducto_pack(type);
 									break;
 								case 3: // Modificar
-									System.out.println("MODIFICAR PRODUCTO");
+									System.out.println(TEXT_PURPLE + "MODIFICAR PRODUCTO" + TEXT_RESET);
 									// Obtener datos
 									System.out.print("ID: ");
 									idproduct = new Scanner(System.in).nextInt();
@@ -136,11 +120,11 @@ public class Controller {
 										// Mostrar resultados
 										System.out.println(products.toString());
 									} else {
-										System.out.println("El producto no existe");
+										System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
 									}
 									break;
 								case 4: // Eliminar
-									System.out.println("ELIMINAR PRODUCTO O PACK: ");
+									System.out.println(TEXT_PURPLE + "ELIMINAR PRODUCTO O PACK: " + TEXT_RESET);
 									System.out.println("ID :");
 									idproduct = new Scanner(System.in).nextInt();
 									prodDAO.delete(idproduct);
@@ -149,6 +133,7 @@ public class Controller {
 									mostrar("productos", prodDAO);
 									break;
 								case 6: // Agregar stock
+									System.out.println(TEXT_PURPLE + "AGREGAR STOCK PRODUCTO" + TEXT_RESET);
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
 									inputResponse = new Scanner(System.in).nextLine();
@@ -168,15 +153,15 @@ public class Controller {
 												}
 											}
 										} catch (IOException e) {
-											System.out.println("Error con el fichero " + e);
+											System.out.println(TEXT_RED + "Error con el fichero: " + e + TEXT_RESET);
 										}
 									} else {
-										System.out.println("STOCK PRODUCTO");
+										System.out.println(TEXT_PURPLE + "STOCK PRODUCTO" + TEXT_RESET);
 										System.out.print("ID: ");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto != null) {
-											System.out.println("El producto no existe");
+											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
 										} else {
 											System.out.println("Agregar stock al producto (" + producto.getId() + ") "
 													+ producto.getName());
@@ -188,6 +173,7 @@ public class Controller {
 									}
 									break;
 								case 7: // Quitar stock
+									System.out.println(TEXT_PURPLE + "QUITAR STOCK PRODUCTO" + TEXT_RESET);
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
 									inputResponse = new Scanner(System.in).nextLine();
@@ -205,14 +191,14 @@ public class Controller {
 												}
 											}
 										} catch (IOException e) {
-											System.out.println("Error con el fichero " + e);
+											System.out.println(TEXT_RED + "Error con el fichero: " + e + TEXT_RESET);
 										}
 									} else {
 										System.out.println("Id del producto:");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto == null) {
-											System.out.println("El producto no existeix");
+											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
 										} else {
 											int takeStock = -1;
 											do {
@@ -232,13 +218,13 @@ public class Controller {
 											if (ok) {
 												prodDAO.modifyProduct(producto);
 											} else {
-												System.out.println("No se ha modificado el producto " + producto);
+												System.out.println(TEXT_RED + "No se ha modificado el producto " + producto + TEXT_RESET);
 											}
 										}
 									}
 									break;
 								case 8: // Mantenimiento de productos
-									System.out.println("COMANDA PRODUCTO");
+									System.out.println(TEXT_PURPLE + "COMANDA PRODUCTO" + TEXT_RESET);
 									System.out.print("Nombre fichero: ");
 									nombreFichero = new Scanner(System.in).nextLine();
 									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombreFichero)));
@@ -254,7 +240,7 @@ public class Controller {
 											dos.writeInt(idproduct);
 											dos.writeInt(stock);
 										} else {
-											System.out.println("El producto no existe");
+											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
 										}
 										System.out.println("¿Continuar? (S/n)");
 										inputResponse = new Scanner(System.in).nextLine();
@@ -264,7 +250,7 @@ public class Controller {
 								case 0:
 									break;
 								default:
-									System.out.println("Opcion incorrecta");
+									System.out.println(TEXT_RED + "Opcion incorrecta" + TEXT_RESET);
 									break;
 							}
 							if (option2 != 0)
@@ -277,7 +263,7 @@ public class Controller {
 							option2 = menu("clientes");
 							switch (option2) {
 								case 1: // Agregar cliente
-									System.out.println("CLIENTE");
+									System.out.println(TEXT_PURPLE + "CREAR CLIENTE" + TEXT_RESET);
 									// Obtener datos
 									System.out.print("ID: ");
 									idperson = new Scanner(System.in).nextInt();
@@ -301,17 +287,18 @@ public class Controller {
 									clie.save(cl);
 									break;
 								case 2: // Buscar cliente
-									System.out.print("ID del cliente: ");
+									System.out.println(TEXT_PURPLE + "BUSCAR CLIENTE" + TEXT_RESET);
+									System.out.print("ID: ");
 									idperson = new Scanner(System.in).nextInt();
 									if (clie.search(idperson) != null) {
 										Client client = (Client) clie.search(idperson);
 										System.out.println(client.toString());
 									} else {
-										System.out.println("El cliente no existeix");
+										System.out.println(TEXT_RED + "El cliente no existe" + TEXT_RESET);
 									}
 									break;
 								case 3: // Modificar cliente
-									System.out.println("MODIFICAR CLIENTE");
+									System.out.println(TEXT_PURPLE + "MODIFICAR CLIENTE" + TEXT_RESET);
 									// Obtener datos
 									System.out.print("ID : ");
 									idperson = new Scanner(System.in).nextInt();
@@ -335,15 +322,17 @@ public class Controller {
 										Client c = new Client(idperson, dni, name, surnames, ad);
 										clie.modify(c);
 									} else {
-										System.out.println("El cliente no existeix");
+										System.out.println(TEXT_RED + "El cliente no existe" + TEXT_RESET);
 									}
 									break;
 								case 4: // Eliminar cliente
-									System.out.print("ID del cliente: ");
+									System.out.println(TEXT_PURPLE + "ELIMINAR CLIENTE" + TEXT_RESET);
+									System.out.print("ID: ");
 									idperson = new Scanner(System.in).nextInt();
 									clie.delete(idperson);
 									break;
-								case 5: // Mostrar todos los clientess
+								case 5: // Mostrar todos los clientes
+									System.out.println(TEXT_PURPLE + "TODOS CLIENTES" + TEXT_RESET);
 									mostrar("clientes", clie);
 									break;
 								case 0:
@@ -358,7 +347,7 @@ public class Controller {
 							option2 = menu("proveedores");
 							switch (option2) {
 								case 1: // Agregar proveedor
-									System.out.println("PROVEEDOR");
+									System.out.println(TEXT_PURPLE + "PROVEEDOR" + TEXT_RESET);
 									// Obtener datos
 									System.out.print("ID: ");
 									idperson = new Scanner(System.in).nextInt();
@@ -382,17 +371,18 @@ public class Controller {
 									prov.save(s);
 									break;
 								case 2: // Buscar proveedor
-									System.out.print("Id del proveedor: ");
+								System.out.println(TEXT_PURPLE + "BUSCAR PROVEEDOR" + TEXT_RESET);
+									System.out.print("ID: ");
 									idperson = new Scanner(System.in).nextInt();
 									if (prov.search(idperson) != null) {
 										Supplier proveidor = (Supplier) prov.search(idperson);
 										System.out.println(proveidor.toString());
 									} else {
-										System.out.println("El proveidor no existe");
+										System.out.println(TEXT_RED + "El proveedor no existeix" + TEXT_RESET);
 									}
 									break;
 								case 3: // Añadir proveedor
-									System.out.println("MODIFICAR PROVEEDOR");
+									System.out.println(TEXT_PURPLE + "MODIFICAR PROVEEDOR" + TEXT_RESET);
 									// Obtener datos
 									System.out.print("ID : ");
 									idperson = new Scanner(System.in).nextInt();
@@ -419,15 +409,17 @@ public class Controller {
 										Supplier proveidor = (Supplier) prov.search(idperson);
 										System.out.println(proveidor.toString());
 									} else {
-										System.out.println("El proveidor no existe");
+										System.out.println(TEXT_RED + "El proveedor no existeix" + TEXT_RESET);
 									}
 									break;
 								case 4: // Eliminar proveedor
-									System.out.print("ID del proveedor:");
+									System.out.println(TEXT_PURPLE + "ELIMINAR PROVEEDOR" + TEXT_RESET);
+									System.out.print("ID: ");
 									idperson = new Scanner(System.in).nextInt();
 									prov.delete(idperson);
 									break;
 								case 5: // Mostrar todos los proveedores
+									System.out.println(TEXT_PURPLE + "TODOS PROVEEDORES" + TEXT_RESET);
 									mostrar("proveedores", prov);
 									break;
 								case 0:
@@ -442,7 +434,7 @@ public class Controller {
 				}
 			} while (option != 0);
 		} catch (RuntimeException ex) {
-			logger.log(Level.SEVERE, "Problema greu", ex);
+			logger.log(Level.SEVERE, TEXT_RED + "Problema greu", ex);
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());
 		} catch (StockInsuficientException ex) {
@@ -450,7 +442,7 @@ public class Controller {
 		} finally {
 			ProductDAO.guardarFichero();
 			System.out.println(TEXT_GREEN + "Resultado guardado");
-			mostrarProductos(prodDAO);
+			mostrar("productos", prodDAO);
 			System.out.println(TEXT_RESET);
 		}
 	}
@@ -461,17 +453,17 @@ public class Controller {
 		int seleccion;
 		switch (type) {
 			case "inicial":
-				System.out.println("BOTIGA");
+				System.out.println(TEXT_PURPLE + "BOTIGA" + TEXT_RESET);
 				System.out.println("+----+");
 				System.out.println("1. Productos");
 				System.out.println("2. Clientes");
 				System.out.println("3. Proveedores");
 				break;
 			case "productos":
-				System.out.println("PRODUCTOS/PACKS < BOTIGA");
+				System.out.println(TEXT_PURPLE + "PRODUCTOS/PACKS < BOTIGA" + TEXT_RESET);
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
-				System.out.println("1. Buscar");
+				System.out.println("2. Buscar");
 				System.out.println("3. Modificar producto");
 				System.out.println("4. Eliminar");
 				System.out.println("5. Mostrar todo");
@@ -480,7 +472,7 @@ public class Controller {
 				System.out.println("8. Mantenimiento de producto");
 				break;
 			case "clientes":
-				System.out.println("CLIENTES < BOTIGA");
+				System.out.println(TEXT_PURPLE + "CLIENTES < BOTIGA" + TEXT_RESET);
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
 				System.out.println("2. Buscar");
@@ -489,7 +481,7 @@ public class Controller {
 				System.out.println("5. Mostrar todo");
 				break;
 			case "proveedores":
-				System.out.println("PROVEEDORES < BOTIGA");
+				System.out.println(TEXT_PURPLE + "PROVEEDORES < BOTIGA" + TEXT_RESET);
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
 				System.out.println("2. Buscar");
@@ -511,23 +503,8 @@ public class Controller {
 
 	// Funcionalidades
 	private static void pulsaParaContinuar() throws IOException {
-		System.out.println("Pulsa para continuar...");
+		System.out.println(TEXT_CYAN +"Pulsa para continuar..." + TEXT_RESET);
 		System.in.read();
-	}
-
-	public static void mostrarProductos(ProductDAO<Product> prodDAO) {
-		Persistable p = prodDAO;
-		System.out.println(p.getMap().toString());
-	}
-
-	public static void mostrarClientes(DAO clieDAO) {
-		Persistable p = clieDAO;
-		System.out.println(p.getMap().toString());
-	}
-
-	public static void mostrarProveedores(DAO provDAO) {
-		Persistable p = provDAO;
-		System.out.println(p.getMap().toString());
 	}
 
 	public static void mostrar(String type, Object dao){
@@ -541,6 +518,6 @@ public class Controller {
 				p = (DAO) dao;
 				break;
 		}
-		System.out.println(p.getMap().toString());
+		System.out.println(TEXT_GREEN + p.getMap().toString() + TEXT_RESET);
 	}
 }
