@@ -24,12 +24,12 @@ public final class Pack extends Product {
     }
 
     //afegir un producte a la llista o eliminar un producte de la llista
-    public void removeProduct(int p) {
-        this.productos.remove(p);
+    public boolean removeProduct(int p) {
+        return this.productos.remove(p);
     }
 
-    public void addProduct(int i) {
-        this.productos.add(i);
+    public boolean addProduct(int i) {
+        return this.productos.add(i);
     }
 
     @Override

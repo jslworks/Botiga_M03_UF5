@@ -71,7 +71,12 @@ public class ProductDAO<T> implements Persistable<T> {
             System.out.println("\u001B[35m" + "AGREGAR PRODUCTOS < PACK" + "\u001B[0m");
             System.out.print("ID: ");
             int idprod = new Scanner(System.in).nextInt();
-            pack.addProduct(idprod);
+            boolean res = pack.addProduct(idprod);
+            if(res){
+                System.out.println("\u001B[33m" + "Añadido correctamente" + "\u001B[0m");
+            }else{
+                System.out.println("\u001B[31m" + "No se puede repetir producto" + "\u001B[0m");
+            }
             System.out.print("¿Agregar mas productos? (S/n) ");
         } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
         System.out.println(pack);
