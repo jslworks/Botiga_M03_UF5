@@ -21,31 +21,35 @@ public class ProductDAO<T> implements Persistable<T> {
 
     // AGREGAR
     public void agregarProducto_pack(String type){
-        int idproduct;
+        int id;
         String nombre;
 
         // Obtener datos
         System.out.print("ID: ");
-        idproduct = new Scanner(System.in).nextInt();
-        System.out.print("Nombre: ");
-        nombre = new Scanner(System.in).nextLine();
-        System.out.print("Precio: ");
-        String tmp = new Scanner(System.in).nextLine();
-        tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
-        double precio = Double.parseDouble(tmp);
-        System.out.print("Stock: ");
-        int stock = new Scanner(System.in).nextInt();
+        id = new Scanner(System.in).nextInt();
+        if(this.search(id) == null){
+            System.out.print("Nombre: ");
+            nombre = new Scanner(System.in).nextLine();
+            System.out.print("Precio: ");
+            String tmp = new Scanner(System.in).nextLine();
+            tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
+            double precio = Double.parseDouble(tmp);
+            System.out.print("Stock: ");
+            int stock = new Scanner(System.in).nextInt();
 
-        switch (type) {
-            case "producto":
-                agregarProducto(idproduct, nombre, precio, stock);
-                break;
-            case "pack":
-                agregarPack(idproduct, nombre, precio, stock);
-                break;
-            default:
-                break;
-        }
+            switch (type) {
+                case "producto":
+                    agregarProducto(id, nombre, precio, stock);
+                    break;
+                case "pack":
+                    agregarPack(id, nombre, precio, stock);
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            System.out.println("\u001B[31m" + "No se ha creado. Ya existe un producto o pack con ese id" + "\u001B[0m");
+        }        
     }
 
     private void agregarProducto(int idproduct, String nombre, double precio, int stock){

@@ -34,7 +34,7 @@ public final class Pack extends Product {
 
     @Override
     public String toString() {
-        return "<Pack>{" + "id(" + getId() + ") " + getNombre() + productos + " = " + getPrecio() + "€ ; Stock = " + getStock() + "}";
+        return "<Pack>{" + getNombre() + "="+ productos + " " + getPrecio() + " EUR ; Stock = " + getStock() + "}";
     }
 
     //Metode equals del id del pack
