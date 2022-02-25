@@ -79,14 +79,16 @@ public class Controller {
 							switch (option2) {
 								case 1: // Agregar nuevo
 									System.out.println(TEXT_PURPLE + "AGREGAR NUEVO" + TEXT_RESET);
-									System.out.println(TEXT_PURPLE + "1. Producto");
-									System.out.println("2. Pack" + TEXT_RESET);
+									System.out.println("1. Producto");
+									System.out.println("2. Pack");
 									seleccion = new Scanner(System.in).nextInt();
 									switch (seleccion) {
 										case 1:
+											System.out.println(TEXT_PURPLE + "PRODUCTO" + TEXT_RESET);
 											prodDAO.agregarProducto_pack("producto");
 											break;
 										case 2:
+											System.out.println(TEXT_PURPLE + "PACK" + TEXT_RESET);
 											prodDAO.agregarProducto_pack("pack");
 											break;
 										default:
@@ -95,15 +97,15 @@ public class Controller {
 									break;
 								case 2: // Buscar
 									System.out.println(TEXT_PURPLE + "BUSCAR" + TEXT_RESET);
-									System.out.println(TEXT_PURPLE + "1. Producto");
-									System.out.println("2. Pack" + TEXT_RESET);
+									System.out.println("1. Producto");
+									System.out.println("2. Pack");
 									seleccion = new Scanner(System.in).nextInt();
 									switch (seleccion) {
 										case 1:
-											prodDAO.agregarProducto_pack("producto");
+											prodDAO.buscarProducto_pack("producto");
 											break;
 										case 2:
-											prodDAO.agregarProducto_pack("pack");
+											prodDAO.buscarProducto_pack("pack");
 											break;
 										default:
 											break;
@@ -178,7 +180,7 @@ public class Controller {
 											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
 										} else {
 											System.out.println("Agregar stock al producto (" + producto.getId() + ") "
-													+ producto.getName());
+													+ producto.getNombre());
 											int addStock = new Scanner(System.in).nextInt();
 											producto.putStock(addStock);
 
@@ -218,7 +220,7 @@ public class Controller {
 											do {
 												System.out
 														.println("Quitar stock al producto (" + producto.getId() + ") "
-																+ producto.getName());
+																+ producto.getNombre());
 												takeStock = new Scanner(System.in).nextInt();
 												try {
 													producto.takeStock(takeStock);
