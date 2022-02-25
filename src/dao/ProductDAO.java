@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -21,55 +21,58 @@ public class ProductDAO<T> implements Persistable<T> {
 
     public void agregarProducto_pack(String type){
         int idproduct;
-        String nombre, tmp;
-		double precio;
+        String nombre;
 
         // Obtener datos
         System.out.print("ID: ");
         idproduct = new Scanner(System.in).nextInt();
-        
         System.out.print("Nombre: ");
         nombre = new Scanner(System.in).nextLine();
         System.out.print("Precio: ");
-        tmp = new Scanner(System.in).nextLine();
+        String tmp = new Scanner(System.in).nextLine();
         tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
-        precio = Double.parseDouble(tmp);
+        double precio = Double.parseDouble(tmp);
+        System.out.print("Stock: ");
+        int stock = new Scanner(System.in).nextInt();
 
         switch (type) {
             case "producto":
-                agregarProducto(idproduct, nombre, precio);
+                agregarProducto(idproduct, nombre, precio, stock);
                 break;
             case "pack":
-                agregarPack(idproduct, nombre, precio);
+                agregarPack(idproduct, nombre, precio, stock);
                 break;
             default:
                 break;
         }
     }
 
-    private void agregarProducto(int idproduct, String nombre, double precio){
-        // Datos especificos Producto
-        System.out.print("Stock: ");
-        int stock = new Scanner(System.in).nextInt();
+    private void agregarProducto(int idproduct, String nombre, double precio, int stock){
         // Agregando producto
-        Product p = new Product(idproduct, nombre, precio, stock);
-        this.save(p);
+        Product product = new Product(idproduct, nombre, precio, stock);
+        this.save(product);
     }
 
-    private void agregarPack(int idproduct, String nombre, double precio){
+    private void agregarPack(int idpack, String nombre, double precio, int stock){
         // Datos especificos Pack
-        System.out.println("% descuento: ");
+        System.out.print("% descuento: ");
         String tmp = new Scanner(System.in).nextLine();
         tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
         double descuento = Double.parseDouble(tmp);
 
         // Generando pack
-        ArrayList<Integer> packList = new ArrayList<>();
-        Pack p = new Pack(packList, descuento, idproduct, nombre, precio);
-        this.save(p);
+        Pack pack = new Pack(idpack, nombre, precio, stock, descuento);
+        do {
+            System.out.println("\u001B[35m" + "AGREGAR PRODUCTOS < PACK" + "\u001B[0m");
+            System.out.print("ID: ");
+            int idprod = new Scanner(System.in).nextInt();
+            pack.addProduct(idprod);
+            System.out.print("¿Agregar mas productos? (S/n) ");
+        } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
+        System.out.println(pack);
+        this.save(pack);
     }
 
-    
     public void buscarProducto_pack(String type){
         int idprod_Pack;
 
@@ -88,14 +91,14 @@ public class ProductDAO<T> implements Persistable<T> {
 
     public void modifyProduct(Product producto) {
         Product prod = (Product) mapaProductos.get(producto.getId());
-        prod.setName(producto.getName());
-        prod.setPrice(producto.getPrice());
+        prod.setNombre(producto.getNombre());
+        prod.setPrecio(producto.getPrecio());
         prod.setStock(producto.getStock());
         System.out.println(producto);
     }
 
-    public ArrayList<String> printProduct() {
-        ArrayList<String> llistaprod = new ArrayList<String>();
+    public TreeSet<String> printProduct() {
+        TreeSet<String> llistaprod = new TreeSet<String>();
         llistaprod.add(mapaProductos.toString());
         return llistaprod;
     }
@@ -158,8 +161,8 @@ public class ProductDAO<T> implements Persistable<T> {
     // Adaptar y dejar de usar
     public void modifyProduct(int i, String n, double p, int s) {
         Product prod = (Product) mapaProductos.get(i);
-        prod.setName(n);
-        prod.setPrice(p);
+        prod.setNombre(n);
+        prod.setPrecio(p);
         prod.setStock(s);
     }
 }
