@@ -1,6 +1,6 @@
 package bo;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 public interface Persistable<T> {
 
@@ -10,5 +10,5 @@ public interface Persistable<T> {
 
     public T search(int id);
 
-    public HashMap<Integer, T> getMap();
+    public TreeMap<Integer, T> getMap();
 }

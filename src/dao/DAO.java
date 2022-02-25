@@ -1,14 +1,13 @@
 package dao;
 
-
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import bo.Identificable;
 import bo.Persistable;
 
 public class DAO<T extends Identificable> implements Persistable<T> {
     
-    private HashMap<Integer, T> hmDAO = new HashMap<Integer, T>();
+    private TreeMap<Integer, T> hmDAO = new TreeMap<Integer, T>();
     
     public T get(int id){
         return this.hmDAO.get(id);
@@ -20,7 +19,7 @@ public class DAO<T extends Identificable> implements Persistable<T> {
     }
     
     @Override
-    public HashMap<Integer, T> getMap() {
+    public TreeMap<Integer, T> getMap() {
         return hmDAO;
     }
 

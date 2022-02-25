@@ -2,7 +2,7 @@ package dao;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import bo.Address;
 import bo.Persistable;
@@ -11,7 +11,7 @@ import bo.Supplier;
 
 public class SupplierDAO<T> implements Persistable<T> {
 
-    private HashMap<Integer, T> supplier = new HashMap<Integer, T>();
+    private TreeMap<Integer, T> supplier = new TreeMap<Integer, T>();
 
     public boolean addSupplier(Integer idperson, String dni, String name, String surnames, Address address) {
         if (supplier.containsKey(idperson)) {
@@ -59,7 +59,7 @@ public class SupplierDAO<T> implements Persistable<T> {
 
     //Implementacio de la Interficie amb variable generica
     @Override
-    public HashMap<Integer, T> getMap() {
+    public TreeMap<Integer, T> getMap() {
         return supplier;
     }
 

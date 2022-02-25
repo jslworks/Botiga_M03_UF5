@@ -56,12 +56,11 @@ public class Controller {
 
 			// Variables
 			// Scanner keyboard = new Scanner(System.in);
-			int option, option2, option3;
+			int option, option2;
 			String inputResponse = "", nombreFichero = "";
 			boolean ok = false;
 
 			int seleccion;
-			String type;
 
 			int idperson;
 			String dni, name, surnames;
@@ -83,17 +82,32 @@ public class Controller {
 									System.out.println(TEXT_PURPLE + "1. Producto");
 									System.out.println("2. Pack" + TEXT_RESET);
 									seleccion = new Scanner(System.in).nextInt();
-									type = seleccion == 1 ? "producto" : "pack";
-
-									prodDAO.agregarProducto_pack(type);
+									switch (seleccion) {
+										case 1:
+											prodDAO.agregarProducto_pack("producto");
+											break;
+										case 2:
+											prodDAO.agregarProducto_pack("pack");
+											break;
+										default:
+											break;
+									}
 									break;
 								case 2: // Buscar
 									System.out.println(TEXT_PURPLE + "BUSCAR" + TEXT_RESET);
 									System.out.println(TEXT_PURPLE + "1. Producto");
 									System.out.println("2. Pack" + TEXT_RESET);
 									seleccion = new Scanner(System.in).nextInt();
-									type = seleccion == 1 ? "producto" : "pack";
-									prodDAO.buscarProducto_pack(type);
+									switch (seleccion) {
+										case 1:
+											prodDAO.agregarProducto_pack("producto");
+											break;
+										case 2:
+											prodDAO.agregarProducto_pack("pack");
+											break;
+										default:
+											break;
+									}
 									break;
 								case 3: // Modificar
 									System.out.println(TEXT_PURPLE + "MODIFICAR PRODUCTO" + TEXT_RESET);

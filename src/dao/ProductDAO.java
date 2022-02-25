@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import bo.Pack;
 import bo.Persistable;
@@ -17,7 +17,7 @@ import bo.Product;
 
 public class ProductDAO<T> implements Persistable<T> {
 
-    private static HashMap<Integer, Product> productes = new HashMap<>();
+    private static TreeMap<Integer, Product> mapaProductos = new TreeMap<>();
 
     public void agregarProducto_pack(String type){
         int idproduct;
@@ -87,7 +87,7 @@ public class ProductDAO<T> implements Persistable<T> {
     // Metodos
 
     public void modifyProduct(Product producto) {
-        Product prod = (Product) productes.get(producto.getId());
+        Product prod = (Product) mapaProductos.get(producto.getId());
         prod.setName(producto.getName());
         prod.setPrice(producto.getPrice());
         prod.setStock(producto.getStock());
@@ -96,13 +96,13 @@ public class ProductDAO<T> implements Persistable<T> {
 
     public ArrayList<String> printProduct() {
         ArrayList<String> llistaprod = new ArrayList<String>();
-        llistaprod.add(productes.toString());
+        llistaprod.add(mapaProductos.toString());
         return llistaprod;
     }
 
     public static void guardarFichero() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
-            oos.writeObject(productes);
+            oos.writeObject(mapaProductos);
         } catch (IOException e) {
             System.out.println("\u001B[31m" + "Error al guardar el archivo: " + e + "\u001B[0m");
         } finally {
@@ -115,7 +115,7 @@ public class ProductDAO<T> implements Persistable<T> {
             File file = new File("productes.dat");
             file.createNewFile();
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-            productes = (HashMap<Integer, Product>) ois.readObject();
+            mapaProductos = (TreeMap<Integer, Product>) ois.readObject();
         } catch (EOFException eofe) {
         } catch (IOException ioe) {
             System.out.println("\u001B[31m" + ioe + "\u001B[0m");
@@ -132,32 +132,32 @@ public class ProductDAO<T> implements Persistable<T> {
     public void save(Object obj) {
         if (obj != null && obj instanceof Product) {
             Product id = (Product) obj;
-            productes.put(id.getIdProduct(), (Product) obj);
+            mapaProductos.put(id.getIdProduct(), (Product) obj);
             System.out.println("\u001B[32m" + "Guardado correctamente" + "\u001B[0m");
         }
     }
 
     @Override
-    public HashMap<Integer, T> getMap() {
-        return (HashMap<Integer, T>) productes;
+    public TreeMap<Integer, T> getMap() {
+        return (TreeMap<Integer, T>) mapaProductos;
     }
 
     @Override
     public void delete(int id) {
-        if (productes.containsKey(id)) {
-            productes.remove(id);
+        if (mapaProductos.containsKey(id)) {
+            mapaProductos.remove(id);
             System.out.println("\u001B[32m" + "Eliminado correctamente" + "\u001B[0m");
         }
     }
 
     @Override
     public T search(int id) {
-        return productes.containsKey(id) ? (T) (Product) productes.get(id) : null;
+        return mapaProductos.containsKey(id) ? (T) (Product) mapaProductos.get(id) : null;
     }
 
     // Adaptar y dejar de usar
     public void modifyProduct(int i, String n, double p, int s) {
-        Product prod = (Product) productes.get(i);
+        Product prod = (Product) mapaProductos.get(i);
         prod.setName(n);
         prod.setPrice(p);
         prod.setStock(s);
