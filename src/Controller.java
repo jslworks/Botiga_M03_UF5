@@ -20,17 +20,6 @@ import err.StockInsuficientException;
 
 public class Controller {
 
-	// Definición colores para prints
-	public static final String TEXT_RESET = "\u001B[0m";
-	public static final String TEXT_BLACK = "\u001B[30m";
-	public static final String TEXT_RED = "\u001B[31m";
-	public static final String TEXT_GREEN = "\u001B[32m";
-	public static final String TEXT_YELLOW = "\u001B[33m";
-	public static final String TEXT_BLUE = "\u001B[34m";
-	public static final String TEXT_PURPLE = "\u001B[35m";
-	public static final String TEXT_CYAN = "\u001B[36m";
-	public static final String TEXT_WHITE = "\u001B[37m";
-
 	// Logger
 	static Logger logger = Logger.getLogger("Log Botiga");
 
@@ -84,11 +73,11 @@ public class Controller {
 									seleccion = new Scanner(System.in).nextInt();
 									switch (seleccion) {
 										case 1:
-											System.out.println(TEXT_PURPLE + "PRODUCTO" + TEXT_RESET);
+											titulo("PRODUCTO");
 											prodDAO.agregarProducto_pack("producto");
 											break;
 										case 2:
-											System.out.println(TEXT_PURPLE + "PACK" + TEXT_RESET);
+											titulo("PACK");
 											prodDAO.agregarProducto_pack("pack");
 											break;
 										default:
@@ -96,7 +85,7 @@ public class Controller {
 									}
 									break;
 								case 2: // Buscar
-									System.out.println(TEXT_PURPLE + "BUSCAR" + TEXT_RESET);
+									titulo("BUSCAR");
 									System.out.println("1. Producto");
 									System.out.println("2. Pack");
 									seleccion = new Scanner(System.in).nextInt();
@@ -112,7 +101,7 @@ public class Controller {
 									}
 									break;
 								case 3: // Modificar
-									System.out.println(TEXT_PURPLE + "MODIFICAR PRODUCTO" + TEXT_RESET);
+									titulo("MODIFICAR PRODUCTO");
 									// Obtener datos
 									System.out.print("ID: ");
 									idproduct = new Scanner(System.in).nextInt();
@@ -136,11 +125,11 @@ public class Controller {
 										// Mostrar resultados
 										System.out.println(products.toString());
 									} else {
-										System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
+										alerta("El producto no existe", "");
 									}
 									break;
 								case 4: // Eliminar
-									System.out.println(TEXT_PURPLE + "ELIMINAR PRODUCTO O PACK: " + TEXT_RESET);
+									titulo("ELIMINAR PRODUCTO O PACK: ");
 									System.out.println("ID :");
 									idproduct = new Scanner(System.in).nextInt();
 									prodDAO.delete(idproduct);
@@ -149,7 +138,7 @@ public class Controller {
 									mostrar("productos", prodDAO);
 									break;
 								case 6: // Agregar stock
-									System.out.println(TEXT_PURPLE + "AGREGAR STOCK PRODUCTO" + TEXT_RESET);
+									titulo("AGREGAR STOCK PRODUCTO");
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
 									inputResponse = new Scanner(System.in).nextLine();
@@ -168,16 +157,16 @@ public class Controller {
 													producto.putStock(stock);
 												}
 											}
-										} catch (IOException e) {
-											System.out.println(TEXT_RED + "Error con el fichero: " + e + TEXT_RESET);
+										} catch (IOException ioe) {
+											alerta("Error con el fichero: ", ioe);
 										}
 									} else {
-										System.out.println(TEXT_PURPLE + "STOCK PRODUCTO" + TEXT_RESET);
+										titulo("STOCK PRODUCTO < AGREGAR");
 										System.out.print("ID: ");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto != null) {
-											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
+											alerta("El producto no existe", "");
 										} else {
 											System.out.println("Agregar stock al producto (" + producto.getId() + ") "
 													+ producto.getNombre());
@@ -189,6 +178,7 @@ public class Controller {
 									}
 									break;
 								case 7: // Quitar stock
+									titulo("QUITAR STOCK PRODUCTO");
 									System.out.println(TEXT_PURPLE + "QUITAR STOCK PRODUCTO" + TEXT_RESET);
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
@@ -206,15 +196,15 @@ public class Controller {
 													producto.takeStock(stock);
 												}
 											}
-										} catch (IOException e) {
-											System.out.println(TEXT_RED + "Error con el fichero: " + e + TEXT_RESET);
+										} catch (IOException ioe) {
+											alerta("Error con el fichero: ", ioe);
 										}
 									} else {
 										System.out.println("Id del producto:");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto == null) {
-											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
+											alerta("El producto no existe", producto);
 										} else {
 											int takeStock = -1;
 											do {
@@ -234,13 +224,13 @@ public class Controller {
 											if (ok) {
 												prodDAO.modifyProduct(producto);
 											} else {
-												System.out.println(TEXT_RED + "No se ha modificado el producto " + producto + TEXT_RESET);
+												alerta("El producto no existe", producto);
 											}
 										}
 									}
 									break;
 								case 8: // Mantenimiento de productos
-									System.out.println(TEXT_PURPLE + "COMANDA PRODUCTO" + TEXT_RESET);
+									titulo("COMANDA PRODUCTO");
 									System.out.print("Nombre fichero: ");
 									nombreFichero = new Scanner(System.in).nextLine();
 									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombreFichero)));
@@ -256,17 +246,20 @@ public class Controller {
 											dos.writeInt(idproduct);
 											dos.writeInt(stock);
 										} else {
-											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
+											alerta("El producto no existe", "");
 										}
 										System.out.println("¿Continuar? (S/n)");
 										inputResponse = new Scanner(System.in).nextLine();
 									}while(inputResponse.equalsIgnoreCase("S"));
 									dos.close();
 									break;
+								case 9:
+									System.out.println();
+									
 								case 0:
 									break;
 								default:
-									System.out.println(TEXT_RED + "Opcion incorrecta" + TEXT_RESET);
+									alerta("Opcion incorrecta", "");
 									break;
 							}
 							if (option2 != 0)
@@ -457,9 +450,8 @@ public class Controller {
 			ex.printStackTrace();
 		} finally {
 			ProductDAO.guardarFichero();
-			System.out.println(TEXT_GREEN + "Resultado guardado");
+			sistema("Resultado guardado");
 			mostrar("productos", prodDAO);
-			System.out.println(TEXT_RESET);
 		}
 	}
 
@@ -469,14 +461,14 @@ public class Controller {
 		int seleccion;
 		switch (type) {
 			case "inicial":
-				System.out.println(TEXT_PURPLE + "BOTIGA" + TEXT_RESET);
+				titulo("BOTIGA");
 				System.out.println("+----+");
 				System.out.println("1. Productos");
 				System.out.println("2. Clientes");
 				System.out.println("3. Proveedores");
 				break;
 			case "productos":
-				System.out.println(TEXT_PURPLE + "PRODUCTOS/PACKS < BOTIGA" + TEXT_RESET);
+				titulo("PRODUCTOS/PACKS < BOTIGA");
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
 				System.out.println("2. Buscar");
@@ -488,7 +480,7 @@ public class Controller {
 				System.out.println("8. Mantenimiento de producto");
 				break;
 			case "clientes":
-				System.out.println(TEXT_PURPLE + "CLIENTES < BOTIGA" + TEXT_RESET);
+				titulo("CLIENTES < BOTIGA");
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
 				System.out.println("2. Buscar");
@@ -497,7 +489,7 @@ public class Controller {
 				System.out.println("5. Mostrar todo");
 				break;
 			case "proveedores":
-				System.out.println(TEXT_PURPLE + "PROVEEDORES < BOTIGA" + TEXT_RESET);
+				titulo("PROVEEDORES < BOTIGA");
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
 				System.out.println("2. Buscar");
@@ -534,6 +526,29 @@ public class Controller {
 				p = (DAO) dao;
 				break;
 		}
-		System.out.println(TEXT_GREEN + p.getMap().toString() + TEXT_RESET);
+		sistema(p.getMap().toString());
 	}
+
+	private static void titulo(String texto){
+		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
+	}
+
+	private static void alerta(String texto, Object obj){
+		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
+	}
+
+	private static void sistema(String texto){
+		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
+	}
+
+	// Definición colores para prints
+	public static final String TEXT_RESET = "\u001B[0m";
+	public static final String TEXT_BLACK = "\u001B[30m";
+	public static final String TEXT_RED = "\u001B[31m";
+	public static final String TEXT_GREEN = "\u001B[32m";
+	public static final String TEXT_YELLOW = "\u001B[33m";
+	public static final String TEXT_BLUE = "\u001B[34m";
+	public static final String TEXT_PURPLE = "\u001B[35m";
+	public static final String TEXT_CYAN = "\u001B[36m";
+	public static final String TEXT_WHITE = "\u001B[37m";
 }
