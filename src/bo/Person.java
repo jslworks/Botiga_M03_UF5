@@ -3,6 +3,8 @@ package bo;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import tools.Identificable;
+
 public abstract class Person implements Identificable{
 
     private Integer idperson;

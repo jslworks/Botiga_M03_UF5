@@ -4,7 +4,7 @@ import java.util.TreeMap;
 
 import bo.Address;
 import bo.Client;
-import bo.Persistable;
+import tools.Persistable;
 
 public class ClientDAO<T> implements Persistable<T> {
 

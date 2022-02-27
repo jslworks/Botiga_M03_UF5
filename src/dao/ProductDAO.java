@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 import bo.Pack;
-import bo.Persistable;
 import bo.Product;
+import tools.Persistable;
 
 public class ProductDAO<T> implements Persistable<T> {
 
@@ -144,6 +146,24 @@ public class ProductDAO<T> implements Persistable<T> {
         TreeSet<String> llistaprod = new TreeSet<String>();
         llistaprod.add(mapaProductos.toString());
         return llistaprod;
+    }
+
+    public ArrayList<Product> mostrarOrdenadoPor(String type){
+        ArrayList<Product> listaOrdenada = new ArrayList<>(mapaProductos.size());
+        switch (type) {
+            case "nombre":
+                
+                break;
+            case "precio":
+                
+                break;
+            case "stock":
+                
+                break;
+            default:
+                break;
+        }
+        return listaOrdenada;
     }
     
     // FICHEROS

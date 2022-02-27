@@ -11,12 +11,12 @@ import java.util.logging.*;
 
 import bo.Address;
 import bo.Client;
-import bo.Persistable;
 import bo.Product;
 import bo.Supplier;
 import dao.DAO;
 import dao.ProductDAO;
 import err.StockInsuficientException;
+import tools.Persistable;
 
 public class Controller {
 
@@ -106,7 +106,8 @@ public class Controller {
 									System.out.print("ID: ");
 									idproduct = new Scanner(System.in).nextInt();
 									if (prodDAO.search(idproduct) != null) {
-										System.out.print("Nombre:");
+										titulo("MODIFICAR");
+										System.out.print("Nombre: ");
 										name = new Scanner(System.in).nextLine();
 
 										System.out.print("Precio: ");

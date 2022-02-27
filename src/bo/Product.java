@@ -3,6 +3,7 @@ package bo;
 import java.io.Serializable;
 import java.util.Objects;
 import err.StockInsuficientException;
+import tools.Identificable;
 
 public class Product implements Identificable, Serializable{
 

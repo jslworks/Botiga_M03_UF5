@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import bo.Address;
-import bo.Persistable;
 import bo.Product;
 import bo.Supplier;
+import tools.Persistable;
 
 public class SupplierDAO<T> implements Persistable<T> {
 

@@ -2,8 +2,8 @@ package dao;
 
 import java.util.TreeMap;
 
-import bo.Identificable;
-import bo.Persistable;
+import tools.Identificable;
+import tools.Persistable;
 
 public class DAO<T extends Identificable> implements Persistable<T> {
     
