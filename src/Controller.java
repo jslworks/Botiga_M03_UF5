@@ -3,6 +3,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -254,9 +255,6 @@ public class Controller {
 									}while(inputResponse.equalsIgnoreCase("S"));
 									dos.close();
 									break;
-								case 9:
-									System.out.println();
-									
 								case 0:
 									break;
 								default:
@@ -475,7 +473,7 @@ public class Controller {
 				System.out.println("2. Buscar");
 				System.out.println("3. Modificar producto");
 				System.out.println("4. Eliminar");
-				System.out.println("5. Mostrar todo");
+				System.out.println("5. Mostrar productos");
 				System.out.println("6. Agregar stock");
 				System.out.println("7. Quitar stock");
 				System.out.println("8. Mantenimiento de producto");
@@ -527,7 +525,18 @@ public class Controller {
 				p = (DAO) dao;
 				break;
 		}
-		sistema(p.getMap().toString());
+		TreeMap<Integer, Product> mapaProductos = p.getMap();
+		
+		sistema("ID\tPrecio\tStock\tNombre\t");
+		for (Product product : mapaProductos.values()) {
+			System.out.println(
+				product.getId() + "\t" + 
+				product.getPrecio() + "\t" + 
+				product.getStock() + "\t" + 
+				product.getNombre() 
+			);
+		}
+		System.out.println();
 	}
 
 	private static void titulo(String texto){
