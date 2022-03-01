@@ -1,6 +1,7 @@
 package bo;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 import err.StockInsuficientException;
 import tools.Identificable;
@@ -13,6 +14,21 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     private String nombre;
     private double precio;
     private int stock;
+    private LocalDate fechaInicial;
+    private LocalDate fechaFinal;
+
+    public LocalDate getFechaInicial() {
+        return fechaInicial;
+    }
+    public void setFechaInicial(LocalDate fechaInicial) {
+        this.fechaInicial = fechaInicial;
+    }
+    public LocalDate getFechaFinal() {
+        return fechaFinal;
+    }
+    public void setFechaFinal(LocalDate fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
 
     @Override
     public int getId() {
@@ -65,7 +81,16 @@ public class Product implements Identificable, Serializable, Comparable<Product>
 		}
     }
     
-    //El constructors del produte
+    // Constructores
+    public Product(int idproduct, String nom, double price, int stock, LocalDate fechaInicial, LocalDate fechaFinal) {
+        this.id = idproduct;
+        this.nombre = nom;
+        this.precio = price;
+        this.stock = stock;
+        this.fechaInicial = fechaInicial;
+        this.fechaFinal = fechaFinal;
+    }
+    
     public Product(int idproduct, String nom, double price, int stock) {
         this.id = idproduct;
         this.nombre = nom;
@@ -82,7 +107,7 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     //El metode toString
     @Override
     public String toString() {
-        return "(" + id + ") " + nombre + ", " + precio + " EUR, stock=" + stock + " <Producto>";
+        return "(" + id + ") " + nombre + ", " + precio + " EUR, stock=" + stock + "catálogo : de " + fechaInicial + " a " + fechaFinal + " <Producto>";
     }
 
     //Metode equals del name

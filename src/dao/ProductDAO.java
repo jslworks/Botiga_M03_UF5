@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -38,9 +40,18 @@ public class ProductDAO<T> implements Persistable<T> {
             System.out.print("Stock: ");
             int stock = new Scanner(System.in).nextInt();
 
+            System.out.println("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
+            System.out.print("Fecha inicial : ");
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String userInput = new Scanner(System.in).nextLine();
+            LocalDate fechaInicial = LocalDate.parse(userInput, dateFormat);
+            System.out.print("Fecha inicial: ");
+            userInput = new Scanner(System.in).nextLine();
+            LocalDate fechaFinal = LocalDate.parse(userInput, dateFormat);
+
             switch (type) {
                 case "producto":
-                    agregarProducto(id, nombre, precio, stock);
+                    agregarProducto(id, nombre, precio, stock, fechaInicial, fechaFinal);
                     break;
                 case "pack":
                     agregarPack(id, nombre, precio, stock);
@@ -53,9 +64,9 @@ public class ProductDAO<T> implements Persistable<T> {
         }        
     }
 
-    private void agregarProducto(int idproduct, String nombre, double precio, int stock){
+    private void agregarProducto(int idproduct, String nombre, double precio, int stock, LocalDate fechaInicial, LocalDate fechaFinal){
         // Agregando producto
-        Product product = new Product(idproduct, nombre, precio, stock);
+        Product product = new Product(idproduct, nombre, precio, stock, fechaInicial, fechaFinal);
         this.save(product);
     }
 
