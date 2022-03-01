@@ -6,7 +6,7 @@ import java.util.TreeSet;
 
 public final class Pack extends Product {
 
-    private TreeSet<Integer> productos;
+    private TreeSet<Product> productos;
     private double descuento;
 
     public Pack(int id, String nombre, double precio, int stock, double descuento) {
@@ -23,18 +23,17 @@ public final class Pack extends Product {
         this.descuento = descuento;
     }
 
-    //afegir un producte a la llista o eliminar un producte de la llista
-    public boolean removeProduct(int p) {
-        return this.productos.remove(p);
+    public boolean removeProduct(Product elProducto) {
+        return this.productos.remove(elProducto);
     }
 
-    public boolean addProduct(int i) {
-        return this.productos.add(i);
+    public boolean addProduct(Product elProducto) {
+        return this.productos.add(elProducto);
     }
 
     @Override
     public String toString() {
-        return "<Pack>{" + getNombre() + "="+ productos + " " + getPrecio() + " EUR ; Stock = " + getStock() + "}";
+        return "(" + super.getId() + ") " + getNombre() + " "+ productos + " = " + getPrecio() + " EUR ; Stock = " + getStock() + " <Pack>";
     }
 
     //Metode equals del id del pack
@@ -47,12 +46,14 @@ public final class Pack extends Product {
 
     @Override
     public boolean equals(Object obj) {
+        boolean checkedID = false;
+        boolean checkedList = false;
         if (obj instanceof Pack) {
-            Pack temp = (Pack) obj;
-            return temp.getNombre().equals(obj);
-        } else {
-            return false;
+            Pack pack = (Pack) obj;
+            checkedID = (getId() == pack.getId());
+            checkedList = (productos.equals(pack.productos));
         }
+        return (checkedID && checkedList);
     }
 
 }

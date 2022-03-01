@@ -5,7 +5,7 @@ import java.util.Objects;
 import err.StockInsuficientException;
 import tools.Identificable;
 
-public class Product implements Identificable, Serializable{
+public class Product implements Identificable, Serializable, Comparable<Product>{
 
     private static final long serialVersionUID = 14L;
 
@@ -82,7 +82,7 @@ public class Product implements Identificable, Serializable{
     //El metode toString
     @Override
     public String toString() {
-        return "Producte{" + "idproduct=" + id + ", nom=" + nombre + ", price=" + precio + ", stock=" + stock + '}';
+        return "(" + id + ") " + nombre + ", " + precio + " EUR, stock=" + stock + " <Producto>";
     }
 
     //Metode equals del name
@@ -101,6 +101,13 @@ public class Product implements Identificable, Serializable{
         int hash = 7;
         hash = 67 * hash + Objects.hashCode(this.nombre);
         return hash;
+    }
+    
+    @Override
+    public int compareTo(Product prod) {
+        Integer thisID = getId();
+        Integer otherID = prod.getId();
+        return thisID.compareTo(otherID);
     }
 
     

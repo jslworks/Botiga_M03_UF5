@@ -9,7 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.TreeSet;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -71,9 +70,9 @@ public class ProductDAO<T> implements Persistable<T> {
         Pack pack = new Pack(idpack, nombre, precio, stock, descuento);
         do {
             System.out.println("\u001B[35m" + "AGREGAR PRODUCTOS < PACK" + "\u001B[0m");
-            System.out.print("ID: ");
-            int idprod = new Scanner(System.in).nextInt();
-            boolean res = pack.addProduct(idprod);
+            Product prod = buscarProducto_pack("producto");
+
+            boolean res = pack.addProduct(prod);
             if(res){
                 System.out.println("\u001B[33m" + "Añadido correctamente" + "\u001B[0m");
             }else{
@@ -95,18 +94,19 @@ public class ProductDAO<T> implements Persistable<T> {
     }
 
     // BUSCAR
-    public void buscarProducto_pack(String type){
+    public Product buscarProducto_pack(String type){
         int idprod_Pack;
 
         System.out.print("ID: ");
         idprod_Pack = new Scanner(System.in).nextInt();
-        Object search = this.search(idprod_Pack);
+        Product search = (Product) this.search(idprod_Pack);
         
         if (search != null) {
             System.out.println(search); // Imprimira producto o pack
         } else {
             System.out.println("\u001B[31m" + "No existe este " + type + "\u001B[0m");
         }
+        return search;
     }
 
     @Override
