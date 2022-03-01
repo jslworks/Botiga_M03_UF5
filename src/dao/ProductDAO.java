@@ -81,7 +81,24 @@ public class ProductDAO<T> implements Persistable<T> {
             System.out.print("¿Agregar mas productos? (S/n) ");
         } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
         System.out.println(pack);
-        this.save(pack);
+        // Comprobar si otros pack tienen los mismos productos
+        if(!packsRepetidos(pack)){
+            this.save(pack);
+        }else{
+            System.out.println("\u001B[31m" + "Ya existe un pack con éstos productos" + "\u001B[0m");
+        }
+    }
+
+    private static boolean packsRepetidos(Pack newPack){
+        for (Product producto : mapaProductos.values()) {
+            if (producto instanceof Pack) {
+                Pack pack = (Pack) producto;
+                if(newPack.equals(pack)){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
