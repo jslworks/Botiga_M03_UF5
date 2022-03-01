@@ -302,7 +302,7 @@ public class Controller {
 		}
 		TreeMap<Integer, Product> mapaProductos = p.getMap();
 		
-		// sistema("ID\tPrecio\tStock\tNombre\t");
+		sistema("(ID) Nombre: precio EUR, Stock // Disponible en catálogo");
 		for (Product product : mapaProductos.values()) {
 			// System.out.println(
 			// 	product.getId() + "\t" + 

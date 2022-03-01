@@ -40,13 +40,15 @@ public class ProductDAO<T> implements Persistable<T> {
             System.out.print("Stock: ");
             int stock = new Scanner(System.in).nextInt();
 
-            System.out.println("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
+            sistema("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
             System.out.print("Fecha inicial : ");
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String userInput = new Scanner(System.in).nextLine();
+            userInput = userInput.isBlank() ? "02/02/2020" : userInput;
             LocalDate fechaInicial = LocalDate.parse(userInput, dateFormat);
-            System.out.print("Fecha inicial: ");
+            System.out.print("Fecha final: ");
             userInput = new Scanner(System.in).nextLine();
+            userInput = userInput.isBlank() ? "02/02/2020" : userInput;
             LocalDate fechaFinal = LocalDate.parse(userInput, dateFormat);
 
             switch (type) {
@@ -60,7 +62,7 @@ public class ProductDAO<T> implements Persistable<T> {
                     break;
             }
         }else{
-            System.out.println("\u001B[31m" + "No se ha creado. Ya existe un producto o pack con ese id" + "\u001B[0m");
+            alerta("No se ha creado. Ya existe un producto o pack con ese id", "");
         }        
     }
 
@@ -80,14 +82,14 @@ public class ProductDAO<T> implements Persistable<T> {
         // Generando pack
         Pack pack = new Pack(idpack, nombre, precio, stock, descuento);
         do {
-            System.out.println("\u001B[35m" + "AGREGAR PRODUCTOS < PACK" + "\u001B[0m");
+            titulo("AGREGAR PRODUCTOS < PACK");
             Product prod = buscarProducto_pack("producto");
 
             boolean res = pack.addProduct(prod);
             if(res){
-                System.out.println("\u001B[33m" + "Añadido correctamente" + "\u001B[0m");
+                sistema("Añadido correctamente");
             }else{
-                System.out.println("\u001B[31m" + "No se puede repetir producto" + "\u001B[0m");
+                alerta("No se puede repetir producto", "");
             }
             System.out.print("¿Agregar mas productos? (S/n) ");
         } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
@@ -96,7 +98,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if(!packsRepetidos(pack)){
             this.save(pack);
         }else{
-            System.out.println("\u001B[31m" + "Ya existe un pack con éstos productos" + "\u001B[0m");
+            alerta("Ya existe un pack con éstos productos", "");
         }
     }
 
@@ -117,7 +119,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if (obj != null && obj instanceof Product) {
             Product id = (Product) obj;
             mapaProductos.put(id.getIdProduct(), (Product) obj);
-            System.out.println("\u001B[32m" + "Guardado correctamente" + "\u001B[0m");
+            sistema("Guardado correctamente");
         }
     }
 
@@ -132,7 +134,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if (search != null) {
             System.out.println(search); // Imprimira producto o pack
         } else {
-            System.out.println("\u001B[31m" + "No existe este " + type + "\u001B[0m");
+            alerta("No existe este ", type);
         }
         return search;
     }
@@ -165,7 +167,7 @@ public class ProductDAO<T> implements Persistable<T> {
     public void delete(int id) {
         if (mapaProductos.containsKey(id)) {
             mapaProductos.remove(id);
-            System.out.println("\u001B[32m" + "Eliminado correctamente" + "\u001B[0m");
+            sistema("Eliminado correctamente");
         }
     }
 
@@ -199,9 +201,9 @@ public class ProductDAO<T> implements Persistable<T> {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
             oos.writeObject(mapaProductos);
         } catch (IOException e) {
-            System.out.println("\u001B[31m" + "Error al guardar el archivo: " + e + "\u001B[0m");
+            alerta("Error al guardar el archivo: ", e);
         } finally {
-            System.out.println("\u001B[32m" + "productes.dat guardado correctamente" + "\u001B[0m");
+            sistema("productes.dat guardado correctamente");
         }
     }
 
@@ -213,11 +215,11 @@ public class ProductDAO<T> implements Persistable<T> {
             mapaProductos = (TreeMap<Integer, Product>) ois.readObject();
         } catch (EOFException eofe) {
         } catch (IOException ioe) {
-            System.out.println("\u001B[31m" + ioe + "\u001B[0m");
+            alerta("", ioe);
         } catch (ClassNotFoundException cnfe) {
-            System.out.println("\u001B[31m" + "La classe no existe: " + cnfe + "\u001B[0m");
+            alerta("La classe no existe: ", cnfe);
         } finally {
-            System.out.println("\u001B[32m" + "productes.dat cargado correctamente" + "\u001B[0m");
+            sistema("productes.dat cargado correctamente");
         }
 
     }
@@ -228,4 +230,35 @@ public class ProductDAO<T> implements Persistable<T> {
         return (TreeMap<Integer, T>) mapaProductos;
     }
 
+	////////////////////////////////////////////////////////////////////////
+	// VISTA
+	//////////
+
+	private static void titulo(String texto){
+		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
+	}
+
+	private static void alerta(String texto, Object obj){
+		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
+	}
+
+	private static void sistema(String texto){
+		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
+	}
+
+	private static void pulsaParaContinuar() throws IOException {
+		System.out.println(TEXT_CYAN +"Pulsa para continuar..." + TEXT_RESET);
+		System.in.read();
+	}
+
+	// Definición colores para prints
+	public static final String TEXT_RESET = "\u001B[0m";
+	public static final String TEXT_BLACK = "\u001B[30m";
+	public static final String TEXT_RED = "\u001B[31m";
+	public static final String TEXT_GREEN = "\u001B[32m";
+	public static final String TEXT_YELLOW = "\u001B[33m";
+	public static final String TEXT_BLUE = "\u001B[34m";
+	public static final String TEXT_PURPLE = "\u001B[35m";
+	public static final String TEXT_CYAN = "\u001B[36m";
+	public static final String TEXT_WHITE = "\u001B[37m";
 }

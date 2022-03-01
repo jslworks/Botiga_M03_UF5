@@ -107,7 +107,7 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     //El metode toString
     @Override
     public String toString() {
-        return "(" + id + ") " + nombre + ", " + precio + " EUR, stock=" + stock + "catálogo : de " + fechaInicial + " a " + fechaFinal + " <Producto>";
+        return "(" + id + ") " + nombre + ": " + precio + " EUR, " + stock + " unidad/es // Desde " + fechaInicial + " hasta " + fechaFinal + " <Producto>";
     }
 
     //Metode equals del name
