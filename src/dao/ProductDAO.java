@@ -9,12 +9,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.TreeSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 import bo.Pack;
 import bo.Product;
 import tools.Persistable;
+import tools.ProductNameComparator;
+import tools.ProductPriceComparator;
+import tools.ProductStockComparator;
 
 public class ProductDAO<T> implements Persistable<T> {
 
@@ -80,7 +84,6 @@ public class ProductDAO<T> implements Persistable<T> {
             }
             System.out.print("¿Agregar mas productos? (S/n) ");
         } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
-        System.out.println(pack);
         // Comprobar si otros pack tienen los mismos productos
         if(!packsRepetidos(pack)){
             this.save(pack);
@@ -165,22 +168,31 @@ public class ProductDAO<T> implements Persistable<T> {
         return llistaprod;
     }
 
-    public ArrayList<Product> mostrarOrdenadoPor(String type){
-        ArrayList<Product> listaOrdenada = new ArrayList<>(mapaProductos.size());
+    public void mostrarOrdenadoPor(String type){
+        ArrayList<Product> listaOrdenada = new ArrayList<>(mapaProductos.values());
         switch (type) {
             case "nombre":
-                
+                Collections.sort(listaOrdenada, new ProductNameComparator());
                 break;
             case "precio":
-                
+                Collections.sort(listaOrdenada, new ProductPriceComparator());
                 break;
             case "stock":
-                
-                break;
+                Collections.sort(listaOrdenada, new ProductStockComparator());
+            break;
             default:
                 break;
         }
-        return listaOrdenada;
+        
+        System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tNombre\t" + "\u001b[0m");
+        for (Product product : listaOrdenada) {
+            System.out.println(
+                product.getId() + "\t" + 
+                product.getPrecio() + "\t" + 
+                product.getStock() + "\t" + 
+                product.getNombre() 
+            );
+        }
     }
     
     // FICHEROS

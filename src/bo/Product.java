@@ -3,6 +3,7 @@ package bo;
 import java.io.Serializable;
 import java.util.Objects;
 import err.StockInsuficientException;
+// import tools.Comparators;
 import tools.Identificable;
 
 public class Product implements Identificable, Serializable, Comparable<Product>{
@@ -108,8 +109,6 @@ public class Product implements Identificable, Serializable, Comparable<Product>
         Integer thisID = getId();
         Integer otherID = prod.getId();
         return thisID.compareTo(otherID);
+        // return Comparators.ID.compare(this, prod);
     }
-
-    
-
 }

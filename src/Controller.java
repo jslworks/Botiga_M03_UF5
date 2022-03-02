@@ -137,7 +137,23 @@ public class Controller {
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
-									mostrar("productos", prodDAO);
+									seleccion = menu("MOSTRAR PRODUCTOS");
+									switch (seleccion) {
+										case 1:
+											mostrar("productos", prodDAO);
+											break;
+										case 2:
+											prodDAO.mostrarOrdenadoPor("nombre");
+											break;
+										case 3:
+											prodDAO.mostrarOrdenadoPor("precio");
+											break;
+										case 4:
+											prodDAO.mostrarOrdenadoPor("stock");		
+											break;									
+										default:
+											break;
+									}
 									break;
 								case 6: // Agregar stock
 									titulo("AGREGAR STOCK PRODUCTO");
@@ -267,7 +283,7 @@ public class Controller {
 						break;
 
 					case 2: // CLIENTES
-						this.clientes();
+						this.clientes();						
 						break;
 					case 3: // PROVEEDORES
 						this.proveedores();
@@ -287,32 +303,6 @@ public class Controller {
 			sistema("Resultado guardado");
 			mostrar("productos", prodDAO);
 		}
-	}
-
-	public static void mostrar(String type, Object dao){
-		Persistable p = null;
-		switch (type) {
-			case "productos":
-				p = (ProductDAO<Product>) dao;
-				break;
-			case "clientes":
-			case "proveedores":
-				p = (DAO) dao;
-				break;
-		}
-		TreeMap<Integer, Product> mapaProductos = p.getMap();
-		
-		// sistema("ID\tPrecio\tStock\tNombre\t");
-		for (Product product : mapaProductos.values()) {
-			// System.out.println(
-			// 	product.getId() + "\t" + 
-			// 	product.getPrecio() + "\t" + 
-			// 	product.getStock() + "\t" + 
-			// 	product.getNombre() 
-			// );
-			System.out.println(product);
-		}
-		System.out.println();
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -495,28 +485,11 @@ public class Controller {
 				pulsaParaContinuar();
 		} while (option2 != 0);
 	}
+	
 
 	////////////////////////////////////////////////////////////////////////
 	// VISTA
 	//////////
-
-	private static void titulo(String texto){
-		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
-	}
-
-	private static void alerta(String texto, Object obj){
-		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
-	}
-
-	private static void sistema(String texto){
-		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
-	}
-
-	private static void pulsaParaContinuar() throws IOException {
-		System.out.println(TEXT_CYAN +"Pulsa para continuar..." + TEXT_RESET);
-		System.in.read();
-	}
-
 	public static int menu(String type) {
 		Scanner sc = new Scanner(System.in);
 		int seleccion;
@@ -558,6 +531,13 @@ public class Controller {
 				System.out.println("4. Eliminar");
 				System.out.println("5. Mostrar todo");
 				break;
+			case "MOSTRAR PRODUCTOS":
+				titulo("MOSTRAR PRODUCTOS");
+				System.out.println("1. ID");
+				System.out.println("2. Nombre");
+				System.out.println("3. Precio");
+				System.out.println("4. Stock");
+				break;
 			default:
 				break;
 		}
@@ -568,6 +548,48 @@ public class Controller {
 		sc.nextLine();
 		System.out.println("");
 		return seleccion;
+	}
+
+	public static void mostrar(String type, Object dao){
+		Persistable p = null;
+		switch (type) {
+			case "productos":
+				p = (ProductDAO<Product>) dao;
+				break;
+			case "clientes":
+			case "proveedores":
+				p = (DAO) dao;
+				break;
+		}
+		TreeMap<Integer, Product> mapaProductos = p.getMap();
+		
+		sistema("ID\tPrecio\tStock\tNombre\t");
+		for (Product product : mapaProductos.values()) {
+			System.out.println(
+				product.getId() + "\t" + 
+				product.getPrecio() + "\t" + 
+				product.getStock() + "\t" + 
+				product.getNombre() 
+			);
+		}
+		System.out.println();
+	}
+
+	private static void titulo(String texto){
+		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
+	}
+
+	private static void alerta(String texto, Object obj){
+		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
+	}
+
+	private static void sistema(String texto){
+		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
+	}
+
+	private static void pulsaParaContinuar() throws IOException {
+		System.out.println(TEXT_CYAN +"Pulsa para continuar..." + TEXT_RESET);
+		System.in.read();
 	}
 
 	// Definición colores para prints
