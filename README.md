@@ -1,8 +1,15 @@
-#Botiga FX (jmmg)
+# Botiga FX (jmmg)
+
 
 ## Getting Started
 
+### Welcome
+
 Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+
+### Init & config tutorial
+
+https://www.youtube.com/watch?v=I4J5_IWDeEo
 
 ## Folder Structure
 
