@@ -94,11 +94,11 @@ public class ProductDAO<T> implements Persistable<T> {
             if (producto instanceof Pack) {
                 Pack pack = (Pack) producto;
                 if(newPack.equals(pack)){
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
