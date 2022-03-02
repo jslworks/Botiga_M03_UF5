@@ -87,6 +87,7 @@ public class ProductDAO<T> implements Persistable<T> {
         // Comprobar si otros pack tienen los mismos productos
         if(!packsRepetidos(pack)){
             this.save(pack);
+            System.out.println(pack);
         }else{
             System.out.println("\u001B[31m" + "Ya existe un pack con éstos productos" + "\u001B[0m");
         }
