@@ -1,60 +1,80 @@
 package bo;
 
-
-import java.util.ArrayList;
 import java.util.Objects;
+import java.util.TreeSet;
 
 public final class Pack extends Product {
 
-    private ArrayList<Integer> list = new ArrayList<>();
-    private double percentageDiscount = 0.0;
-
-    public Pack(ArrayList<Integer> list, double percentatgeDiscount, int idproduct, String name, double price) {
-        super(idproduct, name, price);
-        this.list = list;
-        this.percentageDiscount = percentatgeDiscount;
+    private TreeSet<Product> productos;
+    
+    public TreeSet<Product> getProductos() {
+        return productos;
     }
 
-    public double getPercetatgeDescompte() {
-        return percentageDiscount;
+    public void setProductos(TreeSet<Product> productos) {
+        this.productos = productos;
     }
 
-    public void setPercetatgeDescompte(double percetatgeDescompte) {
-        this.percentageDiscount = percetatgeDescompte;
+    private double descuento;
+
+    public Pack(int id, String nombre, double precio, int stock, double descuento) {
+        super(id, nombre, precio, stock);
+        this.descuento = descuento;
+        this.productos = new TreeSet<>();
     }
 
-    //afegir un producte a la llista o eliminar un producte de la llista
-    public void removeProduct(int p) {
-        this.list.remove(p);
+    public double getDescuento() {
+        return descuento;
     }
 
-    public void addProduct(int i) {
-        this.list.add(i);
+    public void setDescuento(double descuento) {
+        this.descuento = descuento;
+    }
+
+    public boolean removeProduct(Product elProducto) {
+        return this.productos.remove(elProducto);
+    }
+
+    public boolean addProduct(Product elProducto) {
+        return this.productos.add(elProducto);
     }
 
     @Override
     public String toString() {
-        String products = super.toString();
-        return products;
-
+        return "(" + super.getId() + ") " + getNombre() + " "+ productos + " = " + getPrecio() + " EUR ; Stock = " + getStock() + " <Pack>";
     }
 
     //Metode equals del id del pack
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.list);
+        hash = 67 * hash + Objects.hashCode(this.productos);
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Pack) {
-            Pack temp = (Pack) obj;
-            return temp.getName().equals(obj);
-        } else {
+        Pack pack = (Pack) obj;
+        // Comprobar si el objeto recibido es el mismo en el que que estas
+        if(this == pack){
+            return true;
+        }
+        // De toda la lista, filtramos solo los packs. Si no lo es, entonces no es igual
+        if (!(obj instanceof Pack)) {
             return false;
         }
+
+        // Comprobar que no tenga elementos en la lista
+        if(productos == null || productos.isEmpty()){
+            // Comprobar el pack que me han pasado
+            if(pack.productos != null){
+                return false;
+            }
+        }else if(!(pack.productos.equals(this.productos))){
+            return false;
+        }
+
+        return true;
     }
 
 }

@@ -3,31 +3,33 @@ package bo;
 import java.io.Serializable;
 import java.util.Objects;
 import err.StockInsuficientException;
+// import tools.Comparators;
+import tools.Identificable;
 
-public class Product implements Identificable, Serializable{
+public class Product implements Identificable, Serializable, Comparable<Product>{
 
     private static final long serialVersionUID = 14L;
 
-    private Integer idProduct;
-    private String name;
-    private double price;
+    private Integer id;
+    private String nombre;
+    private double precio;
     private int stock;
 
     @Override
     public int getId() {
-        return this.idProduct;
+        return this.id;
     }   
     //Getters dels productes
     public Integer getIdProduct() {
-        return idProduct;
+        return id;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public double getPrice() {
-        return price;
+    public double getPrecio() {
+        return precio;
     }
 
     public int getStock() {
@@ -36,15 +38,15 @@ public class Product implements Identificable, Serializable{
 
     //Setters del producte
     public void setIdproduct(int i) {
-        this.idProduct = i;
+        this.id = i;
     }
 
-    public void setName(String n) {
-        this.name = n;
+    public void setNombre(String n) {
+        this.nombre = n;
     }
 
-    public void setPrice(double p) {
-        this.price = p;
+    public void setPrecio(double p) {
+        this.precio = p;
     }
 
     public void setStock(int s) {
@@ -60,28 +62,28 @@ public class Product implements Identificable, Serializable{
     	if (this.getStock() > cantidad) {
         	this.setStock(this.getStock() - cantidad);
 		} else {
-			throw new StockInsuficientException("No hay suficiente stock de " + this.getName()); 
+			throw new StockInsuficientException("No hay suficiente stock de " + this.getNombre()); 
 		}
     }
     
     //El constructors del produte
     public Product(int idproduct, String nom, double price, int stock) {
-        this.idProduct = idproduct;
-        this.name = nom;
-        this.price = price;
+        this.id = idproduct;
+        this.nombre = nom;
+        this.precio = price;
         this.stock = stock;
     }
 
     public Product(int idproduct, String nom, double price) {
-        this.idProduct = idproduct;
-        this.name = nom;
-        this.price = price;
+        this.id = idproduct;
+        this.nombre = nom;
+        this.precio = price;
 
     }
     //El metode toString
     @Override
     public String toString() {
-        return "Producte{" + "idproduct=" + idProduct + ", nom=" + name + ", price=" + price + ", stock=" + stock + '}';
+        return "(" + id + ") " + nombre + ", " + precio + " EUR, " + stock + " unidades";
     }
 
     //Metode equals del name
@@ -89,7 +91,7 @@ public class Product implements Identificable, Serializable{
     public boolean equals(Object obj) {
         if (obj instanceof Product) {
             Product temp = (Product) obj;
-            return temp.getName().equals(obj);
+            return temp.getNombre().equals(obj);
         } else {
             return false;
         }
@@ -98,10 +100,14 @@ public class Product implements Identificable, Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.name);
+        hash = 67 * hash + Objects.hashCode(this.nombre);
         return hash;
     }
-
     
-
+    @Override
+    public int compareTo(Product prod) {
+        Integer thisID = getId();
+        Integer otherID = prod.getId();
+        return thisID.compareTo(otherID);
+    }
 }

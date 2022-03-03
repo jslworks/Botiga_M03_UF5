@@ -7,102 +7,225 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.TreeSet;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import bo.Pack;
-import bo.Persistable;
 import bo.Product;
+import tools.Persistable;
+import tools.ProductNameComparator;
+import tools.ProductPriceComparator;
+import tools.ProductStockComparator;
 
 public class ProductDAO<T> implements Persistable<T> {
 
-    private static HashMap<Integer, Product> productes = new HashMap<>();
+    private static TreeMap<Integer, Product> mapaProductos = new TreeMap<>();
 
+    // AGREGAR
     public void agregarProducto_pack(String type){
-        int idproduct;
-        String nombre, tmp;
-		double precio;
+        int id;
+        String nombre;
 
         // Obtener datos
         System.out.print("ID: ");
-        idproduct = new Scanner(System.in).nextInt();
-        
-        System.out.print("Nombre: ");
-        nombre = new Scanner(System.in).nextLine();
-        System.out.print("Precio: ");
-        tmp = new Scanner(System.in).nextLine();
-        tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
-        precio = Double.parseDouble(tmp);
+        id = new Scanner(System.in).nextInt();
+        if(this.search(id) == null){
+            System.out.print("Nombre: ");
+            nombre = new Scanner(System.in).nextLine();
+            System.out.print("Precio: ");
+            String tmp = new Scanner(System.in).nextLine();
+            tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
+            double precio = Double.parseDouble(tmp);
+            System.out.print("Stock: ");
+            int stock = new Scanner(System.in).nextInt();
 
-        switch (type) {
-            case "producto":
-                agregarProducto(idproduct, nombre, precio);
-                break;
-            case "pack":
-                agregarPack(idproduct, nombre, precio);
-                break;
-            default:
-                break;
-        }
+            switch (type) {
+                case "producto":
+                    agregarProducto(id, nombre, precio, stock);
+                    break;
+                case "pack":
+                    agregarPack(id, nombre, precio, stock);
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            System.out.println("\u001B[31m" + "No se ha creado. Ya existe un producto o pack con ese id" + "\u001B[0m");
+        }        
     }
 
-    private void agregarProducto(int idproduct, String nombre, double precio){
-        // Datos especificos Producto
-        System.out.print("Stock: ");
-        int stock = new Scanner(System.in).nextInt();
+    private void agregarProducto(int idproduct, String nombre, double precio, int stock){
         // Agregando producto
-        Product p = new Product(idproduct, nombre, precio, stock);
-        this.save(p);
+        Product product = new Product(idproduct, nombre, precio, stock);
+        this.save(product);
     }
 
-    private void agregarPack(int idproduct, String nombre, double precio){
+    private void agregarPack(int idpack, String nombre, double precio, int stock){
         // Datos especificos Pack
-        System.out.println("% descuento: ");
+        System.out.print("% descuento: ");
         String tmp = new Scanner(System.in).nextLine();
         tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
         double descuento = Double.parseDouble(tmp);
 
         // Generando pack
-        ArrayList<Integer> packList = new ArrayList<>();
-        Pack p = new Pack(packList, descuento, idproduct, nombre, precio);
-        this.save(p);
+        Pack pack = new Pack(idpack, nombre, precio, stock, descuento);
+        do {
+            System.out.println("\u001B[35m" + "AGREGAR PRODUCTOS < PACK" + "\u001B[0m");
+            Product prod = buscarProducto_pack("producto");
+
+            boolean res = pack.addProduct(prod);
+            if(res){
+                System.out.println("\u001B[33m" + "Añadido correctamente" + "\u001B[0m");
+            }else{
+                System.out.println("\u001B[31m" + "No se puede repetir producto" + "\u001B[0m");
+            }
+            System.out.print("¿Agregar mas productos? (S/n) ");
+        } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
+        // Comprobar si otros pack tienen los mismos productos
+        if(!packsRepetidos(pack)){
+            this.save(pack);
+            System.out.println(pack);
+        }else{
+            System.out.println("\u001B[31m" + "Ya existe un pack con éstos productos" + "\u001B[0m");
+        }
     }
 
-    
-    public void buscarProducto_pack(String type){
+    private static boolean packsRepetidos(Pack newPack){
+        for (Product producto : mapaProductos.values()) {
+            if (producto instanceof Pack) {
+                Pack pack = (Pack) producto;
+                if(newPack.equals(pack)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void save(Object obj) {
+        if (obj != null && obj instanceof Product) {
+            Product id = (Product) obj;
+            mapaProductos.put(id.getIdProduct(), (Product) obj);
+            System.out.println("\u001B[32m" + "Guardado correctamente" + "\u001B[0m");
+        }
+    }
+
+    // BUSCAR
+    public Product buscarProducto_pack(String type){
         int idprod_Pack;
 
         System.out.print("ID: ");
         idprod_Pack = new Scanner(System.in).nextInt();
-        Object search = this.search(idprod_Pack);
+        Product search = (Product) this.search(idprod_Pack);
         
         if (search != null) {
             System.out.println(search); // Imprimira producto o pack
         } else {
             System.out.println("\u001B[31m" + "No existe este " + type + "\u001B[0m");
         }
+        return search;
+    }
+
+    @Override
+    public T search(int id) {
+        return mapaProductos.containsKey(id) ? (T) (Product) mapaProductos.get(id) : null;
     }
         
-    // Metodos
+    // MODIFICAR
 
     public void modifyProduct(Product producto) {
-        Product prod = (Product) productes.get(producto.getId());
-        prod.setName(producto.getName());
-        prod.setPrice(producto.getPrice());
+        Product prod = (Product) mapaProductos.get(producto.getId());
+        prod.setNombre(producto.getNombre());
+        prod.setPrecio(producto.getPrecio());
         prod.setStock(producto.getStock());
         System.out.println(producto);
     }
 
-    public ArrayList<String> printProduct() {
-        ArrayList<String> llistaprod = new ArrayList<String>();
-        llistaprod.add(productes.toString());
-        return llistaprod;
+        // Adaptar y dejar de usar
+        public void modifyProduct(int i, String n, double p, int s) {
+            Product prod = (Product) mapaProductos.get(i);
+            prod.setNombre(n);
+            prod.setPrecio(p);
+            prod.setStock(s);
+        }
+
+    // ELIMINAR
+    @Override
+    public void delete(int id) {
+        if (mapaProductos.containsKey(id)) {
+            mapaProductos.remove(id);
+            System.out.println("\u001B[32m" + "Eliminado correctamente" + "\u001B[0m");
+        }
     }
 
+    // MOSTRAR
+    // public TreeSet<String> printProduct() {
+    //     TreeSet<String> llistaprod = new TreeSet<String>();
+    //     llistaprod.add(mapaProductos.toString());
+    //     return llistaprod;
+    // }
+
+    public void mostrarOrdenadoPor(String type){
+        ArrayList<Product> listaOrdenada = new ArrayList<>(mapaProductos.values());
+        switch (type) {
+            case "nombre":
+                Collections.sort(listaOrdenada, new ProductNameComparator());
+                break;
+            case "precio":
+                Collections.sort(listaOrdenada, new ProductPriceComparator());
+                break;
+            case "stock":
+                Collections.sort(listaOrdenada, new ProductStockComparator());
+            break;
+            default:
+                break;
+        }
+        
+        printProducts(listaOrdenada);
+    }
+    
+    public void printProducts(ArrayList<Product> lista){
+        System.out.println("\t-- PRODUCTOS --");
+        System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tNombre\t" + "\u001b[0m");
+        ArrayList<Pack> listaPacks = new ArrayList<>();
+        for (Product product : lista) {
+            if(product instanceof Pack){
+                listaPacks.add((Pack) product);
+            }else{
+                System.out.println(
+                    product.getId() + "\t" + 
+                    product.getPrecio() + "\t" + 
+                    product.getStock() + "\t" + 
+                    product.getNombre() 
+                );
+            }
+        }
+        System.out.println();
+        if(!listaPacks.isEmpty()){
+            System.out.println("\t-- PACKS -- ");
+            System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tDescuento\tNombre\tLista Productos" + "\u001b[0m");
+            for (Pack pack : listaPacks) {
+                System.out.println(
+                    pack.getId() + "\t" + 
+                    pack.getPrecio() + "\t" + 
+                    pack.getStock() + " u\t" + 
+                    pack.getDescuento() + " %\t\t" + 
+                    pack.getNombre() + "\t" +
+                    pack.getProductos()
+                );
+            }
+        }
+        System.out.println();
+    }
+
+    // FICHEROS
     public static void guardarFichero() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
-            oos.writeObject(productes);
+            oos.writeObject(mapaProductos);
         } catch (IOException e) {
             System.out.println("\u001B[31m" + "Error al guardar el archivo: " + e + "\u001B[0m");
         } finally {
@@ -115,51 +238,22 @@ public class ProductDAO<T> implements Persistable<T> {
             File file = new File("productes.dat");
             file.createNewFile();
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-            productes = (HashMap<Integer, Product>) ois.readObject();
+            mapaProductos = (TreeMap<Integer, Product>) ois.readObject();
         } catch (EOFException eofe) {
         } catch (IOException ioe) {
             System.out.println("\u001B[31m" + ioe + "\u001B[0m");
         } catch (ClassNotFoundException cnfe) {
             System.out.println("\u001B[31m" + "La classe no existe: " + cnfe + "\u001B[0m");
         } finally {
-            System.out.println("\u001B[32m" + "productes.dat cargado correctamente" + "\u001B[0m");
+            System.out.println("\u001B[32m" + "productes.dat cargado correctamente\n" + "\u001B[0m");
         }
 
     }
 
-    // Implementacio de la Interficie amb variable generica
+    // Set/get data
     @Override
-    public void save(Object obj) {
-        if (obj != null && obj instanceof Product) {
-            Product id = (Product) obj;
-            productes.put(id.getIdProduct(), (Product) obj);
-            System.out.println("\u001B[32m" + "Guardado correctamente" + "\u001B[0m");
-        }
+    public TreeMap<Integer, T> getMap() {
+        return (TreeMap<Integer, T>) mapaProductos;
     }
 
-    @Override
-    public HashMap<Integer, T> getMap() {
-        return (HashMap<Integer, T>) productes;
-    }
-
-    @Override
-    public void delete(int id) {
-        if (productes.containsKey(id)) {
-            productes.remove(id);
-            System.out.println("\u001B[32m" + "Eliminado correctamente" + "\u001B[0m");
-        }
-    }
-
-    @Override
-    public T search(int id) {
-        return productes.containsKey(id) ? (T) (Product) productes.get(id) : null;
-    }
-
-    // Adaptar y dejar de usar
-    public void modifyProduct(int i, String n, double p, int s) {
-        Product prod = (Product) productes.get(i);
-        prod.setName(n);
-        prod.setPrice(p);
-        prod.setStock(s);
-    }
 }

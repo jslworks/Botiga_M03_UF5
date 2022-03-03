@@ -1,14 +1,14 @@
 package dao;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import bo.Address;
 import bo.Client;
-import bo.Persistable;
+import tools.Persistable;
 
 public class ClientDAO<T> implements Persistable<T> {
 
-    private HashMap<Integer, T> client = new HashMap<Integer, T>();
+    private TreeMap<Integer, T> client = new TreeMap<Integer, T>();
 
     public boolean addClient(Integer idperson, String dni, String name, String surnames, Address address) {
         if (client.containsKey(idperson)) {
@@ -49,7 +49,7 @@ public class ClientDAO<T> implements Persistable<T> {
         } 
     }
 
-    public HashMap<Integer, T> getMap() {
+    public TreeMap<Integer, T> getMap() {
         return client;
     }
 

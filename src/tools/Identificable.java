@@ -1,4 +1,4 @@
-package bo;
+package tools;
 public interface Identificable {
     public int getId();
 }

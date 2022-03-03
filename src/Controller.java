@@ -2,6 +2,7 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -11,25 +12,14 @@ import java.util.logging.*;
 
 import bo.Address;
 import bo.Client;
-import bo.Persistable;
 import bo.Product;
 import bo.Supplier;
 import dao.DAO;
 import dao.ProductDAO;
 import err.StockInsuficientException;
+import tools.Persistable;
 
 public class Controller {
-
-	// Definición colores para prints
-	public static final String TEXT_RESET = "\u001B[0m";
-	public static final String TEXT_BLACK = "\u001B[30m";
-	public static final String TEXT_RED = "\u001B[31m";
-	public static final String TEXT_GREEN = "\u001B[32m";
-	public static final String TEXT_YELLOW = "\u001B[33m";
-	public static final String TEXT_BLUE = "\u001B[34m";
-	public static final String TEXT_PURPLE = "\u001B[35m";
-	public static final String TEXT_CYAN = "\u001B[36m";
-	public static final String TEXT_WHITE = "\u001B[37m";
 
 	// Logger
 	static Logger logger = Logger.getLogger("Log Botiga");
@@ -56,12 +46,11 @@ public class Controller {
 
 			// Variables
 			// Scanner keyboard = new Scanner(System.in);
-			int option, option2, option3;
+			int option, option2;
 			String inputResponse = "", nombreFichero = "";
 			boolean ok = false;
 
 			int seleccion;
-			String type;
 
 			int idperson;
 			String dni, name, surnames;
@@ -80,28 +69,46 @@ public class Controller {
 							switch (option2) {
 								case 1: // Agregar nuevo
 									System.out.println(TEXT_PURPLE + "AGREGAR NUEVO" + TEXT_RESET);
-									System.out.println(TEXT_PURPLE + "1. Producto");
-									System.out.println("2. Pack" + TEXT_RESET);
+									System.out.println("1. Producto");
+									System.out.println("2. Pack");
 									seleccion = new Scanner(System.in).nextInt();
-									type = seleccion == 1 ? "producto" : "pack";
-
-									prodDAO.agregarProducto_pack(type);
+									switch (seleccion) {
+										case 1:
+											titulo("PRODUCTO");
+											prodDAO.agregarProducto_pack("producto");
+											break;
+										case 2:
+											titulo("PACK");
+											prodDAO.agregarProducto_pack("pack");
+											break;
+										default:
+											break;
+									}
 									break;
 								case 2: // Buscar
-									System.out.println(TEXT_PURPLE + "BUSCAR" + TEXT_RESET);
-									System.out.println(TEXT_PURPLE + "1. Producto");
-									System.out.println("2. Pack" + TEXT_RESET);
+									titulo("BUSCAR");
+									System.out.println("1. Producto");
+									System.out.println("2. Pack");
 									seleccion = new Scanner(System.in).nextInt();
-									type = seleccion == 1 ? "producto" : "pack";
-									prodDAO.buscarProducto_pack(type);
+									switch (seleccion) {
+										case 1:
+											prodDAO.buscarProducto_pack("producto");
+											break;
+										case 2:
+											prodDAO.buscarProducto_pack("pack");
+											break;
+										default:
+											break;
+									}
 									break;
 								case 3: // Modificar
-									System.out.println(TEXT_PURPLE + "MODIFICAR PRODUCTO" + TEXT_RESET);
+									titulo("MODIFICAR PRODUCTO");
 									// Obtener datos
 									System.out.print("ID: ");
 									idproduct = new Scanner(System.in).nextInt();
 									if (prodDAO.search(idproduct) != null) {
-										System.out.print("Nombre:");
+										titulo("MODIFICAR");
+										System.out.print("Nombre: ");
 										name = new Scanner(System.in).nextLine();
 
 										System.out.print("Precio: ");
@@ -120,20 +127,36 @@ public class Controller {
 										// Mostrar resultados
 										System.out.println(products.toString());
 									} else {
-										System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
+										alerta("El producto no existe", "");
 									}
 									break;
 								case 4: // Eliminar
-									System.out.println(TEXT_PURPLE + "ELIMINAR PRODUCTO O PACK: " + TEXT_RESET);
-									System.out.println("ID :");
+									titulo("ELIMINAR PRODUCTO O PACK: ");
+									System.out.print("ID: ");
 									idproduct = new Scanner(System.in).nextInt();
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
-									mostrar("productos", prodDAO);
+									seleccion = menu("MOSTRAR PRODUCTOS");
+									switch (seleccion) {
+										case 1:
+											mostrar("productos", prodDAO);
+											break;
+										case 2:
+											prodDAO.mostrarOrdenadoPor("nombre");
+											break;
+										case 3:
+											prodDAO.mostrarOrdenadoPor("precio");
+											break;
+										case 4:
+											prodDAO.mostrarOrdenadoPor("stock");		
+											break;									
+										default:
+											break;
+									}
 									break;
 								case 6: // Agregar stock
-									System.out.println(TEXT_PURPLE + "AGREGAR STOCK PRODUCTO" + TEXT_RESET);
+									titulo("AGREGAR STOCK PRODUCTO");
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
 									inputResponse = new Scanner(System.in).nextLine();
@@ -152,19 +175,19 @@ public class Controller {
 													producto.putStock(stock);
 												}
 											}
-										} catch (IOException e) {
-											System.out.println(TEXT_RED + "Error con el fichero: " + e + TEXT_RESET);
+										} catch (IOException ioe) {
+											alerta("Error con el fichero: ", ioe);
 										}
 									} else {
-										System.out.println(TEXT_PURPLE + "STOCK PRODUCTO" + TEXT_RESET);
+										titulo("STOCK PRODUCTO < AGREGAR");
 										System.out.print("ID: ");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto != null) {
-											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
+											alerta("El producto no existe", "");
 										} else {
 											System.out.println("Agregar stock al producto (" + producto.getId() + ") "
-													+ producto.getName());
+													+ producto.getNombre());
 											int addStock = new Scanner(System.in).nextInt();
 											producto.putStock(addStock);
 
@@ -173,6 +196,7 @@ public class Controller {
 									}
 									break;
 								case 7: // Quitar stock
+									titulo("QUITAR STOCK PRODUCTO");
 									System.out.println(TEXT_PURPLE + "QUITAR STOCK PRODUCTO" + TEXT_RESET);
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
@@ -190,21 +214,21 @@ public class Controller {
 													producto.takeStock(stock);
 												}
 											}
-										} catch (IOException e) {
-											System.out.println(TEXT_RED + "Error con el fichero: " + e + TEXT_RESET);
+										} catch (IOException ioe) {
+											alerta("Error con el fichero: ", ioe);
 										}
 									} else {
 										System.out.println("Id del producto:");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto == null) {
-											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
+											alerta("El producto no existe", producto);
 										} else {
 											int takeStock = -1;
 											do {
 												System.out
 														.println("Quitar stock al producto (" + producto.getId() + ") "
-																+ producto.getName());
+																+ producto.getNombre());
 												takeStock = new Scanner(System.in).nextInt();
 												try {
 													producto.takeStock(takeStock);
@@ -218,13 +242,13 @@ public class Controller {
 											if (ok) {
 												prodDAO.modifyProduct(producto);
 											} else {
-												System.out.println(TEXT_RED + "No se ha modificado el producto " + producto + TEXT_RESET);
+												alerta("El producto no existe", producto);
 											}
 										}
 									}
 									break;
 								case 8: // Mantenimiento de productos
-									System.out.println(TEXT_PURPLE + "COMANDA PRODUCTO" + TEXT_RESET);
+									titulo("COMANDA PRODUCTO");
 									System.out.print("Nombre fichero: ");
 									nombreFichero = new Scanner(System.in).nextLine();
 									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombreFichero)));
@@ -240,7 +264,7 @@ public class Controller {
 											dos.writeInt(idproduct);
 											dos.writeInt(stock);
 										} else {
-											System.out.println(TEXT_RED + "El producto no existe" + TEXT_RESET);
+											alerta("El producto no existe", "");
 										}
 										System.out.println("¿Continuar? (S/n)");
 										inputResponse = new Scanner(System.in).nextLine();
@@ -250,7 +274,7 @@ public class Controller {
 								case 0:
 									break;
 								default:
-									System.out.println(TEXT_RED + "Opcion incorrecta" + TEXT_RESET);
+									alerta("Opcion incorrecta", "");
 									break;
 							}
 							if (option2 != 0)
@@ -259,175 +283,10 @@ public class Controller {
 						break;
 
 					case 2: // CLIENTES
-						do {
-							option2 = menu("clientes");
-							switch (option2) {
-								case 1: // Agregar cliente
-									System.out.println(TEXT_PURPLE + "CREAR CLIENTE" + TEXT_RESET);
-									// Obtener datos
-									System.out.print("ID: ");
-									idperson = new Scanner(System.in).nextInt();
-									System.out.print("DNI: ");
-									dni = new Scanner(System.in).nextLine();
-									System.out.print("Nombre: ");
-									name = new Scanner(System.in).nextLine();
-									System.out.print("Apellidos: ");
-									surnames = new Scanner(System.in).nextLine();
-									System.out.print("Localidad: ");
-									locality = new Scanner(System.in).nextLine();
-									System.out.print("Provincia: ");
-									province = new Scanner(System.in).nextLine();
-									System.out.print("CP: ");
-									zipCode = new Scanner(System.in).nextLine();
-									System.out.print("Direccion: ");
-									direction = new Scanner(System.in).nextLine();
-									// Generar cliente
-									Address a = new Address(locality, province, zipCode, direction);
-									Client cl = new Client(idperson, dni, name, surnames, a);
-									clie.save(cl);
-									break;
-								case 2: // Buscar cliente
-									System.out.println(TEXT_PURPLE + "BUSCAR CLIENTE" + TEXT_RESET);
-									System.out.print("ID: ");
-									idperson = new Scanner(System.in).nextInt();
-									if (clie.search(idperson) != null) {
-										Client client = (Client) clie.search(idperson);
-										System.out.println(client.toString());
-									} else {
-										System.out.println(TEXT_RED + "El cliente no existe" + TEXT_RESET);
-									}
-									break;
-								case 3: // Modificar cliente
-									System.out.println(TEXT_PURPLE + "MODIFICAR CLIENTE" + TEXT_RESET);
-									// Obtener datos
-									System.out.print("ID : ");
-									idperson = new Scanner(System.in).nextInt();
-									if (clie.search(idperson) != null) {
-										System.out.print("DNI: ");
-										dni = new Scanner(System.in).nextLine();
-										System.out.print("Nombre: ");
-										name = new Scanner(System.in).nextLine();
-										System.out.print("Apellidos: ");
-										surnames = new Scanner(System.in).nextLine();
-										System.out.print("Localidad: ");
-										locality = new Scanner(System.in).nextLine();
-										System.out.print("Provincia: ");
-										province = new Scanner(System.in).nextLine();
-										System.out.print("CP: ");
-										zipCode = new Scanner(System.in).nextLine();
-										System.out.print("Direccion: ");
-										direction = new Scanner(System.in).nextLine();
-										// Modificando
-										Address ad = new Address(locality, province, zipCode, direction);
-										Client c = new Client(idperson, dni, name, surnames, ad);
-										clie.modify(c);
-									} else {
-										System.out.println(TEXT_RED + "El cliente no existe" + TEXT_RESET);
-									}
-									break;
-								case 4: // Eliminar cliente
-									System.out.println(TEXT_PURPLE + "ELIMINAR CLIENTE" + TEXT_RESET);
-									System.out.print("ID: ");
-									idperson = new Scanner(System.in).nextInt();
-									clie.delete(idperson);
-									break;
-								case 5: // Mostrar todos los clientes
-									System.out.println(TEXT_PURPLE + "TODOS CLIENTES" + TEXT_RESET);
-									mostrar("clientes", clie);
-									break;
-								case 0:
-									break;
-							}
-							if (option2 != 0)
-								pulsaParaContinuar();
-						} while (option2 != 0);
+						this.clientes();						
 						break;
 					case 3: // PROVEEDORES
-						do {
-							option2 = menu("proveedores");
-							switch (option2) {
-								case 1: // Agregar proveedor
-									System.out.println(TEXT_PURPLE + "PROVEEDOR" + TEXT_RESET);
-									// Obtener datos
-									System.out.print("ID: ");
-									idperson = new Scanner(System.in).nextInt();
-									System.out.print("DNI: ");
-									dni = new Scanner(System.in).nextLine();
-									System.out.print("Nombre: ");
-									name = new Scanner(System.in).nextLine();
-									System.out.print("Apellidos: ");
-									surnames = new Scanner(System.in).nextLine();
-									System.out.print("Localidad: ");
-									locality = new Scanner(System.in).nextLine();
-									System.out.print("Provincia: ");
-									province = new Scanner(System.in).nextLine();
-									System.out.print("CP: ");
-									zipCode = new Scanner(System.in).nextLine();
-									System.out.print("Direccion: ");
-									direction = new Scanner(System.in).nextLine();
-									// Generar proveedor
-									Address a = new Address(locality, province, zipCode, direction);
-									Supplier s = new Supplier(idperson, dni, name, surnames, a);
-									prov.save(s);
-									break;
-								case 2: // Buscar proveedor
-								System.out.println(TEXT_PURPLE + "BUSCAR PROVEEDOR" + TEXT_RESET);
-									System.out.print("ID: ");
-									idperson = new Scanner(System.in).nextInt();
-									if (prov.search(idperson) != null) {
-										Supplier proveidor = (Supplier) prov.search(idperson);
-										System.out.println(proveidor.toString());
-									} else {
-										System.out.println(TEXT_RED + "El proveedor no existeix" + TEXT_RESET);
-									}
-									break;
-								case 3: // Añadir proveedor
-									System.out.println(TEXT_PURPLE + "MODIFICAR PROVEEDOR" + TEXT_RESET);
-									// Obtener datos
-									System.out.print("ID : ");
-									idperson = new Scanner(System.in).nextInt();
-									if (clie.search(idperson) != null) {
-										System.out.print("DNI: ");
-										dni = new Scanner(System.in).nextLine();
-										System.out.print("Nombre: ");
-										name = new Scanner(System.in).nextLine();
-										System.out.print("Apellidos: ");
-										surnames = new Scanner(System.in).nextLine();
-										System.out.print("Localidad: ");
-										locality = new Scanner(System.in).nextLine();
-										System.out.print("Provincia: ");
-										province = new Scanner(System.in).nextLine();
-										System.out.print("CP: ");
-										zipCode = new Scanner(System.in).nextLine();
-										System.out.print("Direccion: ");
-										direction = new Scanner(System.in).nextLine();
-										// Modificando
-										Address ad = new Address(locality, province, zipCode, direction);
-										Supplier su = new Supplier(idperson, dni, name, surnames, ad);
-										prov.modify(su);
-
-										Supplier proveidor = (Supplier) prov.search(idperson);
-										System.out.println(proveidor.toString());
-									} else {
-										System.out.println(TEXT_RED + "El proveedor no existeix" + TEXT_RESET);
-									}
-									break;
-								case 4: // Eliminar proveedor
-									System.out.println(TEXT_PURPLE + "ELIMINAR PROVEEDOR" + TEXT_RESET);
-									System.out.print("ID: ");
-									idperson = new Scanner(System.in).nextInt();
-									prov.delete(idperson);
-									break;
-								case 5: // Mostrar todos los proveedores
-									System.out.println(TEXT_PURPLE + "TODOS PROVEEDORES" + TEXT_RESET);
-									mostrar("proveedores", prov);
-									break;
-								case 0:
-									break;
-							}
-							if (option2 != 0)
-								pulsaParaContinuar();
-						} while (option2 != 0);
+						this.proveedores();
 						break;
 					case 0:
 						break;
@@ -441,38 +300,221 @@ public class Controller {
 			ex.printStackTrace();
 		} finally {
 			ProductDAO.guardarFichero();
-			System.out.println(TEXT_GREEN + "Resultado guardado");
+			sistema("Resultado guardado");
 			mostrar("productos", prodDAO);
-			System.out.println(TEXT_RESET);
 		}
 	}
 
-	// Vistas
+	////////////////////////////////////////////////////////////////////////
+	// CLIENTES Y PROVEEDORES
+	//////////
+
+	public void clientes() throws IOException{
+		int option2, idperson;
+		String dni, name, surnames, locality, province, zipCode, direction;
+		do {
+			option2 = menu("clientes");
+			switch (option2) {
+				case 1: // Agregar cliente
+					System.out.println(TEXT_PURPLE + "CREAR CLIENTE" + TEXT_RESET);
+					// Obtener datos
+					System.out.print("ID: ");
+					idperson = new Scanner(System.in).nextInt();
+					System.out.print("DNI: ");
+					dni = new Scanner(System.in).nextLine();
+					System.out.print("Nombre: ");
+					name = new Scanner(System.in).nextLine();
+					System.out.print("Apellidos: ");
+					surnames = new Scanner(System.in).nextLine();
+					System.out.print("Localidad: ");
+					locality = new Scanner(System.in).nextLine();
+					System.out.print("Provincia: ");
+					province = new Scanner(System.in).nextLine();
+					System.out.print("CP: ");
+					zipCode = new Scanner(System.in).nextLine();
+					System.out.print("Direccion: ");
+					direction = new Scanner(System.in).nextLine();
+					// Generar cliente
+					Address a = new Address(locality, province, zipCode, direction);
+					Client cl = new Client(idperson, dni, name, surnames, a);
+					clie.save(cl);
+					break;
+				case 2: // Buscar cliente
+					System.out.println(TEXT_PURPLE + "BUSCAR CLIENTE" + TEXT_RESET);
+					System.out.print("ID: ");
+					idperson = new Scanner(System.in).nextInt();
+					if (clie.search(idperson) != null) {
+						Client client = (Client) clie.search(idperson);
+						System.out.println(client.toString());
+					} else {
+						System.out.println(TEXT_RED + "El cliente no existe" + TEXT_RESET);
+					}
+					break;
+				case 3: // Modificar cliente
+					System.out.println(TEXT_PURPLE + "MODIFICAR CLIENTE" + TEXT_RESET);
+					// Obtener datos
+					System.out.print("ID : ");
+					idperson = new Scanner(System.in).nextInt();
+					if (clie.search(idperson) != null) {
+						System.out.print("DNI: ");
+						dni = new Scanner(System.in).nextLine();
+						System.out.print("Nombre: ");
+						name = new Scanner(System.in).nextLine();
+						System.out.print("Apellidos: ");
+						surnames = new Scanner(System.in).nextLine();
+						System.out.print("Localidad: ");
+						locality = new Scanner(System.in).nextLine();
+						System.out.print("Provincia: ");
+						province = new Scanner(System.in).nextLine();
+						System.out.print("CP: ");
+						zipCode = new Scanner(System.in).nextLine();
+						System.out.print("Direccion: ");
+						direction = new Scanner(System.in).nextLine();
+						// Modificando
+						Address ad = new Address(locality, province, zipCode, direction);
+						Client c = new Client(idperson, dni, name, surnames, ad);
+						clie.modify(c);
+					} else {
+						System.out.println(TEXT_RED + "El cliente no existe" + TEXT_RESET);
+					}
+					break;
+				case 4: // Eliminar cliente
+					System.out.println(TEXT_PURPLE + "ELIMINAR CLIENTE" + TEXT_RESET);
+					System.out.print("ID: ");
+					idperson = new Scanner(System.in).nextInt();
+					clie.delete(idperson);
+					break;
+				case 5: // Mostrar todos los clientes
+					System.out.println(TEXT_PURPLE + "TODOS CLIENTES" + TEXT_RESET);
+					mostrar("clientes", clie);
+					break;
+				case 0:
+					break;
+			}
+			if (option2 != 0)
+				pulsaParaContinuar();
+		} while (option2 != 0);
+	}
+
+	public void proveedores() throws IOException{
+		int option2, idperson;
+		String dni, name, surnames, locality, province, zipCode, direction;
+		do {
+			option2 = menu("proveedores");
+			switch (option2) {
+				case 1: // Agregar proveedor
+					System.out.println(TEXT_PURPLE + "PROVEEDOR" + TEXT_RESET);
+					// Obtener datos
+					System.out.print("ID: ");
+					idperson = new Scanner(System.in).nextInt();
+					System.out.print("DNI: ");
+					dni = new Scanner(System.in).nextLine();
+					System.out.print("Nombre: ");
+					name = new Scanner(System.in).nextLine();
+					System.out.print("Apellidos: ");
+					surnames = new Scanner(System.in).nextLine();
+					System.out.print("Localidad: ");
+					locality = new Scanner(System.in).nextLine();
+					System.out.print("Provincia: ");
+					province = new Scanner(System.in).nextLine();
+					System.out.print("CP: ");
+					zipCode = new Scanner(System.in).nextLine();
+					System.out.print("Direccion: ");
+					direction = new Scanner(System.in).nextLine();
+					// Generar proveedor
+					Address a = new Address(locality, province, zipCode, direction);
+					Supplier s = new Supplier(idperson, dni, name, surnames, a);
+					prov.save(s);
+					break;
+				case 2: // Buscar proveedor
+				System.out.println(TEXT_PURPLE + "BUSCAR PROVEEDOR" + TEXT_RESET);
+					System.out.print("ID: ");
+					idperson = new Scanner(System.in).nextInt();
+					if (prov.search(idperson) != null) {
+						Supplier proveidor = (Supplier) prov.search(idperson);
+						System.out.println(proveidor.toString());
+					} else {
+						System.out.println(TEXT_RED + "El proveedor no existeix" + TEXT_RESET);
+					}
+					break;
+				case 3: // Añadir proveedor
+					System.out.println(TEXT_PURPLE + "MODIFICAR PROVEEDOR" + TEXT_RESET);
+					// Obtener datos
+					System.out.print("ID : ");
+					idperson = new Scanner(System.in).nextInt();
+					if (clie.search(idperson) != null) {
+						System.out.print("DNI: ");
+						dni = new Scanner(System.in).nextLine();
+						System.out.print("Nombre: ");
+						name = new Scanner(System.in).nextLine();
+						System.out.print("Apellidos: ");
+						surnames = new Scanner(System.in).nextLine();
+						System.out.print("Localidad: ");
+						locality = new Scanner(System.in).nextLine();
+						System.out.print("Provincia: ");
+						province = new Scanner(System.in).nextLine();
+						System.out.print("CP: ");
+						zipCode = new Scanner(System.in).nextLine();
+						System.out.print("Direccion: ");
+						direction = new Scanner(System.in).nextLine();
+						// Modificando
+						Address ad = new Address(locality, province, zipCode, direction);
+						Supplier su = new Supplier(idperson, dni, name, surnames, ad);
+						prov.modify(su);
+
+						Supplier proveidor = (Supplier) prov.search(idperson);
+						System.out.println(proveidor.toString());
+					} else {
+						System.out.println(TEXT_RED + "El proveedor no existeix" + TEXT_RESET);
+					}
+					break;
+				case 4: // Eliminar proveedor
+					System.out.println(TEXT_PURPLE + "ELIMINAR PROVEEDOR" + TEXT_RESET);
+					System.out.print("ID: ");
+					idperson = new Scanner(System.in).nextInt();
+					prov.delete(idperson);
+					break;
+				case 5: // Mostrar todos los proveedores
+					System.out.println(TEXT_PURPLE + "TODOS PROVEEDORES" + TEXT_RESET);
+					mostrar("proveedores", prov);
+					break;
+				case 0:
+					break;
+			}
+			if (option2 != 0)
+				pulsaParaContinuar();
+		} while (option2 != 0);
+	}
+	
+
+	////////////////////////////////////////////////////////////////////////
+	// VISTA
+	//////////
 	public static int menu(String type) {
 		Scanner sc = new Scanner(System.in);
 		int seleccion;
 		switch (type) {
 			case "inicial":
-				System.out.println(TEXT_PURPLE + "BOTIGA" + TEXT_RESET);
+				titulo("BOTIGA");
 				System.out.println("+----+");
 				System.out.println("1. Productos");
 				System.out.println("2. Clientes");
 				System.out.println("3. Proveedores");
 				break;
 			case "productos":
-				System.out.println(TEXT_PURPLE + "PRODUCTOS/PACKS < BOTIGA" + TEXT_RESET);
+				titulo("PRODUCTOS/PACKS < BOTIGA");
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
 				System.out.println("2. Buscar");
 				System.out.println("3. Modificar producto");
 				System.out.println("4. Eliminar");
-				System.out.println("5. Mostrar todo");
+				System.out.println("5. Mostrar productos");
 				System.out.println("6. Agregar stock");
 				System.out.println("7. Quitar stock");
 				System.out.println("8. Mantenimiento de producto");
 				break;
 			case "clientes":
-				System.out.println(TEXT_PURPLE + "CLIENTES < BOTIGA" + TEXT_RESET);
+				titulo("CLIENTES < BOTIGA");
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
 				System.out.println("2. Buscar");
@@ -481,13 +523,20 @@ public class Controller {
 				System.out.println("5. Mostrar todo");
 				break;
 			case "proveedores":
-				System.out.println(TEXT_PURPLE + "PROVEEDORES < BOTIGA" + TEXT_RESET);
+				titulo("PROVEEDORES < BOTIGA");
 				System.out.println("+----------------+");
 				System.out.println("1. Agregar");
 				System.out.println("2. Buscar");
 				System.out.println("3. Modificar");
 				System.out.println("4. Eliminar");
 				System.out.println("5. Mostrar todo");
+				break;
+			case "MOSTRAR PRODUCTOS":
+				titulo("MOSTRAR PRODUCTOS");
+				System.out.println("1. ID");
+				System.out.println("2. Nombre");
+				System.out.println("3. Precio");
+				System.out.println("4. Stock");
 				break;
 			default:
 				break;
@@ -501,23 +550,49 @@ public class Controller {
 		return seleccion;
 	}
 
-	// Funcionalidades
-	private static void pulsaParaContinuar() throws IOException {
-		System.out.println(TEXT_CYAN +"Pulsa para continuar..." + TEXT_RESET);
-		System.in.read();
-	}
-
 	public static void mostrar(String type, Object dao){
 		Persistable p = null;
 		switch (type) {
 			case "productos":
 				p = (ProductDAO<Product>) dao;
+				((ProductDAO<Product>) dao).printProducts(new ArrayList<>(p.getMap().values()));
 				break;
 			case "clientes":
+				p = (DAO) dao;
+				// Falta definir
+				break;
 			case "proveedores":
 				p = (DAO) dao;
+				// Falta definir
 				break;
 		}
-		System.out.println(TEXT_GREEN + p.getMap().toString() + TEXT_RESET);
 	}
+
+	private static void titulo(String texto){
+		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
+	}
+
+	private static void alerta(String texto, Object obj){
+		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
+	}
+
+	private static void sistema(String texto){
+		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
+	}
+
+	private static void pulsaParaContinuar() throws IOException {
+		System.out.println(TEXT_CYAN +"Pulsa para continuar..." + TEXT_RESET);
+		System.in.read();
+	}
+
+	// Definición colores para prints
+	public static final String TEXT_RESET = "\u001B[0m";
+	public static final String TEXT_BLACK = "\u001B[30m";
+	public static final String TEXT_RED = "\u001B[31m";
+	public static final String TEXT_GREEN = "\u001B[32m";
+	public static final String TEXT_YELLOW = "\u001B[33m";
+	public static final String TEXT_BLUE = "\u001B[34m";
+	public static final String TEXT_PURPLE = "\u001B[35m";
+	public static final String TEXT_CYAN = "\u001B[36m";
+	public static final String TEXT_WHITE = "\u001B[37m";
 }
