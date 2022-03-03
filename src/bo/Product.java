@@ -83,7 +83,7 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     //El metode toString
     @Override
     public String toString() {
-        return "(" + id + ") " + nombre + ", " + precio + " EUR, stock=" + stock + " <Producto>";
+        return "(" + id + ") " + nombre + ", " + precio + " EUR, " + stock + " unidades";
     }
 
     //Metode equals del name
@@ -109,6 +109,5 @@ public class Product implements Identificable, Serializable, Comparable<Product>
         Integer thisID = getId();
         Integer otherID = prod.getId();
         return thisID.compareTo(otherID);
-        // return Comparators.ID.compare(this, prod);
     }
 }

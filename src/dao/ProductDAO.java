@@ -163,11 +163,11 @@ public class ProductDAO<T> implements Persistable<T> {
     }
 
     // MOSTRAR
-    public TreeSet<String> printProduct() {
-        TreeSet<String> llistaprod = new TreeSet<String>();
-        llistaprod.add(mapaProductos.toString());
-        return llistaprod;
-    }
+    // public TreeSet<String> printProduct() {
+    //     TreeSet<String> llistaprod = new TreeSet<String>();
+    //     llistaprod.add(mapaProductos.toString());
+    //     return llistaprod;
+    // }
 
     public void mostrarOrdenadoPor(String type){
         ArrayList<Product> listaOrdenada = new ArrayList<>(mapaProductos.values());
@@ -185,17 +185,43 @@ public class ProductDAO<T> implements Persistable<T> {
                 break;
         }
         
-        System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tNombre\t" + "\u001b[0m");
-        for (Product product : listaOrdenada) {
-            System.out.println(
-                product.getId() + "\t" + 
-                product.getPrecio() + "\t" + 
-                product.getStock() + "\t" + 
-                product.getNombre() 
-            );
-        }
+        printProducts(listaOrdenada);
     }
     
+    public void printProducts(ArrayList<Product> lista){
+        System.out.println("\t-- PRODUCTOS --");
+        System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tNombre\t" + "\u001b[0m");
+        ArrayList<Pack> listaPacks = new ArrayList<>();
+        for (Product product : lista) {
+            if(product instanceof Pack){
+                listaPacks.add((Pack) product);
+            }else{
+                System.out.println(
+                    product.getId() + "\t" + 
+                    product.getPrecio() + "\t" + 
+                    product.getStock() + "\t" + 
+                    product.getNombre() 
+                );
+            }
+        }
+        System.out.println();
+        if(!listaPacks.isEmpty()){
+            System.out.println("\t-- PACKS -- ");
+            System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tDescuento\tNombre\tLista Productos" + "\u001b[0m");
+            for (Pack pack : listaPacks) {
+                System.out.println(
+                    pack.getId() + "\t" + 
+                    pack.getPrecio() + "\t" + 
+                    pack.getStock() + " u\t" + 
+                    pack.getDescuento() + " %\t\t" + 
+                    pack.getNombre() + "\t" +
+                    pack.getProductos()
+                );
+            }
+        }
+        System.out.println();
+    }
+
     // FICHEROS
     public static void guardarFichero() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
@@ -219,7 +245,7 @@ public class ProductDAO<T> implements Persistable<T> {
         } catch (ClassNotFoundException cnfe) {
             System.out.println("\u001B[31m" + "La classe no existe: " + cnfe + "\u001B[0m");
         } finally {
-            System.out.println("\u001B[32m" + "productes.dat cargado correctamente" + "\u001B[0m");
+            System.out.println("\u001B[32m" + "productes.dat cargado correctamente\n" + "\u001B[0m");
         }
 
     }

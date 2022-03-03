@@ -6,6 +6,15 @@ import java.util.TreeSet;
 public final class Pack extends Product {
 
     private TreeSet<Product> productos;
+    
+    public TreeSet<Product> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(TreeSet<Product> productos) {
+        this.productos = productos;
+    }
+
     private double descuento;
 
     public Pack(int id, String nombre, double precio, int stock, double descuento) {

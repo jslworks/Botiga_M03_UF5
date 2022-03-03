@@ -2,8 +2,8 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.TreeMap;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -555,24 +555,17 @@ public class Controller {
 		switch (type) {
 			case "productos":
 				p = (ProductDAO<Product>) dao;
+				((ProductDAO<Product>) dao).printProducts(new ArrayList<>(p.getMap().values()));
 				break;
 			case "clientes":
+				p = (DAO) dao;
+				// Falta definir
+				break;
 			case "proveedores":
 				p = (DAO) dao;
+				// Falta definir
 				break;
 		}
-		TreeMap<Integer, Product> mapaProductos = p.getMap();
-		
-		sistema("ID\tPrecio\tStock\tNombre\t");
-		for (Product product : mapaProductos.values()) {
-			System.out.println(
-				product.getId() + "\t" + 
-				product.getPrecio() + "\t" + 
-				product.getStock() + "\t" + 
-				product.getNombre() 
-			);
-		}
-		System.out.println();
 	}
 
 	private static void titulo(String texto){
