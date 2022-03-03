@@ -1,12 +1,20 @@
 package bo;
 
-
 import java.util.Objects;
 import java.util.TreeSet;
 
 public final class Pack extends Product {
 
     private TreeSet<Product> productos;
+    
+    public TreeSet<Product> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(TreeSet<Product> productos) {
+        this.productos = productos;
+    }
+
     private double descuento;
 
     public Pack(int id, String nombre, double precio, int stock, double descuento) {
@@ -46,14 +54,27 @@ public final class Pack extends Product {
 
     @Override
     public boolean equals(Object obj) {
-        boolean checkedID = false;
-        boolean checkedList = false;
-        if (obj instanceof Pack) {
-            Pack pack = (Pack) obj;
-            checkedID = (getId() == pack.getId());
-            checkedList = (productos.equals(pack.productos));
+        Pack pack = (Pack) obj;
+        // Comprobar si el objeto recibido es el mismo en el que que estas
+        if(this == pack){
+            return true;
         }
-        return (checkedID && checkedList);
+        // De toda la lista, filtramos solo los packs. Si no lo es, entonces no es igual
+        if (!(obj instanceof Pack)) {
+            return false;
+        }
+
+        // Comprobar que no tenga elementos en la lista
+        if(productos == null || productos.isEmpty()){
+            // Comprobar el pack que me han pasado
+            if(pack.productos != null){
+                return false;
+            }
+        }else if(!(pack.productos.equals(this.productos))){
+            return false;
+        }
+
+        return true;
     }
 
 }

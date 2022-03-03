@@ -16,20 +16,73 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     private int stock;
     private LocalDate fechaInicial;
     private LocalDate fechaFinal;
+    
+    // Transacciones stock
+    public void putStock(int cantidad) {
+    	this.setStock(this.getStock() + cantidad);
+    }
 
-    public LocalDate getFechaInicial() {
-        return fechaInicial;
+    public void takeStock(int cantidad) throws StockInsuficientException{
+    	if (this.getStock() > cantidad) {
+        	this.setStock(this.getStock() - cantidad);
+		} else {
+			throw new StockInsuficientException("No hay suficiente stock de " + this.getNombre()); 
+		}
     }
-    public void setFechaInicial(LocalDate fechaInicial) {
+    // Constructores
+    public Product(int idproduct, String nom, double price, int stock, LocalDate fechaInicial, LocalDate fechaFinal) {
+        this.id = idproduct;
+        this.nombre = nom;
+        this.precio = price;
+        this.stock = stock;
         this.fechaInicial = fechaInicial;
-    }
-    public LocalDate getFechaFinal() {
-        return fechaFinal;
-    }
-    public void setFechaFinal(LocalDate fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
+    
+    public Product(int idproduct, String nom, double price, int stock) {
+        this.id = idproduct;
+        this.nombre = nom;
+        this.precio = price;
+        this.stock = stock;
+    }
 
+    public Product(int idproduct, String nom, double price) {
+        this.id = idproduct;
+        this.nombre = nom;
+        this.precio = price;
+
+    }
+
+    @Override
+    public String toString() {
+        return "(" + id + ") " + nombre + ": " + precio + " EUR, " + stock + " unidad/es // Desde " + fechaInicial + " hasta " + fechaFinal + " <Producto>";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Product) {
+            Product temp = (Product) obj;
+            return temp.getNombre().equals(obj);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.nombre);
+        return hash;
+    }
+    
+    @Override
+    public int compareTo(Product prod) {
+        Integer thisID = getId();
+        Integer otherID = prod.getId();
+        return thisID.compareTo(otherID);
+    }
+
+    // Getters & Setters
     @Override
     public int getId() {
         return this.id;
@@ -67,74 +120,18 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     public void setStock(int s) {
         this.stock = s;
     }
-    
-    // Transacciones stock
-    public void putStock(int cantidad) {
-    	this.setStock(this.getStock() + cantidad);
-    }
 
-    public void takeStock(int cantidad) throws StockInsuficientException{
-    	if (this.getStock() > cantidad) {
-        	this.setStock(this.getStock() - cantidad);
-		} else {
-			throw new StockInsuficientException("No hay suficiente stock de " + this.getNombre()); 
-		}
+    public LocalDate getFechaInicial() {
+        return fechaInicial;
     }
-    
-    // Constructores
-    public Product(int idproduct, String nom, double price, int stock, LocalDate fechaInicial, LocalDate fechaFinal) {
-        this.id = idproduct;
-        this.nombre = nom;
-        this.precio = price;
-        this.stock = stock;
+    public void setFechaInicial(LocalDate fechaInicial) {
         this.fechaInicial = fechaInicial;
+    }
+    public LocalDate getFechaFinal() {
+        return fechaFinal;
+    }
+    public void setFechaFinal(LocalDate fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
-    
-    public Product(int idproduct, String nom, double price, int stock) {
-        this.id = idproduct;
-        this.nombre = nom;
-        this.precio = price;
-        this.stock = stock;
-    }
-
-    public Product(int idproduct, String nom, double price) {
-        this.id = idproduct;
-        this.nombre = nom;
-        this.precio = price;
-
-    }
-    //El metode toString
-    @Override
-    public String toString() {
-        return "(" + id + ") " + nombre + ": " + precio + " EUR, " + stock + " unidad/es // Desde " + fechaInicial + " hasta " + fechaFinal + " <Producto>";
-    }
-
-    //Metode equals del name
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Product) {
-            Product temp = (Product) obj;
-            return temp.getNombre().equals(obj);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.nombre);
-        return hash;
-    }
-    
-    @Override
-    public int compareTo(Product prod) {
-        Integer thisID = getId();
-        Integer otherID = prod.getId();
-        return thisID.compareTo(otherID);
-    }
-
-    
 
 }

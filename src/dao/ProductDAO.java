@@ -9,14 +9,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.TreeSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 import bo.Pack;
 import bo.Product;
 import tools.Persistable;
+import tools.ProductNameComparator;
+import tools.ProductPriceComparator;
+import tools.ProductStockComparator;
 
 public class ProductDAO<T> implements Persistable<T> {
 
@@ -107,11 +110,11 @@ public class ProductDAO<T> implements Persistable<T> {
             if (producto instanceof Pack) {
                 Pack pack = (Pack) producto;
                 if(newPack.equals(pack)){
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -145,7 +148,6 @@ public class ProductDAO<T> implements Persistable<T> {
     }
         
     // MODIFICAR
-
     public void modifyProduct(Product producto) {
         Product prod = (Product) mapaProductos.get(producto.getId());
         prod.setNombre(producto.getNombre());
@@ -172,30 +174,59 @@ public class ProductDAO<T> implements Persistable<T> {
     }
 
     // MOSTRAR
-    public TreeSet<String> printProduct() {
-        TreeSet<String> llistaprod = new TreeSet<String>();
-        llistaprod.add(mapaProductos.toString());
-        return llistaprod;
-    }
-
-    public ArrayList<Product> mostrarOrdenadoPor(String type){
-        ArrayList<Product> listaOrdenada = new ArrayList<>(mapaProductos.size());
+    public void mostrarOrdenadoPor(String type){
+        ArrayList<Product> listaOrdenada = new ArrayList<>(mapaProductos.values());
         switch (type) {
             case "nombre":
-                
+                Collections.sort(listaOrdenada, new ProductNameComparator());
                 break;
             case "precio":
-                
+                Collections.sort(listaOrdenada, new ProductPriceComparator());
                 break;
             case "stock":
-                
-                break;
+                Collections.sort(listaOrdenada, new ProductStockComparator());
+            break;
             default:
                 break;
         }
-        return listaOrdenada;
+        
+        printProducts(listaOrdenada);
     }
     
+    public void printProducts(ArrayList<Product> lista){
+        System.out.println("\t-- PRODUCTOS --");
+        System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tNombre\t" + "\u001b[0m");
+        ArrayList<Pack> listaPacks = new ArrayList<>();
+        for (Product product : lista) {
+            if(product instanceof Pack){
+                listaPacks.add((Pack) product);
+            }else{
+                System.out.println(
+                    product.getId() + "\t" + 
+                    product.getPrecio() + "\t" + 
+                    product.getStock() + "\t" + 
+                    product.getNombre() 
+                );
+            }
+        }
+        System.out.println();
+        if(!listaPacks.isEmpty()){
+            System.out.println("\t-- PACKS -- ");
+            System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tDescuento\tNombre\tLista Productos" + "\u001b[0m");
+            for (Pack pack : listaPacks) {
+                System.out.println(
+                    pack.getId() + "\t" + 
+                    pack.getPrecio() + "\t" + 
+                    pack.getStock() + " u\t" + 
+                    pack.getDescuento() + " %\t\t" + 
+                    pack.getNombre() + "\t" +
+                    pack.getProductos()
+                );
+            }
+        }
+        System.out.println();
+    }
+
     // FICHEROS
     public static void guardarFichero() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
