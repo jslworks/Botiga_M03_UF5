@@ -43,20 +43,9 @@ public class ProductDAO<T> implements Persistable<T> {
             System.out.print("Stock: ");
             int stock = new Scanner(System.in).nextInt();
 
-            sistema("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
-            System.out.print("Fecha inicial : ");
-            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String userInput = new Scanner(System.in).nextLine();
-            userInput = userInput.isBlank() ? "02/02/2020" : userInput;
-            LocalDate fechaInicial = LocalDate.parse(userInput, dateFormat);
-            System.out.print("Fecha final: ");
-            userInput = new Scanner(System.in).nextLine();
-            userInput = userInput.isBlank() ? "02/02/2020" : userInput;
-            LocalDate fechaFinal = LocalDate.parse(userInput, dateFormat);
-
             switch (type) {
                 case "producto":
-                    agregarProducto(id, nombre, precio, stock, fechaInicial, fechaFinal);
+                    agregarProducto(id, nombre, precio, stock);
                     break;
                 case "pack":
                     agregarPack(id, nombre, precio, stock);
@@ -69,9 +58,11 @@ public class ProductDAO<T> implements Persistable<T> {
         }        
     }
 
-    private void agregarProducto(int idproduct, String nombre, double precio, int stock, LocalDate fechaInicial, LocalDate fechaFinal){
+    private void agregarProducto(int idproduct, String nombre, double precio, int stock){
+        ArrayList<LocalDate> fechas = pedirFecha("newProduct");
+        
         // Agregando producto
-        Product product = new Product(idproduct, nombre, precio, stock, fechaInicial, fechaFinal);
+        Product product = new Product(idproduct, nombre, precio, stock, fechas.get(0), fechas.get(1));
         this.save(product);
     }
 
@@ -195,8 +186,9 @@ public class ProductDAO<T> implements Persistable<T> {
     
     public void printProducts(ArrayList<Product> lista){
         System.out.println("\t-- PRODUCTOS --");
-        System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tNombre\t" + "\u001b[0m");
+        System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tNombre\tCatalogo\t" + "\u001b[0m");
         ArrayList<Pack> listaPacks = new ArrayList<>();
+        
         for (Product product : lista) {
             if(product instanceof Pack){
                 listaPacks.add((Pack) product);
@@ -205,7 +197,9 @@ public class ProductDAO<T> implements Persistable<T> {
                     product.getId() + "\t" + 
                     product.getPrecio() + "\t" + 
                     product.getStock() + "\t" + 
-                    product.getNombre() 
+                    product.getNombre()  + "\t" + 
+                    product.getFechaInicial() + " > " +
+                    product.getFechaFinal()
                 );
             }
         }
@@ -225,6 +219,23 @@ public class ProductDAO<T> implements Persistable<T> {
             }
         }
         System.out.println();
+    }
+
+    public void mostrarDescatalogados(LocalDate fecha){
+        for (Product product : mapaProductos.values()) {
+            if (product.getFechaFinal().isBefore(fecha)) {
+                int fecha_dias = fecha.getDayOfYear();
+                int product_final_dias = product.getFechaFinal().getDayOfYear();
+                int tiempoDescatalogado = fecha_dias - product_final_dias;
+
+                String text = "El producto (" + product.getId() + ") " + product.getNombre() +
+                    " lleva " + TEXT_RED + tiempoDescatalogado;
+                text += ( tiempoDescatalogado == 1 ) ? " dia descatalogado" : " dias descatalogado";
+                text += TEXT_RESET;
+
+                System.out.println(text);
+            }
+        }        
     }
 
     // FICHEROS
@@ -259,6 +270,33 @@ public class ProductDAO<T> implements Persistable<T> {
     @Override
     public TreeMap<Integer, T> getMap() {
         return (TreeMap<Integer, T>) mapaProductos;
+    }
+
+    public ArrayList<LocalDate> pedirFecha(String type){   
+        int n_fechas = 1;
+        ArrayList<String> textFechas = new ArrayList<>();
+        if(type.equals("newProduct")){
+            n_fechas = 2; // Inicial y final
+            textFechas.add("Fecha inicial: ");
+            textFechas.add("Fecha final: ");
+        }else if(type.equals("fromDate")){
+            n_fechas = 1;
+            textFechas.add("Fecha: ");
+        }
+        
+        ArrayList<LocalDate> fechas = new ArrayList<>(n_fechas);
+        sistema("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
+        sistema("Si no escribe, se introducirá la fecha actual");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        for (int i = 0; i < n_fechas; i++) {
+            System.out.print( textFechas.get(i) );
+            String userInput = new Scanner(System.in).nextLine();
+            fechas.add(userInput.isBlank() ? 
+                java.time.LocalDate.now() : LocalDate.parse(userInput, dateFormat));
+        }
+
+        return fechas;
     }
 
 	////////////////////////////////////////////////////////////////////////

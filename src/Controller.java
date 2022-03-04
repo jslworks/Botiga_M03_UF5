@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedInputStream;
@@ -270,6 +271,13 @@ public class Controller {
 									}while(inputResponse.equalsIgnoreCase("S"));
 									dos.close();
 									break;
+								case 9: // Catálogo
+									titulo("MOSTRAR CATÁLOGO");
+									// Pedir fecha o pulsar tecla si es dia de hoy
+									LocalDate fecha = prodDAO.pedirFecha("fromDate").get(0);
+									// Mostrar productos descatalogados
+									prodDAO.mostrarDescatalogados(fecha);
+									break;
 								case 0:
 									break;
 								default:
@@ -511,6 +519,7 @@ public class Controller {
 				System.out.println("6. Agregar stock");
 				System.out.println("7. Quitar stock");
 				System.out.println("8. Mantenimiento de producto");
+				System.out.println("9. Mostrar descatalogados");
 				break;
 			case "clientes":
 				titulo("CLIENTES < BOTIGA");
