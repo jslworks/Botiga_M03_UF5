@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import err.StockInsuficientException;
-// import tools.Comparators;
 import tools.Identificable;
 
 public class Product implements Identificable, Serializable, Comparable<Product>{

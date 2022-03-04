@@ -492,11 +492,11 @@ public class Controller {
 				pulsaParaContinuar();
 		} while (option2 != 0);
 	}
-	
 
 	////////////////////////////////////////////////////////////////////////
 	// VISTA
 	//////////
+
 	public static int menu(String type) {
 		Scanner sc = new Scanner(System.in);
 		int seleccion;
