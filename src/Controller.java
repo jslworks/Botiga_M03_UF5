@@ -295,6 +295,9 @@ public class Controller {
 					case 3: // PROVEEDORES
 						this.proveedores();
 						break;
+					case 4:
+						this.empleados();
+						break;
 					case 0:
 						break;
 				}
@@ -313,8 +316,25 @@ public class Controller {
 	}
 
 	////////////////////////////////////////////////////////////////////////
-	// CLIENTES Y PROVEEDORES
+	// EMPLEADOS, CLIENTES Y PROVEEDORES
 	//////////
+
+	public void empleados(){
+		int option = menu("inicial");
+		switch (option) {
+			case 1:
+				
+				break;
+			case 2:
+
+				break;
+			case 3:
+
+				break;
+			default:
+				break;
+		}
+	}
 
 	public void clientes() throws IOException{
 		int option2, idperson;
@@ -507,6 +527,7 @@ public class Controller {
 				System.out.println("1. Productos");
 				System.out.println("2. Clientes");
 				System.out.println("3. Proveedores");
+				System.out.println("4. Empleados");
 				break;
 			case "productos":
 				titulo("PRODUCTOS/PACKS < BOTIGA");
@@ -538,6 +559,13 @@ public class Controller {
 				System.out.println("3. Modificar");
 				System.out.println("4. Eliminar");
 				System.out.println("5. Mostrar todo");
+				break;
+			case "empleados":
+				titulo("EMPLEADOS < BOTIGA");
+				System.out.println("+----------------+");
+				System.out.println("1. Fichar entrada");
+				System.out.println("2. Fichar salida");
+				System.out.println("3. Consultar");
 				break;
 			case "MOSTRAR PRODUCTOS":
 				titulo("MOSTRAR PRODUCTOS");
