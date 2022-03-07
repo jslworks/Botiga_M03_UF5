@@ -52,9 +52,7 @@ public class Controller {
 
 			int seleccion;
 
-			int idperson;
-			String dni, name, surnames;
-			String locality, province, zipCode, direction;
+			String name;
 
 			int idproduct, stock;
 			double price;
@@ -149,8 +147,8 @@ public class Controller {
 											prodDAO.mostrarOrdenadoPor("precio");
 											break;
 										case 4:
-											prodDAO.mostrarOrdenadoPor("stock");		
-											break;									
+											prodDAO.mostrarOrdenadoPor("stock");
+											break;
 										default:
 											break;
 									}
@@ -251,8 +249,9 @@ public class Controller {
 									titulo("COMANDA PRODUCTO");
 									System.out.print("Nombre fichero: ");
 									nombreFichero = new Scanner(System.in).nextLine();
-									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombreFichero)));
-									do{
+									DataOutputStream dos = new DataOutputStream(
+											new BufferedOutputStream(new FileOutputStream(nombreFichero)));
+									do {
 										// Obtener datos
 										System.out.print("ID producto: ");
 										idproduct = new Scanner(System.in).nextInt();
@@ -268,7 +267,7 @@ public class Controller {
 										}
 										System.out.println("¿Continuar? (S/n)");
 										inputResponse = new Scanner(System.in).nextLine();
-									}while(inputResponse.equalsIgnoreCase("S"));
+									} while (inputResponse.equalsIgnoreCase("S"));
 									dos.close();
 									break;
 								case 9: // Catálogo
@@ -288,9 +287,8 @@ public class Controller {
 								pulsaParaContinuar();
 						} while (option2 != 0);
 						break;
-
 					case 2: // CLIENTES
-						this.clientes();						
+						this.clientes();
 						break;
 					case 3: // PROVEEDORES
 						this.proveedores();
@@ -319,16 +317,16 @@ public class Controller {
 	// EMPLEADOS, CLIENTES Y PROVEEDORES
 	//////////
 
-	public void empleados(){
+	public void empleados() {
 		int option = menu("inicial");
 		switch (option) {
-			case 1:
-				
-				break;
-			case 2:
+			case 1: // Fichar entrada
 
 				break;
-			case 3:
+			case 2: // Fichar salida
+
+				break;
+			case 3: // Consultar
 
 				break;
 			default:
@@ -336,7 +334,7 @@ public class Controller {
 		}
 	}
 
-	public void clientes() throws IOException{
+	public void clientes() throws IOException {
 		int option2, idperson;
 		String dni, name, surnames, locality, province, zipCode, direction;
 		do {
@@ -423,7 +421,7 @@ public class Controller {
 		} while (option2 != 0);
 	}
 
-	public void proveedores() throws IOException{
+	public void proveedores() throws IOException {
 		int option2, idperson;
 		String dni, name, surnames, locality, province, zipCode, direction;
 		do {
@@ -454,7 +452,7 @@ public class Controller {
 					prov.save(s);
 					break;
 				case 2: // Buscar proveedor
-				System.out.println(TEXT_PURPLE + "BUSCAR PROVEEDOR" + TEXT_RESET);
+					System.out.println(TEXT_PURPLE + "BUSCAR PROVEEDOR" + TEXT_RESET);
 					System.out.print("ID: ");
 					idperson = new Scanner(System.in).nextInt();
 					if (prov.search(idperson) != null) {
@@ -586,7 +584,7 @@ public class Controller {
 		return seleccion;
 	}
 
-	public static void mostrar(String type, Object dao){
+	public static void mostrar(String type, Object dao) {
 		Persistable p = null;
 		switch (type) {
 			case "productos":
@@ -604,20 +602,20 @@ public class Controller {
 		}
 	}
 
-	private static void titulo(String texto){
+	private static void titulo(String texto) {
 		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
 	}
 
-	private static void alerta(String texto, Object obj){
+	private static void alerta(String texto, Object obj) {
 		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
 	}
 
-	private static void sistema(String texto){
+	private static void sistema(String texto) {
 		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
 	}
 
 	private static void pulsaParaContinuar() throws IOException {
-		System.out.println(TEXT_CYAN +"Pulsa para continuar..." + TEXT_RESET);
+		System.out.println(TEXT_CYAN + "Pulsa para continuar..." + TEXT_RESET);
 		System.in.read();
 	}
 

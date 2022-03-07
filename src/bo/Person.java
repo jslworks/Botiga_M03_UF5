@@ -5,7 +5,7 @@ import java.time.temporal.ChronoUnit;
 
 import tools.Identificable;
 
-public abstract class Person implements Identificable{
+public abstract class Person implements Identificable {
 
     private Integer idperson;
     private String dni;
@@ -17,7 +17,7 @@ public abstract class Person implements Identificable{
     private Address address;
     private int count;
 
-    //Set i get del id de la persona
+    // Set i get del id de la persona
     public void setIdperson(int i) {
         this.idperson = i;
     }
@@ -25,9 +25,9 @@ public abstract class Person implements Identificable{
     @Override
     public int getId() {
         return this.idperson;
-    }   
+    }
 
-    //Set i get del DNI
+    // Set i get del DNI
     public void setDni(String d) {
         this.dni = d;
     }
@@ -36,7 +36,7 @@ public abstract class Person implements Identificable{
         return this.dni;
     }
 
-    //Set i get del nombre
+    // Set i get del nombre
     public void setName(String n) {
         this.name = n;
     }
@@ -45,7 +45,7 @@ public abstract class Person implements Identificable{
         return this.name;
     }
 
-    //Set i get dels cognoms
+    // Set i get dels cognoms
     public void setSurnames(String s) {
         this.surnames = s;
     }
@@ -54,7 +54,7 @@ public abstract class Person implements Identificable{
         return this.surnames;
     }
 
-    //Set i get de la data de naixement
+    // Set i get de la data de naixement
     public void setBirthdate(LocalDate b) {
         this.birthdate = b;
     }
@@ -63,7 +63,7 @@ public abstract class Person implements Identificable{
         return this.birthdate;
     }
 
-    //Set i get del correu electronic
+    // Set i get del correu electronic
     public void setEmail(String e) {
         this.email = e;
     }
@@ -72,7 +72,7 @@ public abstract class Person implements Identificable{
         return this.email;
     }
 
-    //Set i get del telefon
+    // Set i get del telefon
     public void setPhone(String e) {
         this.phone = e;
     }
@@ -81,7 +81,7 @@ public abstract class Person implements Identificable{
         return this.phone;
     }
 
-    //Set i get de la direcció
+    // Set i get de la direcció
     public void setAddress(Address a) {
         this.address = a;
     }
@@ -100,7 +100,7 @@ public abstract class Person implements Identificable{
         this.name = name;
         this.surnames = surnames;
     }
-    
+
     protected Person(int idperson, String dni, String name, String surnames, Address address) {
         this.idperson = idperson;
         this.dni = dni;
@@ -133,10 +133,11 @@ public abstract class Person implements Identificable{
 
     @Override
     public String toString() {
-        return "Person{" + "idperson=" + idperson + ", dni=" + dni + ", name=" + name + ", surnames=" + surnames + ", birthdate=" + birthdate + ", email=" + email + ", phone=" + phone + ", address=" + address + '}';
+        return "Person{" + "idperson=" + idperson + ", dni=" + dni + ", name=" + name + ", surnames=" + surnames
+                + ", birthdate=" + birthdate + ", email=" + email + ", phone=" + phone + ", address=" + address + '}';
     }
-    
+
     public boolean isValid() {
-        return (this.idperson == null || this.dni == null || this.name == null || this.surnames == null) ;
+        return (this.idperson == null || this.dni == null || this.name == null || this.surnames == null);
     }
 }

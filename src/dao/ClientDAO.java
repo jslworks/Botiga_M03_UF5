@@ -40,13 +40,13 @@ public class ClientDAO<T> implements Persistable<T> {
         client.remove(idperson);
     }
 
-    //Implementacio de la Interficie amb variable generica
+    // Implementacio de la Interficie amb variable generica
     @Override
     public void save(Object obj) {
         if (obj != null && obj instanceof Client) {
             Client id = (Client) obj;
             client.put(id.getId(), (T) obj);
-        } 
+        }
     }
 
     public TreeMap<Integer, T> getMap() {

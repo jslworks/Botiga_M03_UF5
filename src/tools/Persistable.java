@@ -1,6 +1,5 @@
 package tools;
 
-
 import java.util.TreeMap;
 
 public interface Persistable<T> {

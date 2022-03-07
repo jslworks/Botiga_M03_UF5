@@ -6,7 +6,7 @@ import java.util.TreeSet;
 public final class Pack extends Product {
 
     private TreeSet<Product> productos;
-    
+
     public TreeSet<Product> getProductos() {
         return productos;
     }
@@ -41,10 +41,11 @@ public final class Pack extends Product {
 
     @Override
     public String toString() {
-        return "(" + super.getId() + ") " + getNombre() + " "+ productos + " = " + getPrecio() + " EUR ; Stock = " + getStock() + " <Pack>";
+        return "(" + super.getId() + ") " + getNombre() + " " + productos + " = " + getPrecio() + " EUR ; Stock = "
+                + getStock() + " <Pack>";
     }
 
-    //Metode equals del id del pack
+    // Metode equals del id del pack
     @Override
     public int hashCode() {
         int hash = 5;
@@ -56,7 +57,7 @@ public final class Pack extends Product {
     public boolean equals(Object obj) {
         Pack pack = (Pack) obj;
         // Comprobar si el objeto recibido es el mismo en el que que estas
-        if(this == pack){
+        if (this == pack) {
             return true;
         }
         // De toda la lista, filtramos solo los packs. Si no lo es, entonces no es igual
@@ -65,12 +66,12 @@ public final class Pack extends Product {
         }
 
         // Comprobar que no tenga elementos en la lista
-        if(productos == null || productos.isEmpty()){
+        if (productos == null || productos.isEmpty()) {
             // Comprobar el pack que me han pasado
-            if(pack.productos != null){
+            if (pack.productos != null) {
                 return false;
             }
-        }else if(!(pack.productos.equals(this.productos))){
+        } else if (!(pack.productos.equals(this.productos))) {
             return false;
         }
 

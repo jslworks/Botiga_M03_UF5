@@ -6,7 +6,7 @@ import java.util.Objects;
 import err.StockInsuficientException;
 import tools.Identificable;
 
-public class Product implements Identificable, Serializable, Comparable<Product>{
+public class Product implements Identificable, Serializable, Comparable<Product> {
 
     private static final long serialVersionUID = 14L;
 
@@ -16,19 +16,20 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     private int stock;
     private LocalDate fechaInicial;
     private LocalDate fechaFinal;
-    
+
     // Transacciones stock
     public void putStock(int cantidad) {
-    	this.setStock(this.getStock() + cantidad);
+        this.setStock(this.getStock() + cantidad);
     }
 
-    public void takeStock(int cantidad) throws StockInsuficientException{
-    	if (this.getStock() > cantidad) {
-        	this.setStock(this.getStock() - cantidad);
-		} else {
-			throw new StockInsuficientException("No hay suficiente stock de " + this.getNombre()); 
-		}
+    public void takeStock(int cantidad) throws StockInsuficientException {
+        if (this.getStock() > cantidad) {
+            this.setStock(this.getStock() - cantidad);
+        } else {
+            throw new StockInsuficientException("No hay suficiente stock de " + this.getNombre());
+        }
     }
+
     // Constructores
     public Product(int idproduct, String nom, double price, int stock, LocalDate fechaInicial, LocalDate fechaFinal) {
         this.id = idproduct;
@@ -38,7 +39,7 @@ public class Product implements Identificable, Serializable, Comparable<Product>
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
     }
-    
+
     public Product(int idproduct, String nom, double price, int stock) {
         this.id = idproduct;
         this.nombre = nom;
@@ -55,7 +56,8 @@ public class Product implements Identificable, Serializable, Comparable<Product>
 
     @Override
     public String toString() {
-        return "(" + id + ") " + nombre + ": " + precio + " EUR, " + stock + " unidad/es // Desde " + fechaInicial + " hasta " + fechaFinal + " <Producto>";
+        return "(" + id + ") " + nombre + ": " + precio + " EUR, " + stock + " unidad/es // Desde " + fechaInicial
+                + " hasta " + fechaFinal + " <Producto>";
     }
 
     @Override
@@ -74,7 +76,7 @@ public class Product implements Identificable, Serializable, Comparable<Product>
         hash = 67 * hash + Objects.hashCode(this.nombre);
         return hash;
     }
-    
+
     @Override
     public int compareTo(Product prod) {
         Integer thisID = getId();
@@ -86,8 +88,9 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     @Override
     public int getId() {
         return this.id;
-    }   
-    //Getters dels productes
+    }
+
+    // Getters dels productes
     public Integer getIdProduct() {
         return id;
     }
@@ -104,7 +107,7 @@ public class Product implements Identificable, Serializable, Comparable<Product>
         return stock;
     }
 
-    //Setters del producte
+    // Setters del producte
     public void setIdproduct(int i) {
         this.id = i;
     }
@@ -124,12 +127,15 @@ public class Product implements Identificable, Serializable, Comparable<Product>
     public LocalDate getFechaInicial() {
         return fechaInicial;
     }
+
     public void setFechaInicial(LocalDate fechaInicial) {
         this.fechaInicial = fechaInicial;
     }
+
     public LocalDate getFechaFinal() {
         return fechaFinal;
     }
+
     public void setFechaFinal(LocalDate fechaFinal) {
         this.fechaFinal = fechaFinal;
     }

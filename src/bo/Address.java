@@ -1,6 +1,5 @@
 package bo;
 
-
 public class Address {
 
     private String locality;
@@ -8,7 +7,7 @@ public class Address {
     private String zipCode;
     private String street;
 
-    //Set i get de la localitat
+    // Set i get de la localitat
     public void setLocality(String l) {
         this.locality = l;
     }
@@ -17,7 +16,7 @@ public class Address {
         return this.locality;
     }
 
-    //Set i get de la provincia
+    // Set i get de la provincia
     public void setProvince(String p) {
         this.province = p;
     }
@@ -26,7 +25,7 @@ public class Address {
         return this.province;
     }
 
-    //Set i get del codi postal
+    // Set i get del codi postal
     public void setZipCode(String c) {
         this.zipCode = c;
     }
@@ -35,7 +34,7 @@ public class Address {
         return this.zipCode;
     }
 
-    //Set i get del adreça
+    // Set i get del adreça
     public void setStreet(String a) {
         this.street = a;
     }
@@ -44,7 +43,7 @@ public class Address {
         return this.street;
     }
 
-    //El constructor de adreça
+    // El constructor de adreça
     public Address(String l, String p, String c, String a) {
         this.locality = l;
         this.province = p;
@@ -55,7 +54,8 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" + "locality=" + locality + ", province=" + province + ", zipCode=" + zipCode + ", address=" + street + '}';
+        return "Address{" + "locality=" + locality + ", province=" + province + ", zipCode=" + zipCode + ", address="
+                + street + '}';
     }
-    
+
 }
