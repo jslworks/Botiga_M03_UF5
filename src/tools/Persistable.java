@@ -11,4 +11,6 @@ public interface Persistable<T> {
     public T search(int id);
 
     public TreeMap<Integer, T> getMap();
+
+    public TreeMap<String, T> getSMap();
 }

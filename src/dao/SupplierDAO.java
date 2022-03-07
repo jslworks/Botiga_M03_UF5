@@ -78,4 +78,10 @@ public class SupplierDAO<T> implements Persistable<T> {
         }
     }
 
+    @Override
+    public TreeMap<String, T> getSMap() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

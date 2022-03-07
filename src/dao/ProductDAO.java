@@ -327,4 +327,10 @@ public class ProductDAO<T> implements Persistable<T> {
     public static final String TEXT_PURPLE = "\u001B[35m";
     public static final String TEXT_CYAN = "\u001B[36m";
     public static final String TEXT_WHITE = "\u001B[37m";
+
+    @Override
+    public TreeMap<String, T> getSMap() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

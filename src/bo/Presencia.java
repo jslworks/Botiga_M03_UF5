@@ -3,27 +3,35 @@ package bo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import tools.Identificable;
+public class Presencia implements Serializable {
 
-public class Presencia implements Identificable, Serializable {
-
+    private String id;
     private int idEmpleado;
     private LocalDate fecha;
     private LocalDate entrada;
     private LocalDate salida;
 
-    public Presencia(int id, LocalDate fecha) {
-        this.idEmpleado = id;
+    public Presencia(int idEmpleado, LocalDate fecha) {
+        this.idEmpleado = idEmpleado;
         this.fecha = fecha;
+        this.id = Integer.toString(idEmpleado) + "_" + fecha.toString();
+        System.out.println(this.id);
     }
 
-    @Override
-    public int getId() {
-        return this.idEmpleado;
+    public String getId() {
+        return this.id;
     }
 
-    public void setId(int id) {
-        this.idEmpleado = id;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public LocalDate getFecha() {

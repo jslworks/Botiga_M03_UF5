@@ -40,4 +40,10 @@ public class DAO<T extends Identificable> implements Persistable<T> {
         hmDAO.replace(obj.getId(), obj);
     }
 
+    @Override
+    public TreeMap<String, T> getSMap() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
