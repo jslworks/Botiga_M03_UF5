@@ -333,4 +333,16 @@ public class ProductDAO<T> implements Persistable<T> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void delete(String id) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public T search(String id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

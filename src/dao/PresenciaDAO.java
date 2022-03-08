@@ -1,10 +1,26 @@
 package dao;
 
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 import java.util.TreeMap;
 
+import bo.Pack;
+import bo.Product;
 import bo.Presencia;
 import tools.Persistable;
+import tools.ProductNameComparator;
+import tools.ProductPriceComparator;
+import tools.ProductStockComparator;
 
 public class PresenciaDAO<T> implements Persistable<T> {
 
@@ -23,15 +39,18 @@ public class PresenciaDAO<T> implements Persistable<T> {
     // BUSCAR
     @Override
     public T search(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        return mapaPresencia.containsKey(id) ? (T) (Presencia) mapaPresencia.get(id) : null;
     }
 
     // ELIMINAR
     @Override
-    public void delete(int id) {
-        // TODO Auto-generated method stub
-
+    public void delete(String id) {
+        if (mapaPresencia.containsKey(id)) {
+            mapaPresencia.remove(id);
+            sistema("Eliminado correctamente");
+        }else{
+            alerta("No se ha podido eliminar el id ", id);
+        }
     }
 
     // Set/get data
@@ -45,7 +64,6 @@ public class PresenciaDAO<T> implements Persistable<T> {
         return null;
     }
     
-
     // GETTERS & SETTERS
 
     // MOSTRAR
@@ -55,7 +73,6 @@ public class PresenciaDAO<T> implements Persistable<T> {
     ////////////////////////////////////////////////////////////////////////
     // VISTA
     //////////
-
     private static void titulo(String texto) {
         System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
     }
@@ -84,4 +101,16 @@ public class PresenciaDAO<T> implements Persistable<T> {
     public static final String TEXT_CYAN = "\u001B[36m";
     public static final String TEXT_WHITE = "\u001B[37m";
 
+    @Override
+    public void delete(int id) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public T search(String id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
 }

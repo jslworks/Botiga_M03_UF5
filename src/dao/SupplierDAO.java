@@ -84,4 +84,16 @@ public class SupplierDAO<T> implements Persistable<T> {
         return null;
     }
 
+    @Override
+    public void delete(String id) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public T search(String id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
