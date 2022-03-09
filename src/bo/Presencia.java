@@ -2,20 +2,20 @@ package bo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Presencia implements Serializable {
 
     private String id;
     private int idEmpleado;
     private LocalDate fecha;
-    private LocalDate entrada;
-    private LocalDate salida;
+    private LocalTime entrada;
+    private LocalTime salida;
 
     public Presencia(int idEmpleado, LocalDate fecha) {
         this.idEmpleado = idEmpleado;
         this.fecha = fecha;
         this.id = Integer.toString(idEmpleado) + "_" + fecha.toString();
-        System.out.println(this.id);
     }
 
     public String getId() {
@@ -42,20 +42,25 @@ public class Presencia implements Serializable {
         this.fecha = fecha;
     }
 
-    public LocalDate getEntrada() {
+    public LocalTime getEntrada() {
         return entrada;
     }
 
-    public void setEntrada(LocalDate entrada) {
+    public void setEntrada(LocalTime entrada) {
         this.entrada = entrada;
     }
 
-    public LocalDate getSalida() {
+    public LocalTime getSalida() {
         return salida;
     }
 
-    public void setSalida(LocalDate salida) {
+    public void setSalida(LocalTime salida) {
         this.salida = salida;
+    }
+
+    @Override
+    public String toString() {
+        return "Empleado " + idEmpleado + " [" + fecha + "], entrada= " + entrada + " / salida= " + salida;
     }
 
 }

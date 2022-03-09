@@ -12,9 +12,11 @@ import java.util.logging.*;
 
 import bo.Address;
 import bo.Client;
+import bo.Presencia;
 import bo.Product;
 import bo.Supplier;
 import dao.DAO;
+import dao.PresenciaDAO;
 import dao.ProductDAO;
 import err.StockInsuficientException;
 import tools.Persistable;
@@ -28,6 +30,7 @@ public class Controller {
 	private ProductDAO<Product> prodDAO = new ProductDAO<Product>();
 	private DAO prov = new DAO();
 	private DAO clie = new DAO();
+	private PresenciaDAO<Presencia> presenciaDAO = new PresenciaDAO<>();
 
 	// Ejecutar
 	public void run() {
@@ -316,18 +319,22 @@ public class Controller {
 	////////////////////////////////////////////////////////////////////////
 	// EMPLEADOS, CLIENTES Y PROVEEDORES
 	//////////
-
 	public void empleados() {
-		int option = menu("inicial");
+		int option = menu("empleados");
+		System.out.print("ID: ");
+		int idEmpleado = new Scanner(System.in).nextInt();
 		switch (option) {
 			case 1: // Fichar entrada
-
+				sistema("ENTRADA < EMPLEADOS");
+				presenciaDAO.ficharEntrada(idEmpleado);
 				break;
 			case 2: // Fichar salida
-
+				sistema("SALIR < EMPLEADOS");
+				presenciaDAO.ficharSalida(idEmpleado);
 				break;
 			case 3: // Consultar
-
+				sistema("CONSULTAR FICHAJE < EMPLEADOS");
+				presenciaDAO.consultaDia(idEmpleado);
 				break;
 			default:
 				break;
@@ -514,7 +521,6 @@ public class Controller {
 	////////////////////////////////////////////////////////////////////////
 	// VISTA
 	//////////
-
 	public static int menu(String type) {
 		Scanner sc = new Scanner(System.in);
 		int seleccion;

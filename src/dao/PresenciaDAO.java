@@ -1,30 +1,66 @@
 package dao;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-import bo.Pack;
-import bo.Product;
 import bo.Presencia;
 import tools.Persistable;
-import tools.ProductNameComparator;
-import tools.ProductPriceComparator;
-import tools.ProductStockComparator;
 
 public class PresenciaDAO<T> implements Persistable<T> {
 
     private static TreeMap<String, Presencia> mapaPresencia = new TreeMap<>();
+
+    public void ficharEntrada(int idEmpleado) {
+        // System.out.println("ID: ");
+        // int idEmpleado = new Scanner(System.in).nextInt();
+        LocalDate fechaActual = java.time.LocalDate.now();
+        if (this.search(idEmpleado) == null) {
+            Presencia presencia = new Presencia(idEmpleado, fechaActual);
+            presencia.setEntrada(LocalTime.now());
+            this.save(presencia);
+            sistema("Entrada correcta " + (presencia.getEntrada()).toString());
+        } else {
+            alerta("No se puede volver fichar la entrada", "");
+        }
+    }
+
+    public void ficharSalida(int idEmpleado) {
+        // System.out.print("ID: ");
+        // int idEmpleado = new Scanner(System.in).nextInt();
+        LocalDate fechaActual = java.time.LocalDate.now();
+        String idPresencia = Integer.toString(idEmpleado) + "_" + fechaActual.toString();
+        Presencia presencia = (Presencia) this.search(idPresencia);
+
+        if (presencia != null && presencia.getSalida() == null) {
+            presencia.setSalida(LocalTime.now());
+            this.save(presencia);
+            sistema("Salida correcta " + (presencia.getSalida()).toString());
+        } else {
+            alerta("No se puede fichar la salida", "");
+        }
+    }
+
+    public void consultaDia(int idEmpleado) {
+        sistema("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
+        System.out.print("Fecha: ");
+        LocalDate dateInput = LocalDate.parse(
+                new Scanner(System.in).nextLine(),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String idPresencia = Integer.toString(idEmpleado) + "_" + dateInput.toString();
+
+        Presencia presencia = (Presencia) this.search(idPresencia);
+        if (presencia != null) {
+            System.out.println(presencia);
+        } else {
+            alerta("No existe", "");
+        }
+    }
 
     // AGREGAR
     @Override
@@ -32,14 +68,28 @@ public class PresenciaDAO<T> implements Persistable<T> {
         if (obj != null && obj instanceof Presencia) {
             Presencia presencia = (Presencia) obj;
             mapaPresencia.put(presencia.getId(), (Presencia) obj);
-            sistema("Guardado correctamente");
+            // sistema("Guardado correctamente");
         }
     }
 
     // BUSCAR
     @Override
-    public T search(int id) {
+    public T search(String id) {
         return mapaPresencia.containsKey(id) ? (T) (Presencia) mapaPresencia.get(id) : null;
+    }
+
+    @Override
+    public T search(int id) {
+        ArrayList<Presencia> listaPresencia = new ArrayList<>(mapaPresencia.values());
+        Iterator<Presencia> it = listaPresencia.iterator();
+        Presencia presencia;
+        while (it.hasNext()) {
+            presencia = it.next();
+            if (presencia.getIdEmpleado() == id) {
+                return (T) (Presencia) presencia;
+            }
+        }
+        return null;
     }
 
     // ELIMINAR
@@ -48,9 +98,14 @@ public class PresenciaDAO<T> implements Persistable<T> {
         if (mapaPresencia.containsKey(id)) {
             mapaPresencia.remove(id);
             sistema("Eliminado correctamente");
-        }else{
+        } else {
             alerta("No se ha podido eliminar el id ", id);
         }
+    }
+
+    @Override
+    public void delete(int id) {
+        // TODO Auto-generated method stub
     }
 
     // Set/get data
@@ -63,8 +118,6 @@ public class PresenciaDAO<T> implements Persistable<T> {
     public TreeMap<Integer, T> getMap() {
         return null;
     }
-    
-    // GETTERS & SETTERS
 
     // MOSTRAR
 
@@ -101,16 +154,4 @@ public class PresenciaDAO<T> implements Persistable<T> {
     public static final String TEXT_CYAN = "\u001B[36m";
     public static final String TEXT_WHITE = "\u001B[37m";
 
-    @Override
-    public void delete(int id) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public T search(String id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
 }
