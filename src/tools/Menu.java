@@ -16,8 +16,8 @@ import dao.ProductDAO;
  */
 public class Menu {
 
-    Locale localeDisplay;
-    ResourceBundle rb;
+    private Locale localeDisplay;
+    private static ResourceBundle rb;
 
     public Menu(){
        this.localeDisplay = Locale.getDefault(Category.DISPLAY); 
@@ -131,7 +131,7 @@ public class Menu {
 	}
 
 	public static void titulo(String texto) {
-		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
+		System.out.println(TEXT_PURPLE + rb.getString("botigaTitle") + TEXT_RESET);
 	}
 
 	public static void alerta(String texto, Object obj) {
