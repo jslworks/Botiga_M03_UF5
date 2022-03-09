@@ -1,6 +1,5 @@
 package bo;
 
-
 import java.time.LocalDate;
 
 public class Supplier extends Person {

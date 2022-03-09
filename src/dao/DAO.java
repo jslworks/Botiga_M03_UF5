@@ -6,24 +6,24 @@ import tools.Identificable;
 import tools.Persistable;
 
 public class DAO<T extends Identificable> implements Persistable<T> {
-    
+
     private TreeMap<Integer, T> hmDAO = new TreeMap<Integer, T>();
-    
-    public T get(int id){
+
+    public T get(int id) {
         return this.hmDAO.get(id);
     }
-    
+
     @Override
-    public void save(T t){
+    public void save(T t) {
         this.hmDAO.put(t.getId(), t);
     }
-    
+
     @Override
     public TreeMap<Integer, T> getMap() {
         return hmDAO;
     }
 
-     @Override
+    @Override
     public void delete(int id) {
         hmDAO.remove(id);
     }
@@ -35,9 +35,27 @@ public class DAO<T extends Identificable> implements Persistable<T> {
             return null;
         }
     }
-    
+
     public void modify(T obj) {
         hmDAO.replace(obj.getId(), obj);
+    }
+
+    @Override
+    public TreeMap<String, T> getSMap() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void delete(String id) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public T search(String id) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

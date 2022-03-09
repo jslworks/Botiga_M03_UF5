@@ -12,9 +12,11 @@ import java.util.logging.*;
 
 import bo.Address;
 import bo.Client;
+import bo.Presencia;
 import bo.Product;
 import bo.Supplier;
 import dao.DAO;
+import dao.PresenciaDAO;
 import dao.ProductDAO;
 import err.StockInsuficientException;
 import tools.Persistable;
@@ -28,6 +30,7 @@ public class Controller {
 	private ProductDAO<Product> prodDAO = new ProductDAO<Product>();
 	private DAO prov = new DAO();
 	private DAO clie = new DAO();
+	private PresenciaDAO<Presencia> presenciaDAO = new PresenciaDAO<>();
 
 	// Ejecutar
 	public void run() {
@@ -52,9 +55,7 @@ public class Controller {
 
 			int seleccion;
 
-			int idperson;
-			String dni, name, surnames;
-			String locality, province, zipCode, direction;
+			String name;
 
 			int idproduct, stock;
 			double price;
@@ -149,8 +150,8 @@ public class Controller {
 											prodDAO.mostrarOrdenadoPor("precio");
 											break;
 										case 4:
-											prodDAO.mostrarOrdenadoPor("stock");		
-											break;									
+											prodDAO.mostrarOrdenadoPor("stock");
+											break;
 										default:
 											break;
 									}
@@ -251,8 +252,9 @@ public class Controller {
 									titulo("COMANDA PRODUCTO");
 									System.out.print("Nombre fichero: ");
 									nombreFichero = new Scanner(System.in).nextLine();
-									DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nombreFichero)));
-									do{
+									DataOutputStream dos = new DataOutputStream(
+											new BufferedOutputStream(new FileOutputStream(nombreFichero)));
+									do {
 										// Obtener datos
 										System.out.print("ID producto: ");
 										idproduct = new Scanner(System.in).nextInt();
@@ -268,7 +270,7 @@ public class Controller {
 										}
 										System.out.println("¿Continuar? (S/n)");
 										inputResponse = new Scanner(System.in).nextLine();
-									}while(inputResponse.equalsIgnoreCase("S"));
+									} while (inputResponse.equalsIgnoreCase("S"));
 									dos.close();
 									break;
 								case 9: // Catálogo
@@ -288,12 +290,14 @@ public class Controller {
 								pulsaParaContinuar();
 						} while (option2 != 0);
 						break;
-
 					case 2: // CLIENTES
-						this.clientes();						
+						this.clientes();
 						break;
 					case 3: // PROVEEDORES
 						this.proveedores();
+						break;
+					case 4:
+						this.empleados();
 						break;
 					case 0:
 						break;
@@ -313,10 +317,31 @@ public class Controller {
 	}
 
 	////////////////////////////////////////////////////////////////////////
-	// CLIENTES Y PROVEEDORES
+	// EMPLEADOS, CLIENTES Y PROVEEDORES
 	//////////
+	public void empleados() {
+		int option = menu("empleados");
+		System.out.print("ID: ");
+		int idEmpleado = new Scanner(System.in).nextInt();
+		switch (option) {
+			case 1: // Fichar entrada
+				sistema("ENTRADA < EMPLEADOS");
+				presenciaDAO.ficharEntrada(idEmpleado);
+				break;
+			case 2: // Fichar salida
+				sistema("SALIR < EMPLEADOS");
+				presenciaDAO.ficharSalida(idEmpleado);
+				break;
+			case 3: // Consultar
+				sistema("CONSULTAR FICHAJE < EMPLEADOS");
+				presenciaDAO.consultaDia(idEmpleado);
+				break;
+			default:
+				break;
+		}
+	}
 
-	public void clientes() throws IOException{
+	public void clientes() throws IOException {
 		int option2, idperson;
 		String dni, name, surnames, locality, province, zipCode, direction;
 		do {
@@ -403,7 +428,7 @@ public class Controller {
 		} while (option2 != 0);
 	}
 
-	public void proveedores() throws IOException{
+	public void proveedores() throws IOException {
 		int option2, idperson;
 		String dni, name, surnames, locality, province, zipCode, direction;
 		do {
@@ -434,7 +459,7 @@ public class Controller {
 					prov.save(s);
 					break;
 				case 2: // Buscar proveedor
-				System.out.println(TEXT_PURPLE + "BUSCAR PROVEEDOR" + TEXT_RESET);
+					System.out.println(TEXT_PURPLE + "BUSCAR PROVEEDOR" + TEXT_RESET);
 					System.out.print("ID: ");
 					idperson = new Scanner(System.in).nextInt();
 					if (prov.search(idperson) != null) {
@@ -496,7 +521,6 @@ public class Controller {
 	////////////////////////////////////////////////////////////////////////
 	// VISTA
 	//////////
-
 	public static int menu(String type) {
 		Scanner sc = new Scanner(System.in);
 		int seleccion;
@@ -507,6 +531,7 @@ public class Controller {
 				System.out.println("1. Productos");
 				System.out.println("2. Clientes");
 				System.out.println("3. Proveedores");
+				System.out.println("4. Empleados");
 				break;
 			case "productos":
 				titulo("PRODUCTOS/PACKS < BOTIGA");
@@ -539,6 +564,13 @@ public class Controller {
 				System.out.println("4. Eliminar");
 				System.out.println("5. Mostrar todo");
 				break;
+			case "empleados":
+				titulo("EMPLEADOS < BOTIGA");
+				System.out.println("+----------------+");
+				System.out.println("1. Fichar entrada");
+				System.out.println("2. Fichar salida");
+				System.out.println("3. Consultar");
+				break;
 			case "MOSTRAR PRODUCTOS":
 				titulo("MOSTRAR PRODUCTOS");
 				System.out.println("1. ID");
@@ -558,7 +590,7 @@ public class Controller {
 		return seleccion;
 	}
 
-	public static void mostrar(String type, Object dao){
+	public static void mostrar(String type, Object dao) {
 		Persistable p = null;
 		switch (type) {
 			case "productos":
@@ -576,20 +608,20 @@ public class Controller {
 		}
 	}
 
-	private static void titulo(String texto){
+	private static void titulo(String texto) {
 		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
 	}
 
-	private static void alerta(String texto, Object obj){
+	private static void alerta(String texto, Object obj) {
 		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
 	}
 
-	private static void sistema(String texto){
+	private static void sistema(String texto) {
 		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
 	}
 
 	private static void pulsaParaContinuar() throws IOException {
-		System.out.println(TEXT_CYAN +"Pulsa para continuar..." + TEXT_RESET);
+		System.out.println(TEXT_CYAN + "Pulsa para continuar..." + TEXT_RESET);
 		System.in.read();
 	}
 

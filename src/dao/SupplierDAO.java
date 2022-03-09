@@ -1,6 +1,5 @@
 package dao;
 
-
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -57,7 +56,7 @@ public class SupplierDAO<T> implements Persistable<T> {
         }
     }
 
-    //Implementacio de la Interficie amb variable generica
+    // Implementacio de la Interficie amb variable generica
     @Override
     public TreeMap<Integer, T> getMap() {
         return supplier;
@@ -77,6 +76,24 @@ public class SupplierDAO<T> implements Persistable<T> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public TreeMap<String, T> getSMap() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void delete(String id) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public T search(String id) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
