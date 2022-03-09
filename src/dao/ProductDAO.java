@@ -16,6 +16,7 @@ import java.util.TreeMap;
 
 import bo.Pack;
 import bo.Product;
+import tools.Menu;
 import tools.Persistable;
 import tools.ProductNameComparator;
 import tools.ProductPriceComparator;
@@ -24,6 +25,7 @@ import tools.ProductStockComparator;
 public class ProductDAO<T> implements Persistable<T> {
 
     private static TreeMap<Integer, Product> mapaProductos = new TreeMap<>();
+	static Menu menu = new Menu();
 
     // AGREGAR
     public void agregarProducto_pack(String type) {
@@ -54,7 +56,7 @@ public class ProductDAO<T> implements Persistable<T> {
                     break;
             }
         } else {
-            alerta("No se ha creado. Ya existe un producto o pack con ese id", "");
+            menu.alerta("No se ha creado. Ya existe un producto o pack con ese id", "");
         }
     }
 
@@ -76,14 +78,14 @@ public class ProductDAO<T> implements Persistable<T> {
         // Generando pack
         Pack pack = new Pack(idpack, nombre, precio, stock, descuento);
         do {
-            titulo("AGREGAR PRODUCTOS < PACK");
+            menu.titulo("AGREGAR PRODUCTOS < PACK");
             Product prod = buscarProducto_pack("producto");
 
             boolean res = pack.addProduct(prod);
             if (res) {
-                sistema("Añadido correctamente");
+                menu.sistema("Añadido correctamente");
             } else {
-                alerta("No se puede repetir producto", "");
+                menu.alerta("No se puede repetir producto", "");
             }
             System.out.print("¿Agregar mas productos? (S/n) ");
         } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
@@ -92,7 +94,7 @@ public class ProductDAO<T> implements Persistable<T> {
             this.save(pack);
             System.out.println(pack);
         } else {
-            alerta("Ya existe un pack con éstos productos", "");
+            menu.alerta("Ya existe un pack con éstos productos", "");
         }
     }
 
@@ -113,7 +115,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if (obj != null && obj instanceof Product) {
             Product id = (Product) obj;
             mapaProductos.put(id.getIdProduct(), (Product) obj);
-            sistema("Guardado correctamente");
+            menu.sistema("Guardado correctamente");
         }
     }
 
@@ -128,7 +130,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if (search != null) {
             System.out.println(search); // Imprimira producto o pack
         } else {
-            alerta("No existe este ", type);
+            menu.alerta("No existe este ", type);
         }
         return search;
     }
@@ -160,7 +162,7 @@ public class ProductDAO<T> implements Persistable<T> {
     public void delete(int id) {
         if (mapaProductos.containsKey(id)) {
             mapaProductos.remove(id);
-            sistema("Eliminado correctamente");
+            menu.sistema("Eliminado correctamente");
         }
     }
 
@@ -186,7 +188,7 @@ public class ProductDAO<T> implements Persistable<T> {
 
     public void printProducts(ArrayList<Product> lista) {
         System.out.println("\t-- PRODUCTOS --");
-        System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tNombre\tCatalogo\t" + "\u001b[0m");
+        menu.sistema("ID\tPrecio\tStock\tNombre\tCatalogo\t");
         ArrayList<Pack> listaPacks = new ArrayList<>();
 
         for (Product product : lista) {
@@ -205,7 +207,7 @@ public class ProductDAO<T> implements Persistable<T> {
         System.out.println();
         if (!listaPacks.isEmpty()) {
             System.out.println("\t-- PACKS -- ");
-            System.out.println("\u001b[32m" + "ID\tPrecio\tStock\tDescuento\tNombre\tLista Productos" + "\u001b[0m");
+            menu.sistema("ID\tPrecio\tStock\tDescuento\tNombre\tLista Productos");
             for (Pack pack : listaPacks) {
                 System.out.println(
                         pack.getId() + "\t" +
@@ -227,9 +229,9 @@ public class ProductDAO<T> implements Persistable<T> {
                 int tiempoDescatalogado = fecha_dias - product_final_dias;
 
                 String text = "El producto (" + product.getId() + ") " + product.getNombre() +
-                        " lleva " + TEXT_RED + tiempoDescatalogado;
+                        " lleva " + menu.TEXT_RED + tiempoDescatalogado;
                 text += (tiempoDescatalogado == 1) ? " dia descatalogado" : " dias descatalogado";
-                text += TEXT_RESET;
+                text += menu.TEXT_RESET;
 
                 System.out.println(text);
             }
@@ -241,9 +243,9 @@ public class ProductDAO<T> implements Persistable<T> {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
             oos.writeObject(mapaProductos);
         } catch (IOException e) {
-            alerta("Error al guardar el archivo: ", e);
+            menu.alerta("Error al guardar el archivo: ", e);
         } finally {
-            sistema("productes.dat guardado correctamente");
+            menu.sistema("productes.dat guardado correctamente");
         }
     }
 
@@ -255,11 +257,11 @@ public class ProductDAO<T> implements Persistable<T> {
             mapaProductos = (TreeMap<Integer, Product>) ois.readObject();
         } catch (EOFException eofe) {
         } catch (IOException ioe) {
-            alerta("", ioe);
+            menu.alerta("", ioe);
         } catch (ClassNotFoundException cnfe) {
-            alerta("La classe no existe: ", cnfe);
+            menu.alerta("La classe no existe: ", cnfe);
         } finally {
-            sistema("productes.dat cargado correctamente");
+            menu.sistema("productes.dat cargado correctamente");
         }
 
     }
@@ -283,8 +285,8 @@ public class ProductDAO<T> implements Persistable<T> {
         }
 
         ArrayList<LocalDate> fechas = new ArrayList<>(n_fechas);
-        sistema("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
-        sistema("Si no escribe, se introducirá la fecha actual");
+        menu.sistema("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
+        menu.sistema("Si no escribe, se introducirá la fecha actual");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (int i = 0; i < n_fechas; i++) {
@@ -295,38 +297,6 @@ public class ProductDAO<T> implements Persistable<T> {
 
         return fechas;
     }
-
-    ////////////////////////////////////////////////////////////////////////
-    // VISTA
-    //////////
-
-    private static void titulo(String texto) {
-        System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
-    }
-
-    private static void alerta(String texto, Object obj) {
-        System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
-    }
-
-    private static void sistema(String texto) {
-        System.out.println(TEXT_GREEN + texto + TEXT_RESET);
-    }
-
-    private static void pulsaParaContinuar() throws IOException {
-        System.out.println(TEXT_CYAN + "Pulsa para continuar..." + TEXT_RESET);
-        System.in.read();
-    }
-
-    // Definición colores para prints
-    public static final String TEXT_RESET = "\u001B[0m";
-    public static final String TEXT_BLACK = "\u001B[30m";
-    public static final String TEXT_RED = "\u001B[31m";
-    public static final String TEXT_GREEN = "\u001B[32m";
-    public static final String TEXT_YELLOW = "\u001B[33m";
-    public static final String TEXT_BLUE = "\u001B[34m";
-    public static final String TEXT_PURPLE = "\u001B[35m";
-    public static final String TEXT_CYAN = "\u001B[36m";
-    public static final String TEXT_WHITE = "\u001B[37m";
 
     @Override
     public TreeMap<String, T> getSMap() {

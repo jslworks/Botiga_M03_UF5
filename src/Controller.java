@@ -2,7 +2,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -19,9 +18,11 @@ import dao.DAO;
 import dao.PresenciaDAO;
 import dao.ProductDAO;
 import err.StockInsuficientException;
-import tools.Persistable;
+import tools.Menu;
 
 public class Controller {
+
+	Menu menu = new Menu();
 
 	// Logger
 	static Logger logger = Logger.getLogger("Log Botiga");
@@ -37,7 +38,7 @@ public class Controller {
 
 		// Cargamos los datos desde fichero
 		prodDAO.abrirFichero();
-		mostrar("productos", prodDAO);
+		menu.mostrar("productos", prodDAO);
 
 		try {
 			// Logger
@@ -62,24 +63,24 @@ public class Controller {
 			Product producto = new Product(1, "Patata", 1, 5);
 
 			do {
-				option = menu("inicial");
+				option = menu.show("inicial");
 				switch (option) {
 					case 1: // PRODUCTOS
 						do {
-							option2 = menu("productos");
+							option2 = menu.show("productos");
 							switch (option2) {
 								case 1: // Agregar nuevo
-									titulo("AGREGAR NUEVO");
+									menu.titulo("AGREGAR NUEVO");
 									System.out.println("1. Producto");
 									System.out.println("2. Pack");
 									seleccion = new Scanner(System.in).nextInt();
 									switch (seleccion) {
 										case 1:
-											titulo("PRODUCTO");
+											menu.titulo("PRODUCTO");
 											prodDAO.agregarProducto_pack("producto");
 											break;
 										case 2:
-											titulo("PACK");
+											menu.titulo("PACK");
 											prodDAO.agregarProducto_pack("pack");
 											break;
 										default:
@@ -87,7 +88,7 @@ public class Controller {
 									}
 									break;
 								case 2: // Buscar
-									titulo("BUSCAR");
+									menu.titulo("BUSCAR");
 									System.out.println("1. Producto");
 									System.out.println("2. Pack");
 									seleccion = new Scanner(System.in).nextInt();
@@ -103,12 +104,12 @@ public class Controller {
 									}
 									break;
 								case 3: // Modificar
-									titulo("MODIFICAR PRODUCTO");
+									menu.titulo("MODIFICAR PRODUCTO");
 									// Obtener datos
 									System.out.print("ID: ");
 									idproduct = new Scanner(System.in).nextInt();
 									if (prodDAO.search(idproduct) != null) {
-										titulo("MODIFICAR");
+										menu.titulo("MODIFICAR");
 										System.out.print("Nombre: ");
 										name = new Scanner(System.in).nextLine();
 
@@ -128,20 +129,20 @@ public class Controller {
 										// Mostrar resultados
 										System.out.println(products.toString());
 									} else {
-										alerta("El producto no existe", "");
+										menu.alerta("El producto no existe", "");
 									}
 									break;
 								case 4: // Eliminar
-									titulo("ELIMINAR PRODUCTO O PACK: ");
+									menu.titulo("ELIMINAR PRODUCTO O PACK: ");
 									System.out.print("ID: ");
 									idproduct = new Scanner(System.in).nextInt();
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
-									seleccion = menu("MOSTRAR PRODUCTOS");
+									seleccion = menu.show("MOSTRAR PRODUCTOS");
 									switch (seleccion) {
 										case 1:
-											mostrar("productos", prodDAO);
+											menu.mostrar("productos", prodDAO);
 											break;
 										case 2:
 											prodDAO.mostrarOrdenadoPor("nombre");
@@ -157,7 +158,7 @@ public class Controller {
 									}
 									break;
 								case 6: // Agregar stock
-									titulo("AGREGAR STOCK PRODUCTO");
+									menu.titulo("AGREGAR STOCK PRODUCTO");
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
 									inputResponse = new Scanner(System.in).nextLine();
@@ -177,15 +178,15 @@ public class Controller {
 												}
 											}
 										} catch (IOException ioe) {
-											alerta("Error con el fichero: ", ioe);
+											menu.alerta("Error con el fichero: ", ioe);
 										}
 									} else {
-										titulo("STOCK PRODUCTO < AGREGAR");
+										menu.titulo("STOCK PRODUCTO < AGREGAR");
 										System.out.print("ID: ");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto != null) {
-											alerta("El producto no existe", "");
+											menu.alerta("El producto no existe", "");
 										} else {
 											System.out.println("Agregar stock al producto (" + producto.getId() + ") "
 													+ producto.getNombre());
@@ -197,7 +198,7 @@ public class Controller {
 									}
 									break;
 								case 7: // Quitar stock
-									titulo("QUITAR STOCK PRODUCTO");
+									menu.titulo("QUITAR STOCK PRODUCTO");
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
 									inputResponse = new Scanner(System.in).nextLine();
@@ -215,14 +216,14 @@ public class Controller {
 												}
 											}
 										} catch (IOException ioe) {
-											alerta("Error con el fichero: ", ioe);
+											menu.alerta("Error con el fichero: ", ioe);
 										}
 									} else {
 										System.out.print("ID: ");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto == null) {
-											alerta("El producto no existe", producto);
+											menu.alerta("El producto no existe", producto);
 										} else {
 											int takeStock = -1;
 											do {
@@ -242,13 +243,13 @@ public class Controller {
 											if (ok) {
 												prodDAO.modifyProduct(producto);
 											} else {
-												alerta("El producto no existe", producto);
+												menu.alerta("El producto no existe", producto);
 											}
 										}
 									}
 									break;
 								case 8: // Mantenimiento de productos
-									titulo("COMANDA PRODUCTO");
+									menu.titulo("COMANDA PRODUCTO");
 									System.out.print("Nombre fichero: ");
 									nombreFichero = new Scanner(System.in).nextLine();
 									DataOutputStream dos = new DataOutputStream(
@@ -265,7 +266,7 @@ public class Controller {
 											dos.writeInt(idproduct);
 											dos.writeInt(stock);
 										} else {
-											alerta("El producto no existe", "");
+											menu.alerta("El producto no existe", "");
 										}
 										System.out.println("¿Continuar? (S/n)");
 										inputResponse = new Scanner(System.in).nextLine();
@@ -273,7 +274,7 @@ public class Controller {
 									dos.close();
 									break;
 								case 9: // Catálogo
-									titulo("MOSTRAR CATÁLOGO");
+									menu.titulo("MOSTRAR CATÁLOGO");
 									// Pedir fecha o pulsar tecla si es dia de hoy
 									LocalDate fecha = prodDAO.pedirFecha("fromDate").get(0);
 									// Mostrar productos descatalogados
@@ -282,11 +283,11 @@ public class Controller {
 								case 0:
 									break;
 								default:
-									alerta("Opcion incorrecta", "");
+									menu.alerta("Opcion incorrecta", "");
 									break;
 							}
 							if (option2 != 0)
-								pulsaParaContinuar();
+								menu.pulsaParaContinuar();
 						} while (option2 != 0);
 						break;
 					case 2: // CLIENTES
@@ -303,15 +304,15 @@ public class Controller {
 				}
 			} while (option != 0);
 		} catch (RuntimeException ex) {
-			logger.log(Level.SEVERE, TEXT_RED + "Problema greu", ex);
+			logger.log(Level.SEVERE, menu.TEXT_RED + "Problema greu", ex);
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());
 		} catch (StockInsuficientException ex) {
 			ex.printStackTrace();
 		} finally {
 			ProductDAO.guardarFichero();
-			sistema("Resultado guardado");
-			mostrar("productos", prodDAO);
+			menu.sistema("Resultado guardado");
+			menu.mostrar("productos", prodDAO);
 		}
 	}
 
@@ -319,20 +320,20 @@ public class Controller {
 	// EMPLEADOS, CLIENTES Y PROVEEDORES
 	//////////
 	public void empleados() {
-		int option = menu("empleados");
+		int option = menu.show("empleados");
 		System.out.print("ID: ");
 		int idEmpleado = new Scanner(System.in).nextInt();
 		switch (option) {
 			case 1: // Fichar entrada
-				sistema("ENTRADA < EMPLEADOS");
+				menu.sistema("ENTRADA < EMPLEADOS");
 				presenciaDAO.ficharEntrada(idEmpleado);
 				break;
 			case 2: // Fichar salida
-				sistema("SALIR < EMPLEADOS");
+				menu.sistema("SALIR < EMPLEADOS");
 				presenciaDAO.ficharSalida(idEmpleado);
 				break;
 			case 3: // Consultar
-				sistema("CONSULTAR FICHAJE < EMPLEADOS");
+				menu.sistema("CONSULTAR FICHAJE < EMPLEADOS");
 				presenciaDAO.consultaDia(idEmpleado);
 				break;
 			default:
@@ -344,10 +345,10 @@ public class Controller {
 		int option2, idperson;
 		String dni, name, surnames, locality, province, zipCode, direction;
 		do {
-			option2 = menu("clientes");
+			option2 = menu.show("clientes");
 			switch (option2) {
 				case 1: // Agregar cliente
-					System.out.println(TEXT_PURPLE + "CREAR CLIENTE" + TEXT_RESET);
+					menu.titulo("CREAR CLIENTE");
 					// Obtener datos
 					System.out.print("ID: ");
 					idperson = new Scanner(System.in).nextInt();
@@ -371,18 +372,18 @@ public class Controller {
 					clie.save(cl);
 					break;
 				case 2: // Buscar cliente
-					System.out.println(TEXT_PURPLE + "BUSCAR CLIENTE" + TEXT_RESET);
+					menu.titulo("BUSCAR CLIENTE");
 					System.out.print("ID: ");
 					idperson = new Scanner(System.in).nextInt();
 					if (clie.search(idperson) != null) {
 						Client client = (Client) clie.search(idperson);
 						System.out.println(client.toString());
 					} else {
-						System.out.println(TEXT_RED + "El cliente no existe" + TEXT_RESET);
+						menu.alerta("El cliente no existe","");
 					}
 					break;
 				case 3: // Modificar cliente
-					System.out.println(TEXT_PURPLE + "MODIFICAR CLIENTE" + TEXT_RESET);
+					menu.titulo("MODIFICAR CLIENTE");
 					// Obtener datos
 					System.out.print("ID : ");
 					idperson = new Scanner(System.in).nextInt();
@@ -406,24 +407,24 @@ public class Controller {
 						Client c = new Client(idperson, dni, name, surnames, ad);
 						clie.modify(c);
 					} else {
-						System.out.println(TEXT_RED + "El cliente no existe" + TEXT_RESET);
+						menu.alerta("El cliente no existe", "");
 					}
 					break;
 				case 4: // Eliminar cliente
-					System.out.println(TEXT_PURPLE + "ELIMINAR CLIENTE" + TEXT_RESET);
+					menu.titulo("ELIMINAR CLIENTE");
 					System.out.print("ID: ");
 					idperson = new Scanner(System.in).nextInt();
 					clie.delete(idperson);
 					break;
 				case 5: // Mostrar todos los clientes
-					System.out.println(TEXT_PURPLE + "TODOS CLIENTES" + TEXT_RESET);
-					mostrar("clientes", clie);
+					menu.titulo("TODOS CLIENTES");
+					menu.mostrar("clientes", clie);
 					break;
 				case 0:
 					break;
 			}
 			if (option2 != 0)
-				pulsaParaContinuar();
+				menu.pulsaParaContinuar();
 		} while (option2 != 0);
 	}
 
@@ -431,10 +432,10 @@ public class Controller {
 		int option2, idperson;
 		String dni, name, surnames, locality, province, zipCode, direction;
 		do {
-			option2 = menu("proveedores");
+			option2 = menu.show("proveedores");
 			switch (option2) {
 				case 1: // Agregar proveedor
-					System.out.println(TEXT_PURPLE + "PROVEEDOR" + TEXT_RESET);
+					menu.titulo("PROVEEDOR");
 					// Obtener datos
 					System.out.print("ID: ");
 					idperson = new Scanner(System.in).nextInt();
@@ -458,18 +459,18 @@ public class Controller {
 					prov.save(s);
 					break;
 				case 2: // Buscar proveedor
-					System.out.println(TEXT_PURPLE + "BUSCAR PROVEEDOR" + TEXT_RESET);
+					menu.titulo("BUSCAR PROVEEDOR");
 					System.out.print("ID: ");
 					idperson = new Scanner(System.in).nextInt();
 					if (prov.search(idperson) != null) {
 						Supplier proveidor = (Supplier) prov.search(idperson);
 						System.out.println(proveidor.toString());
 					} else {
-						System.out.println(TEXT_RED + "El proveedor no existeix" + TEXT_RESET);
+						menu.alerta("El proveedor no existeix", "");
 					}
 					break;
 				case 3: // Añadir proveedor
-					System.out.println(TEXT_PURPLE + "MODIFICAR PROVEEDOR" + TEXT_RESET);
+					menu.titulo("MODIFICAR PROVEEDOR");
 					// Obtener datos
 					System.out.print("ID : ");
 					idperson = new Scanner(System.in).nextInt();
@@ -496,142 +497,25 @@ public class Controller {
 						Supplier proveidor = (Supplier) prov.search(idperson);
 						System.out.println(proveidor.toString());
 					} else {
-						System.out.println(TEXT_RED + "El proveedor no existeix" + TEXT_RESET);
+						menu.alerta("El proveedor no existeix","");
 					}
 					break;
 				case 4: // Eliminar proveedor
-					System.out.println(TEXT_PURPLE + "ELIMINAR PROVEEDOR" + TEXT_RESET);
+					menu.titulo("ELIMINAR PROVEEDOR");
 					System.out.print("ID: ");
 					idperson = new Scanner(System.in).nextInt();
 					prov.delete(idperson);
 					break;
 				case 5: // Mostrar todos los proveedores
-					System.out.println(TEXT_PURPLE + "TODOS PROVEEDORES" + TEXT_RESET);
-					mostrar("proveedores", prov);
+					menu.titulo("TODOS PROVEEDORES");
+					menu.mostrar("proveedores", prov);
 					break;
 				case 0:
 					break;
 			}
 			if (option2 != 0)
-				pulsaParaContinuar();
+				menu.pulsaParaContinuar();
 		} while (option2 != 0);
 	}
-
-	////////////////////////////////////////////////////////////////////////
-	// VISTA
-	//////////
-	public static int menu(String type) {
-		Scanner sc = new Scanner(System.in);
-		int seleccion;
-		switch (type) {
-			case "inicial":
-				titulo("BOTIGA");
-				System.out.println("+----+");
-				System.out.println("1. Productos");
-				System.out.println("2. Clientes");
-				System.out.println("3. Proveedores");
-				System.out.println("4. Empleados");
-				break;
-			case "productos":
-				titulo("PRODUCTOS/PACKS < BOTIGA");
-				System.out.println("+----------------+");
-				System.out.println("1. Agregar");
-				System.out.println("2. Buscar");
-				System.out.println("3. Modificar producto");
-				System.out.println("4. Eliminar");
-				System.out.println("5. Mostrar productos");
-				System.out.println("6. Agregar stock");
-				System.out.println("7. Quitar stock");
-				System.out.println("8. Mantenimiento de producto");
-				System.out.println("9. Mostrar descatalogados");
-				break;
-			case "clientes":
-				titulo("CLIENTES < BOTIGA");
-				System.out.println("+----------------+");
-				System.out.println("1. Agregar");
-				System.out.println("2. Buscar");
-				System.out.println("3. Modificar");
-				System.out.println("4. Eliminar");
-				System.out.println("5. Mostrar todo");
-				break;
-			case "proveedores":
-				titulo("PROVEEDORES < BOTIGA");
-				System.out.println("+----------------+");
-				System.out.println("1. Agregar");
-				System.out.println("2. Buscar");
-				System.out.println("3. Modificar");
-				System.out.println("4. Eliminar");
-				System.out.println("5. Mostrar todo");
-				break;
-			case "empleados":
-				titulo("EMPLEADOS < BOTIGA");
-				System.out.println("+----------------+");
-				System.out.println("1. Fichar entrada");
-				System.out.println("2. Fichar salida");
-				System.out.println("3. Consultar");
-				break;
-			case "MOSTRAR PRODUCTOS":
-				titulo("MOSTRAR PRODUCTOS");
-				System.out.println("1. ID");
-				System.out.println("2. Nombre");
-				System.out.println("3. Precio");
-				System.out.println("4. Stock");
-				break;
-			default:
-				break;
-		}
-		System.out.println("0. Salir");
-		System.out.println("+------------------------------------------------+");
-		System.out.print("Selección: ");
-		seleccion = sc.nextInt();
-		sc.nextLine();
-		System.out.println("");
-		return seleccion;
-	}
-
-	public static void mostrar(String type, Object dao) {
-		Persistable p = null;
-		switch (type) {
-			case "productos":
-				p = (ProductDAO<Product>) dao;
-				((ProductDAO<Product>) dao).printProducts(new ArrayList<>(p.getMap().values()));
-				break;
-			case "clientes":
-				p = (DAO) dao;
-				// Falta definir
-				break;
-			case "proveedores":
-				p = (DAO) dao;
-				// Falta definir
-				break;
-		}
-	}
-
-	private static void titulo(String texto) {
-		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
-	}
-
-	private static void alerta(String texto, Object obj) {
-		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
-	}
-
-	private static void sistema(String texto) {
-		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
-	}
-
-	private static void pulsaParaContinuar() throws IOException {
-		System.out.println(TEXT_CYAN + "Pulsa para continuar..." + TEXT_RESET);
-		System.in.read();
-	}
-
-	// Definición colores para prints
-	public static final String TEXT_RESET = "\u001B[0m";
-	public static final String TEXT_BLACK = "\u001B[30m";
-	public static final String TEXT_RED = "\u001B[31m";
-	public static final String TEXT_GREEN = "\u001B[32m";
-	public static final String TEXT_YELLOW = "\u001B[33m";
-	public static final String TEXT_BLUE = "\u001B[34m";
-	public static final String TEXT_PURPLE = "\u001B[35m";
-	public static final String TEXT_CYAN = "\u001B[36m";
-	public static final String TEXT_WHITE = "\u001B[37m";
+	
 }
