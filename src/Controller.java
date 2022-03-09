@@ -69,7 +69,7 @@ public class Controller {
 							option2 = menu("productos");
 							switch (option2) {
 								case 1: // Agregar nuevo
-									System.out.println(TEXT_PURPLE + "AGREGAR NUEVO" + TEXT_RESET);
+									titulo("AGREGAR NUEVO");
 									System.out.println("1. Producto");
 									System.out.println("2. Pack");
 									seleccion = new Scanner(System.in).nextInt();
@@ -198,7 +198,6 @@ public class Controller {
 									break;
 								case 7: // Quitar stock
 									titulo("QUITAR STOCK PRODUCTO");
-									System.out.println(TEXT_PURPLE + "QUITAR STOCK PRODUCTO" + TEXT_RESET);
 									// Selecciona metodo manual o automatico
 									System.out.println("Cargar automaticamente? (S/n)");
 									inputResponse = new Scanner(System.in).nextLine();
@@ -219,7 +218,7 @@ public class Controller {
 											alerta("Error con el fichero: ", ioe);
 										}
 									} else {
-										System.out.println("Id del producto:");
+										System.out.print("ID: ");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto == null) {
