@@ -249,7 +249,7 @@ public class ProductDAO<T> implements Persistable<T> {
         }
     }
 
-    public static void abrirFichero() {
+    public void abrirFichero() {
         try {
             File file = new File("productes.dat");
             file.createNewFile();

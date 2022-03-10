@@ -185,10 +185,10 @@ public class Controller {
 										System.out.print("ID: ");
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
-										if (producto != null) {
+										if (producto == null) {
 											menu.alerta("El producto no existe", "");
 										} else {
-											System.out.println("Agregar stock al producto (" + producto.getId() + ") "
+											System.out.println("Agregar stock al producto (" + idproduct + ") "
 													+ producto.getNombre());
 											int addStock = new Scanner(System.in).nextInt();
 											producto.putStock(addStock);

@@ -43,7 +43,7 @@ public class Menu {
 	////////////////////////////////////////////////////////////////////////
 	// VISTA
 	//////////    
-    public static int show(String type) {
+    public int show(String type) {
 		Scanner sc = new Scanner(System.in);
 		int seleccion;
 		switch (type) {
@@ -112,7 +112,7 @@ public class Menu {
 		return seleccion;
 	}
 
-	public static void mostrar(String type, Object dao) {
+	public void mostrar(String type, Object dao) {
 		Persistable p = null;
 		switch (type) {
 			case "productos":
@@ -130,27 +130,27 @@ public class Menu {
 		}
 	}
 
-	public static void titulo(String texto) {
+	public void titulo(String texto) {
 		System.out.println(TEXT_PURPLE + rb.getString("botigaTitle") + TEXT_RESET);
 	}
 
-	public static void alerta(String texto, Object obj) {
+	public void alerta(String texto, Object obj) {
 		System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
 	}
 
-	public static void sistema(String texto) {
+	public void sistema(String texto) {
 		System.out.println(TEXT_GREEN + texto + TEXT_RESET);
 	}
 
-	public static void pulsaParaContinuar() throws IOException {
+	public void pulsaParaContinuar() throws IOException {
 		System.out.println(TEXT_CYAN + "Pulsa para continuar..." + TEXT_RESET);
 		System.in.read();
 	}
 
 	// Definición colores para prints
-	public static final String TEXT_RESET = "\u001B[0m";
+	public final String TEXT_RESET = "\u001B[0m";
 	public static final String TEXT_BLACK = "\u001B[30m";
-	public static final String TEXT_RED = "\u001B[31m";
+	public final String TEXT_RED = "\u001B[31m";
 	public static final String TEXT_GREEN = "\u001B[32m";
 	public static final String TEXT_YELLOW = "\u001B[33m";
 	public static final String TEXT_BLUE = "\u001B[34m";
