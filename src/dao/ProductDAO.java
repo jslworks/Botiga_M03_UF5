@@ -130,7 +130,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if (search != null) {
             System.out.println(search); // Imprimira producto o pack
         } else {
-            menu.alerta("No existe este ", type);
+            menu.alerta("No se encuentra este ", type);
         }
         return search;
     }
