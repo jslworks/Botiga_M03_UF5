@@ -70,17 +70,22 @@ public class Controller {
 							option2 = menu.show("productos");
 							switch (option2) {
 								case 1: // Agregar nuevo
-									menu.titulo("AGREGAR NUEVO");
-									System.out.println("1. Producto");
-									System.out.println("2. Pack");
+									menu.titulo(
+										menu.getRb().getString("addNewProductTitle") );
+									System.out.println(
+										menu.getRb().getString("opcionProducto") );
+									System.out.println(
+										menu.getRb().getString("opcionPack") );
 									seleccion = new Scanner(System.in).nextInt();
 									switch (seleccion) {
 										case 1:
-											menu.titulo("PRODUCTO");
+											menu.titulo(
+												menu.getRb().getString("addProductTitle") );
 											prodDAO.agregarProducto_pack("producto");
 											break;
 										case 2:
-											menu.titulo("PACK");
+											menu.titulo(
+												menu.getRb().getString("addPackTitle") );
 											prodDAO.agregarProducto_pack("pack");
 											break;
 										default:
@@ -88,9 +93,12 @@ public class Controller {
 									}
 									break;
 								case 2: // Buscar
-									menu.titulo("BUSCAR");
-									System.out.println("1. Producto");
-									System.out.println("2. Pack");
+									menu.titulo(
+										menu.getRb().getString("searchProductTitle") );
+									System.out.println(
+										menu.getRb().getString("opcionProducto") );
+									System.out.println(
+										menu.getRb().getString("opcionPack") );
 									seleccion = new Scanner(System.in).nextInt();
 									switch (seleccion) {
 										case 1:
@@ -103,24 +111,30 @@ public class Controller {
 											break;
 									}
 									break;
-								case 3: // Modificar
-									menu.titulo("MODIFICAR PRODUCTO");
+								case 3: // Modificar									
+									menu.titulo(
+										menu.getRb().getString("modifyProductTitle") );
 									// Obtener datos
-									System.out.print("ID: ");
+									System.out.print(
+										menu.getRb().getString("input_id") );
 									idproduct = new Scanner(System.in).nextInt();
 									if (prodDAO.search(idproduct) != null) {
-										menu.titulo("MODIFICAR");
-										System.out.print("Nombre: ");
+										menu.titulo(
+											menu.getRb().getString("modifyTitle") );
+										System.out.print(
+											menu.getRb().getString("input_name") );
 										name = new Scanner(System.in).nextLine();
 
-										System.out.print("Precio: ");
+										System.out.print(
+                							menu.getRb().getString("input_price") );
 										if (inputResponse.contains(",")) {
 											inputResponse.replace(",", ".");
 											price = Double.parseDouble(inputResponse);
 										} else {
 											price = new Scanner(System.in).nextDouble();
 										}
-										System.out.print("Stock: ");
+										System.out.print(
+                							menu.getRb().getString("input_Stock") );
 										stock = new Scanner(System.in).nextInt();
 
 										// Modificando
@@ -129,17 +143,21 @@ public class Controller {
 										// Mostrar resultados
 										System.out.println(products.toString());
 									} else {
-										menu.alerta("El producto no existe", "");
+										menu.alerta(
+											menu.getRb().getString("alert_productNotExist"), "");
 									}
 									break;
-								case 4: // Eliminar
-									menu.titulo("ELIMINAR PRODUCTO O PACK: ");
-									System.out.print("ID: ");
+								case 4: // Eliminar									
+									menu.titulo(
+										menu.getRb().getString("deleteProductTitle") );
+									System.out.print(
+										menu.getRb().getString("input_id") );
 									idproduct = new Scanner(System.in).nextInt();
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
-									seleccion = menu.show("MOSTRAR PRODUCTOS");
+									seleccion = menu.show(
+										menu.getRb().getString("showProductTitle") );
 									switch (seleccion) {
 										case 1:
 											menu.mostrar("productos", prodDAO);
@@ -157,6 +175,52 @@ public class Controller {
 											break;
 									}
 									break;
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+
 								case 6: // Agregar stock
 									menu.titulo("AGREGAR STOCK PRODUCTO");
 									// Selecciona metodo manual o automatico

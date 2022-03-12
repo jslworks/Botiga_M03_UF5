@@ -33,16 +33,20 @@ public class ProductDAO<T> implements Persistable<T> {
         String nombre;
 
         // Obtener datos
-        System.out.print("ID: ");
+        System.out.print(
+            menu.getRb().getString("input_id") );
         id = new Scanner(System.in).nextInt();
         if (this.search(id) == null) {
-            System.out.print("Nombre: ");
+            System.out.print(
+                menu.getRb().getString("input_name") );
             nombre = new Scanner(System.in).nextLine();
-            System.out.print("Precio: ");
+            System.out.print(
+                menu.getRb().getString("input_price") );
             String tmp = new Scanner(System.in).nextLine();
             tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
             double precio = Double.parseDouble(tmp);
-            System.out.print("Stock: ");
+            System.out.print(
+                menu.getRb().getString("input_Stock") );
             int stock = new Scanner(System.in).nextInt();
 
             switch (type) {
@@ -56,7 +60,8 @@ public class ProductDAO<T> implements Persistable<T> {
                     break;
             }
         } else {
-            menu.alerta("No se ha creado. Ya existe un producto o pack con ese id", "");
+            menu.alerta(
+                menu.getRb().getString("alert_productExists"), "" );
         }
     }
 
@@ -70,7 +75,8 @@ public class ProductDAO<T> implements Persistable<T> {
 
     private void agregarPack(int idpack, String nombre, double precio, int stock) {
         // Datos especificos Pack
-        System.out.print("% descuento: ");
+        System.out.print(
+            menu.getRb().getString("input_discount") );
         String tmp = new Scanner(System.in).nextLine();
         tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
         double descuento = Double.parseDouble(tmp);
@@ -78,23 +84,28 @@ public class ProductDAO<T> implements Persistable<T> {
         // Generando pack
         Pack pack = new Pack(idpack, nombre, precio, stock, descuento);
         do {
-            menu.titulo("AGREGAR PRODUCTOS < PACK");
+            menu.titulo(
+                menu.getRb().getString("info_add_ok") );
             Product prod = buscarProducto_pack("producto");
 
             boolean res = pack.addProduct(prod);
             if (res) {
-                menu.sistema("Añadido correctamente");
+                menu.sistema(
+                    menu.getRb().getString("addPackTitle") );
             } else {
-                menu.alerta("No se puede repetir producto", "");
+                menu.alerta(
+                    menu.getRb().getString("alert_repeatedProduct"), "" );
             }
-            System.out.print("¿Agregar mas productos? (S/n) ");
+            System.out.print(
+                menu.getRb().getString("input_addMore") );
         } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
         // Comprobar si otros pack tienen los mismos productos
         if (!packsRepetidos(pack)) {
             this.save(pack);
             System.out.println(pack);
         } else {
-            menu.alerta("Ya existe un pack con éstos productos", "");
+            menu.alerta(
+                menu.getRb().getString("alert_repeatedProductsInPack"), "" );
         }
     }
 
@@ -115,7 +126,8 @@ public class ProductDAO<T> implements Persistable<T> {
         if (obj != null && obj instanceof Product) {
             Product id = (Product) obj;
             mapaProductos.put(id.getIdProduct(), (Product) obj);
-            menu.sistema("Guardado correctamente");
+            menu.sistema(
+                menu.getRb().getString("info_save_ok") );
         }
     }
 
@@ -123,14 +135,16 @@ public class ProductDAO<T> implements Persistable<T> {
     public Product buscarProducto_pack(String type) {
         int idprod_Pack;
 
-        System.out.print("ID: ");
+        System.out.print(
+            menu.getRb().getString("info_add_ok") );
         idprod_Pack = new Scanner(System.in).nextInt();
         Product search = (Product) this.search(idprod_Pack);
 
         if (search != null) {
             System.out.println(search); // Imprimira producto o pack
         } else {
-            menu.alerta("No se encuentra este ", type);
+            menu.alerta(
+                menu.getRb().getString("alert_notFound"), type );
         }
         return search;
     }
@@ -162,7 +176,8 @@ public class ProductDAO<T> implements Persistable<T> {
     public void delete(int id) {
         if (mapaProductos.containsKey(id)) {
             mapaProductos.remove(id);
-            menu.sistema("Eliminado correctamente");
+            menu.sistema(
+                menu.getRb().getString("info_delete_ok") );
         }
     }
 
@@ -187,8 +202,10 @@ public class ProductDAO<T> implements Persistable<T> {
     }
 
     public void printProducts(ArrayList<Product> lista) {
-        System.out.println("\t-- PRODUCTOS --");
-        menu.sistema("ID\tPrecio\tStock\tNombre\tCatalogo\t");
+        System.out.println(
+            menu.getRb().getString("showProdTitle") );
+        menu.sistema(
+            menu.getRb().getString("showProdHeaders") );
         ArrayList<Pack> listaPacks = new ArrayList<>();
 
         for (Product product : lista) {
@@ -206,8 +223,10 @@ public class ProductDAO<T> implements Persistable<T> {
         }
         System.out.println();
         if (!listaPacks.isEmpty()) {
-            System.out.println("\t-- PACKS -- ");
-            menu.sistema("ID\tPrecio\tStock\tDescuento\tNombre\tLista Productos");
+            System.out.println(
+                menu.getRb().getString("showPackTitle") );
+            menu.sistema(
+                menu.getRb().getString("showPackHeaders") );
             for (Pack pack : listaPacks) {
                 System.out.println(
                         pack.getId() + "\t" +
@@ -243,9 +262,11 @@ public class ProductDAO<T> implements Persistable<T> {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("productes.dat"))) {
             oos.writeObject(mapaProductos);
         } catch (IOException e) {
-            menu.alerta("Error al guardar el archivo: ", e);
+            menu.alerta(
+                menu.getRb().getString("alert_saveFile"), e);
         } finally {
-            menu.sistema("productes.dat guardado correctamente");
+            menu.sistema(
+                menu.getRb().getString("info_savedat_ok") );
         }
     }
 
@@ -259,9 +280,11 @@ public class ProductDAO<T> implements Persistable<T> {
         } catch (IOException ioe) {
             menu.alerta("", ioe);
         } catch (ClassNotFoundException cnfe) {
-            menu.alerta("La classe no existe: ", cnfe);
+            menu.alerta(
+                menu.getRb().getString("alert_classNotExists"), cnfe);
         } finally {
-            menu.sistema("productes.dat cargado correctamente");
+            menu.sistema(
+                menu.getRb().getString("info_loaddat_ok") );
         }
 
     }
@@ -277,16 +300,21 @@ public class ProductDAO<T> implements Persistable<T> {
         ArrayList<String> textFechas = new ArrayList<>();
         if (type.equals("newProduct")) {
             n_fechas = 2; // Inicial y final
-            textFechas.add("Fecha inicial: ");
-            textFechas.add("Fecha final: ");
+            textFechas.add(
+                menu.getRb().getString("input_initialDate") );
+            textFechas.add(
+                menu.getRb().getString("input_finalDate") );
         } else if (type.equals("fromDate")) {
             n_fechas = 1;
-            textFechas.add("Fecha: ");
+            textFechas.add(
+                menu.getRb().getString("input_date") );
         }
 
         ArrayList<LocalDate> fechas = new ArrayList<>(n_fechas);
-        menu.sistema("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
-        menu.sistema("Si no escribe, se introducirá la fecha actual");
+        menu.sistema(
+            menu.getRb().getString("info_dateFormat") );
+        menu.sistema(
+            menu.getRb().getString("info_dateFormatAdvise") );
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (int i = 0; i < n_fechas; i++) {

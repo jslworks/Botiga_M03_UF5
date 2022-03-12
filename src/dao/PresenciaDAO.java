@@ -1,6 +1,5 @@
 package dao;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -10,9 +9,12 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 import bo.Presencia;
+import tools.Menu;
 import tools.Persistable;
 
 public class PresenciaDAO<T> implements Persistable<T> {
+
+	Menu menu = new Menu();
 
     private static TreeMap<String, Presencia> mapaPresencia = new TreeMap<>();
 
@@ -24,9 +26,11 @@ public class PresenciaDAO<T> implements Persistable<T> {
             Presencia presencia = new Presencia(idEmpleado, fechaActual);
             presencia.setEntrada(LocalTime.now());
             this.save(presencia);
-            sistema("Entrada correcta " + (presencia.getEntrada()).toString());
+            menu.sistema(
+                menu.getRb().getString("info_entryWork_ok") + (presencia.getEntrada()).toString() );
         } else {
-            alerta("No se puede volver fichar la entrada", "");
+            menu.alerta(
+                menu.getRb().getString("alert_entryWork"), "");
         }
     }
 
@@ -40,15 +44,19 @@ public class PresenciaDAO<T> implements Persistable<T> {
         if (presencia != null && presencia.getSalida() == null) {
             presencia.setSalida(LocalTime.now());
             this.save(presencia);
-            sistema("Salida correcta " + (presencia.getSalida()).toString());
+            menu.sistema(
+                menu.getRb().getString("info_exitWork_ok") + (presencia.getEntrada()).toString() );
         } else {
-            alerta("No se puede fichar la salida", "");
+            menu.alerta(
+                menu.getRb().getString("alert_exitWork"), "");
         }
     }
 
     public void consultaDia(int idEmpleado) {
-        sistema("Formato de fecha dd/MM/yyyy (p.e. 02/02/2020)");
-        System.out.print("Fecha: ");
+        menu.sistema(
+            menu.getRb().getString("info_dateFormat") );
+        System.out.print(
+            menu.getRb().getString("input_date") );
         LocalDate dateInput = LocalDate.parse(
                 new Scanner(System.in).nextLine(),
                 DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -58,7 +66,8 @@ public class PresenciaDAO<T> implements Persistable<T> {
         if (presencia != null) {
             System.out.println(presencia);
         } else {
-            alerta("No existe", "");
+            menu.alerta(
+                menu.getRb().getString("alert_notExists"), "");
         }
     }
 
@@ -97,9 +106,11 @@ public class PresenciaDAO<T> implements Persistable<T> {
     public void delete(String id) {
         if (mapaPresencia.containsKey(id)) {
             mapaPresencia.remove(id);
-            sistema("Eliminado correctamente");
+            menu.sistema(
+                menu.getRb().getString("info_delete_ok") );
         } else {
-            alerta("No se ha podido eliminar el id ", id);
+            menu.alerta(
+                menu.getRb().getString("alert_deleteID"), id);
         }
     }
 
@@ -122,36 +133,5 @@ public class PresenciaDAO<T> implements Persistable<T> {
     // MOSTRAR
 
     // MODIFICAR
-
-    ////////////////////////////////////////////////////////////////////////
-    // VISTA
-    //////////
-    private static void titulo(String texto) {
-        System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
-    }
-
-    private static void alerta(String texto, Object obj) {
-        System.out.println(TEXT_RED + texto + obj + TEXT_RESET);
-    }
-
-    private static void sistema(String texto) {
-        System.out.println(TEXT_GREEN + texto + TEXT_RESET);
-    }
-
-    private static void pulsaParaContinuar() throws IOException {
-        System.out.println(TEXT_CYAN + "Pulsa para continuar..." + TEXT_RESET);
-        System.in.read();
-    }
-
-    // Definición colores para prints
-    public static final String TEXT_RESET = "\u001B[0m";
-    public static final String TEXT_BLACK = "\u001B[30m";
-    public static final String TEXT_RED = "\u001B[31m";
-    public static final String TEXT_GREEN = "\u001B[32m";
-    public static final String TEXT_YELLOW = "\u001B[33m";
-    public static final String TEXT_BLUE = "\u001B[34m";
-    public static final String TEXT_PURPLE = "\u001B[35m";
-    public static final String TEXT_CYAN = "\u001B[36m";
-    public static final String TEXT_WHITE = "\u001B[37m";
 
 }
