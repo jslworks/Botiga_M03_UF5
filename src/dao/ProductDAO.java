@@ -136,7 +136,7 @@ public class ProductDAO<T> implements Persistable<T> {
         int idprod_Pack;
 
         System.out.print(
-            menu.getRb().getString("info_add_ok") );
+            menu.getRb().getString("input_id") );
         idprod_Pack = new Scanner(System.in).nextInt();
         Product search = (Product) this.search(idprod_Pack);
 
