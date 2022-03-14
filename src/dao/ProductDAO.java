@@ -7,12 +7,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.Locale.Category;
 
 import bo.Pack;
 import bo.Product;
@@ -25,7 +28,21 @@ import tools.ProductStockComparator;
 public class ProductDAO<T> implements Persistable<T> {
 
     private static TreeMap<Integer, Product> mapaProductos = new TreeMap<>();
-	static Menu menu = new Menu();
+    static Menu menu = new Menu();
+
+    Locale locale = Locale.getDefault(Category.FORMAT);
+
+    public String formateoEntero(int numero){
+        return NumberFormat.getNumberInstance(locale).format(numero);
+    }
+
+    public String formateoPrecio(Double numero) {
+        return NumberFormat.getCurrencyInstance(locale).format(numero);
+    }
+
+    public String formateoPorcentaje(Double numero) {
+        return NumberFormat.getPercentInstance(locale).format(numero);
+    }
 
     // AGREGAR
     public void agregarProducto_pack(String type) {
@@ -34,19 +51,19 @@ public class ProductDAO<T> implements Persistable<T> {
 
         // Obtener datos
         System.out.print(
-            menu.getRb().getString("input_id") );
+                menu.getRb().getString("input_id"));
         id = new Scanner(System.in).nextInt();
         if (this.search(id) == null) {
             System.out.print(
-                menu.getRb().getString("input_name") );
+                    menu.getRb().getString("input_name"));
             nombre = new Scanner(System.in).nextLine();
             System.out.print(
-                menu.getRb().getString("input_price") );
+                    menu.getRb().getString("input_price"));
             String tmp = new Scanner(System.in).nextLine();
             tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
             double precio = Double.parseDouble(tmp);
             System.out.print(
-                menu.getRb().getString("input_Stock") );
+                    menu.getRb().getString("input_Stock"));
             int stock = new Scanner(System.in).nextInt();
 
             switch (type) {
@@ -61,7 +78,7 @@ public class ProductDAO<T> implements Persistable<T> {
             }
         } else {
             menu.alerta(
-                menu.getRb().getString("alert_productExists"), "" );
+                    menu.getRb().getString("alert_productExists"), "");
         }
     }
 
@@ -76,7 +93,7 @@ public class ProductDAO<T> implements Persistable<T> {
     private void agregarPack(int idpack, String nombre, double precio, int stock) {
         // Datos especificos Pack
         System.out.print(
-            menu.getRb().getString("input_discount") );
+                menu.getRb().getString("input_discount"));
         String tmp = new Scanner(System.in).nextLine();
         tmp = tmp.contains(",") ? tmp.replace(",", ".") : tmp;
         double descuento = Double.parseDouble(tmp);
@@ -85,19 +102,19 @@ public class ProductDAO<T> implements Persistable<T> {
         Pack pack = new Pack(idpack, nombre, precio, stock, descuento);
         do {
             menu.titulo(
-                menu.getRb().getString("info_add_ok") );
+                    menu.getRb().getString("info_add_ok"));
             Product prod = buscarProducto_pack("producto");
 
             boolean res = pack.addProduct(prod);
             if (res) {
                 menu.sistema(
-                    menu.getRb().getString("addPackTitle") );
+                        menu.getRb().getString("addPackTitle"));
             } else {
                 menu.alerta(
-                    menu.getRb().getString("alert_repeatedProduct"), "" );
+                        menu.getRb().getString("alert_repeatedProduct"), "");
             }
             System.out.print(
-                menu.getRb().getString("input_addMore") );
+                    menu.getRb().getString("input_addMore"));
         } while (new Scanner(System.in).next().equalsIgnoreCase("S"));
         // Comprobar si otros pack tienen los mismos productos
         if (!packsRepetidos(pack)) {
@@ -105,7 +122,7 @@ public class ProductDAO<T> implements Persistable<T> {
             System.out.println(pack);
         } else {
             menu.alerta(
-                menu.getRb().getString("alert_repeatedProductsInPack"), "" );
+                    menu.getRb().getString("alert_repeatedProductsInPack"), "");
         }
     }
 
@@ -127,7 +144,7 @@ public class ProductDAO<T> implements Persistable<T> {
             Product id = (Product) obj;
             mapaProductos.put(id.getIdProduct(), (Product) obj);
             menu.sistema(
-                menu.getRb().getString("info_save_ok") );
+                    menu.getRb().getString("info_save_ok"));
         }
     }
 
@@ -136,7 +153,7 @@ public class ProductDAO<T> implements Persistable<T> {
         int idprod_Pack;
 
         System.out.print(
-            menu.getRb().getString("input_id") );
+                menu.getRb().getString("input_id"));
         idprod_Pack = new Scanner(System.in).nextInt();
         Product search = (Product) this.search(idprod_Pack);
 
@@ -144,7 +161,7 @@ public class ProductDAO<T> implements Persistable<T> {
             System.out.println(search); // Imprimira producto o pack
         } else {
             menu.alerta(
-                menu.getRb().getString("alert_notFound"), type );
+                    menu.getRb().getString("alert_notFound"), type);
         }
         return search;
     }
@@ -177,7 +194,7 @@ public class ProductDAO<T> implements Persistable<T> {
         if (mapaProductos.containsKey(id)) {
             mapaProductos.remove(id);
             menu.sistema(
-                menu.getRb().getString("info_delete_ok") );
+                    menu.getRb().getString("info_delete_ok"));
         }
     }
 
@@ -203,9 +220,9 @@ public class ProductDAO<T> implements Persistable<T> {
 
     public void printProducts(ArrayList<Product> lista) {
         System.out.println(
-            menu.getRb().getString("showProdTitle") );
+                menu.getRb().getString("showProdTitle"));
         menu.sistema(
-            menu.getRb().getString("showProdHeaders") );
+                menu.getRb().getString("showProdHeaders"));
         ArrayList<Pack> listaPacks = new ArrayList<>();
 
         for (Product product : lista) {
@@ -224,15 +241,15 @@ public class ProductDAO<T> implements Persistable<T> {
         System.out.println();
         if (!listaPacks.isEmpty()) {
             System.out.println(
-                menu.getRb().getString("showPackTitle") );
+                    menu.getRb().getString("showPackTitle"));
             menu.sistema(
-                menu.getRb().getString("showPackHeaders") );
+                    menu.getRb().getString("showPackHeaders"));
             for (Pack pack : listaPacks) {
                 System.out.println(
                         pack.getId() + "\t" +
-                                pack.getPrecio() + "\t" +
-                                pack.getStock() + " u\t" +
-                                pack.getDescuento() + " %\t\t" +
+                                formateoPrecio( pack.getPrecio() ) + "\t" +
+                                formateoEntero( pack.getStock() ) + " u\t" +
+                                formateoPorcentaje( pack.getDescuento() ) + " %\t\t" +
                                 pack.getNombre() + "\t" +
                                 pack.getProductos());
             }
@@ -263,10 +280,10 @@ public class ProductDAO<T> implements Persistable<T> {
             oos.writeObject(mapaProductos);
         } catch (IOException e) {
             menu.alerta(
-                menu.getRb().getString("alert_saveFile"), e);
+                    menu.getRb().getString("alert_saveFile"), e);
         } finally {
             menu.sistema(
-                menu.getRb().getString("info_savedat_ok") );
+                    menu.getRb().getString("info_savedat_ok"));
         }
     }
 
@@ -281,10 +298,10 @@ public class ProductDAO<T> implements Persistable<T> {
             menu.alerta("", ioe);
         } catch (ClassNotFoundException cnfe) {
             menu.alerta(
-                menu.getRb().getString("alert_classNotExists"), cnfe);
+                    menu.getRb().getString("alert_classNotExists"), cnfe);
         } finally {
             menu.sistema(
-                menu.getRb().getString("info_loaddat_ok") );
+                    menu.getRb().getString("info_loaddat_ok"));
         }
 
     }
@@ -301,20 +318,20 @@ public class ProductDAO<T> implements Persistable<T> {
         if (type.equals("newProduct")) {
             n_fechas = 2; // Inicial y final
             textFechas.add(
-                menu.getRb().getString("input_initialDate") );
+                    menu.getRb().getString("input_initialDate"));
             textFechas.add(
-                menu.getRb().getString("input_finalDate") );
+                    menu.getRb().getString("input_finalDate"));
         } else if (type.equals("fromDate")) {
             n_fechas = 1;
             textFechas.add(
-                menu.getRb().getString("input_date") );
+                    menu.getRb().getString("input_date"));
         }
 
         ArrayList<LocalDate> fechas = new ArrayList<>(n_fechas);
         menu.sistema(
-            menu.getRb().getString("info_dateFormat") );
+                menu.getRb().getString("info_dateFormat"));
         menu.sistema(
-            menu.getRb().getString("info_dateFormatAdvise") );
+                menu.getRb().getString("info_dateFormatAdvise"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (int i = 0; i < n_fechas; i++) {
