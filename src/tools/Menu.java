@@ -17,10 +17,11 @@ import dao.ProductDAO;
 public class Menu {
 
 	private Locale localeDisplay;
-	private static ResourceBundle rb;
+	private ResourceBundle rb;
 
 	public Menu() {
 		this.localeDisplay = Locale.getDefault(Category.DISPLAY);
+		System.out.println(localeDisplay);
 		this.rb = ResourceBundle.getBundle("i18n/Texts", localeDisplay); // Fetch data from this property
 	}
 
