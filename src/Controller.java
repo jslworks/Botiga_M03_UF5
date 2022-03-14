@@ -156,8 +156,7 @@ public class Controller {
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
-									seleccion = menu.show(
-											menu.getRb().getString("showProductTitle"));
+									seleccion = menu.show("MOSTRAR PRODUCTOS");
 									switch (seleccion) {
 										case 1:
 											menu.mostrar("productos", prodDAO);

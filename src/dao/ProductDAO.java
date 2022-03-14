@@ -231,11 +231,11 @@ public class ProductDAO<T> implements Persistable<T> {
             } else {
                 System.out.println(
                         product.getId() + "\t" +
-                                product.getPrecio() + "\t" +
-                                product.getStock() + "\t" +
-                                product.getNombre() + "\t" +
-                                product.getFechaInicial() + " > " +
-                                product.getFechaFinal());
+                        product.getPrecio() + "\t" +
+                        product.getStock() + "\t" +
+                        product.getNombre() + "\t" +
+                        product.getFechaInicial() + " > " +
+                        product.getFechaFinal());
             }
         }
         System.out.println();
