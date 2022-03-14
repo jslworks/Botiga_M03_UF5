@@ -133,9 +133,9 @@ public class Menu {
 				System.out.println(
 						getRb().getString("showProd_Name_option"));
 				System.out.println(
-						getRb().getString("showProd_ID_option"));
+						getRb().getString("showProd_Price_option"));
 				System.out.println(
-						getRb().getString("showProd_ID_option"));
+						getRb().getString("showProd_Stock_option"));
 				break;
 			default:
 				break;
