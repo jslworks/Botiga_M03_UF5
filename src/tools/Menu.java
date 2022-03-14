@@ -22,7 +22,6 @@ public class Menu {
 	public Menu() {
 		this.localeDisplay = Locale.getDefault(Category.DISPLAY);
 		this.rb = ResourceBundle.getBundle("i18n/Texts", localeDisplay); // Fetch data from this property
-		System.out.println(localeDisplay);
 	}
 
 	public Locale getLocaleDisplay() {
