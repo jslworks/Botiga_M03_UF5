@@ -361,28 +361,31 @@ public class Controller {
 	//////////
 	public void empleados() {
 		int option = menu.show("empleados");
-		System.out.print(
-				menu.getRb().getString("input_id"));
-		int idEmpleado = new Scanner(System.in).nextInt();
-		switch (option) {
-			case 1: // Fichar entrada
-				menu.sistema(
-						menu.getRb().getString("employeeEntryTitle"));
-				presenciaDAO.ficharEntrada(idEmpleado);
-				break;
-			case 2: // Fichar salida
-				menu.sistema(
-						menu.getRb().getString("employeeExitTitle"));
-				presenciaDAO.ficharSalida(idEmpleado);
-				break;
-			case 3: // Consultar
-				menu.sistema(
-						menu.getRb().getString("employeeConsultTitle"));
-				presenciaDAO.consultaDia(idEmpleado);
-				break;
-			default:
-				break;
+		if (option != 0) {
+			System.out.print(
+					menu.getRb().getString("input_id"));
+			int idEmpleado = new Scanner(System.in).nextInt();
+			switch (option) {
+				case 1: // Fichar entrada
+					menu.sistema(
+							menu.getRb().getString("employeeEntryTitle"));
+					presenciaDAO.ficharEntrada(idEmpleado);
+					break;
+				case 2: // Fichar salida
+					menu.sistema(
+							menu.getRb().getString("employeeExitTitle"));
+					presenciaDAO.ficharSalida(idEmpleado);
+					break;
+				case 3: // Consultar
+					menu.sistema(
+							menu.getRb().getString("employeeConsultTitle"));
+					presenciaDAO.consultaDia(idEmpleado);
+					break;
+				default:
+					break;
+			}
 		}
+
 	}
 
 	public void clientes() throws IOException {
