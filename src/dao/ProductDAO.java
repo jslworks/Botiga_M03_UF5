@@ -249,7 +249,7 @@ public class ProductDAO<T> implements Persistable<T> {
                         pack.getId() + "\t" +
                                 formateoPrecio(pack.getPrecio()) + "\t" +
                                 formateoEntero(pack.getStock()) + " u\t" +
-                                formateoPorcentaje(pack.getDescuento()) + " %\t\t" +
+                                formateoPorcentaje(pack.getDescuento()) + "\t\t" +
                                 pack.getNombre() + "\t" +
                                 pack.getProductos());
             }
