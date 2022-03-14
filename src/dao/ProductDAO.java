@@ -32,7 +32,7 @@ public class ProductDAO<T> implements Persistable<T> {
 
     Locale locale = Locale.getDefault(Category.FORMAT);
 
-    public String formateoEntero(int numero){
+    public String formateoEntero(int numero) {
         return NumberFormat.getNumberInstance(locale).format(numero);
     }
 
@@ -247,9 +247,9 @@ public class ProductDAO<T> implements Persistable<T> {
             for (Pack pack : listaPacks) {
                 System.out.println(
                         pack.getId() + "\t" +
-                                formateoPrecio( pack.getPrecio() ) + "\t" +
-                                formateoEntero( pack.getStock() ) + " u\t" +
-                                formateoPorcentaje( pack.getDescuento() ) + " %\t\t" +
+                                formateoPrecio(pack.getPrecio()) + "\t" +
+                                formateoEntero(pack.getStock()) + " u\t" +
+                                formateoPorcentaje(pack.getDescuento()) + " %\t\t" +
                                 pack.getNombre() + "\t" +
                                 pack.getProductos());
             }

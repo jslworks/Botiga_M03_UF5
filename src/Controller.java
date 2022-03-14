@@ -71,21 +71,21 @@ public class Controller {
 							switch (option2) {
 								case 1: // Agregar nuevo
 									menu.titulo(
-										menu.getRb().getString("addNewProductTitle") );
+											menu.getRb().getString("addNewProductTitle"));
 									System.out.println(
-										menu.getRb().getString("info_productOption") );
+											menu.getRb().getString("info_productOption"));
 									System.out.println(
-										menu.getRb().getString("info_packOption") );
+											menu.getRb().getString("info_packOption"));
 									seleccion = new Scanner(System.in).nextInt();
 									switch (seleccion) {
 										case 1:
 											menu.titulo(
-												menu.getRb().getString("addProductTitle") );
+													menu.getRb().getString("addProductTitle"));
 											prodDAO.agregarProducto_pack("producto");
 											break;
 										case 2:
 											menu.titulo(
-												menu.getRb().getString("addPackTitle") );
+													menu.getRb().getString("addPackTitle"));
 											prodDAO.agregarProducto_pack("pack");
 											break;
 										default:
@@ -94,11 +94,11 @@ public class Controller {
 									break;
 								case 2: // Buscar
 									menu.titulo(
-										menu.getRb().getString("searchProductTitle") );
+											menu.getRb().getString("searchProductTitle"));
 									System.out.println(
-										menu.getRb().getString("info_productOption") );
+											menu.getRb().getString("info_productOption"));
 									System.out.println(
-										menu.getRb().getString("info_packOption") );
+											menu.getRb().getString("info_packOption"));
 									seleccion = new Scanner(System.in).nextInt();
 									switch (seleccion) {
 										case 1:
@@ -111,22 +111,22 @@ public class Controller {
 											break;
 									}
 									break;
-								case 3: // Modificar									
+								case 3: // Modificar
 									menu.titulo(
-										menu.getRb().getString("modifyProductTitle") );
+											menu.getRb().getString("modifyProductTitle"));
 									// Obtener datos
 									System.out.print(
-										menu.getRb().getString("input_id") );
+											menu.getRb().getString("input_id"));
 									idproduct = new Scanner(System.in).nextInt();
 									if (prodDAO.search(idproduct) != null) {
 										menu.titulo(
-											menu.getRb().getString("modifyTitle") );
+												menu.getRb().getString("modifyTitle"));
 										System.out.print(
-											menu.getRb().getString("input_name") );
+												menu.getRb().getString("input_name"));
 										name = new Scanner(System.in).nextLine();
 
 										System.out.print(
-                							menu.getRb().getString("input_price") );
+												menu.getRb().getString("input_price"));
 										if (inputResponse.contains(",")) {
 											inputResponse.replace(",", ".");
 											price = Double.parseDouble(inputResponse);
@@ -134,7 +134,7 @@ public class Controller {
 											price = new Scanner(System.in).nextDouble();
 										}
 										System.out.print(
-                							menu.getRb().getString("input_Stock") );
+												menu.getRb().getString("input_Stock"));
 										stock = new Scanner(System.in).nextInt();
 
 										// Modificando
@@ -144,20 +144,20 @@ public class Controller {
 										System.out.println(products.toString());
 									} else {
 										menu.alerta(
-											menu.getRb().getString("alert_productNotExist"), "");
+												menu.getRb().getString("alert_productNotExist"), "");
 									}
 									break;
-								case 4: // Eliminar									
+								case 4: // Eliminar
 									menu.titulo(
-										menu.getRb().getString("deleteProductTitle") );
+											menu.getRb().getString("deleteProductTitle"));
 									System.out.print(
-										menu.getRb().getString("input_id") );
+											menu.getRb().getString("input_id"));
 									idproduct = new Scanner(System.in).nextInt();
 									prodDAO.delete(idproduct);
 									break;
 								case 5: // Mostrar todos
 									seleccion = menu.show(
-										menu.getRb().getString("showProductTitle") );
+											menu.getRb().getString("showProductTitle"));
 									switch (seleccion) {
 										case 1:
 											menu.mostrar("productos", prodDAO);
@@ -175,16 +175,16 @@ public class Controller {
 											break;
 									}
 									break;
-								case 6: // Agregar stock									
+								case 6: // Agregar stock
 									menu.titulo(
-										menu.getRb().getString("addStockTitle") );
+											menu.getRb().getString("addStockTitle"));
 									// Selecciona metodo manual o automatico
 									System.out.println(
-										menu.getRb().getString("input_autoLoad") );
+											menu.getRb().getString("input_autoLoad"));
 									inputResponse = new Scanner(System.in).nextLine();
 									if (inputResponse.equalsIgnoreCase("S")) {
 										System.out.println(
-											menu.getRb().getString("input_fileName") );
+												menu.getRb().getString("input_fileName"));
 										nombreFichero = new Scanner(System.in).nextLine();
 										try (DataInputStream dis = new DataInputStream(
 												new BufferedInputStream(new FileInputStream(nombreFichero)))) {
@@ -200,21 +200,21 @@ public class Controller {
 											}
 										} catch (IOException ioe) {
 											menu.alerta(
-												menu.getRb().getString("alert_fileError"), ioe);
+													menu.getRb().getString("alert_fileError"), ioe);
 										}
 									} else {
 										menu.titulo(
-											menu.getRb().getString("addStockTitle2") );
+												menu.getRb().getString("addStockTitle2"));
 										System.out.print(
-											menu.getRb().getString("input_id") );
+												menu.getRb().getString("input_id"));
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto == null) {
 											menu.alerta(
-												menu.getRb().getString("alert_productNotExist"), "");
+													menu.getRb().getString("alert_productNotExist"), "");
 										} else {
-											System.out.println( menu.getRb().getString("info_addProductStock") +
-												"(" + idproduct + ") " + producto.getNombre());
+											System.out.println(menu.getRb().getString("info_addProductStock") +
+													"(" + idproduct + ") " + producto.getNombre());
 											int addStock = new Scanner(System.in).nextInt();
 											producto.putStock(addStock);
 
@@ -224,10 +224,10 @@ public class Controller {
 									break;
 								case 7: // Quitar stock
 									menu.titulo(
-										menu.getRb().getString("removeStockTitle") );
+											menu.getRb().getString("removeStockTitle"));
 									// Selecciona metodo manual o automatico
 									System.out.println(
-										menu.getRb().getString("input_autoLoad") );
+											menu.getRb().getString("input_autoLoad"));
 									inputResponse = new Scanner(System.in).nextLine();
 
 									if (inputResponse.equalsIgnoreCase("S")) {
@@ -247,17 +247,18 @@ public class Controller {
 										}
 									} else {
 										System.out.print(
-            								menu.getRb().getString("input_id") );
+												menu.getRb().getString("input_id"));
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto == null) {
 											menu.alerta(
-												menu.getRb().getString("alert_productNotExist"), producto);
+													menu.getRb().getString("alert_productNotExist"), producto);
 										} else {
 											int takeStock = -1;
 											do {
 												System.out
-														.println(menu.getRb().getString("info_removeProductStock") + "(" + producto.getId() + ") "
+														.println(menu.getRb().getString("info_removeProductStock") + "("
+																+ producto.getId() + ") "
 																+ producto.getNombre());
 												takeStock = new Scanner(System.in).nextInt();
 												try {
@@ -273,45 +274,45 @@ public class Controller {
 												prodDAO.modifyProduct(producto);
 											} else {
 												menu.alerta(
-													menu.getRb().getString("alert_fileError"), producto);
+														menu.getRb().getString("alert_fileError"), producto);
 											}
 										}
 									}
 									break;
 								case 8: // Mantenimiento de productos
 									menu.titulo(
-										menu.getRb().getString("productoOrderTitle") );	
+											menu.getRb().getString("productoOrderTitle"));
 									System.out.print(
-										menu.getRb().getString("input_fileName") );
+											menu.getRb().getString("input_fileName"));
 									nombreFichero = new Scanner(System.in).nextLine();
 									DataOutputStream dos = new DataOutputStream(
 											new BufferedOutputStream(new FileOutputStream(nombreFichero)));
 									do {
 										// Obtener datos
 										System.out.print(
-											menu.getRb().getString("input_id") );
+												menu.getRb().getString("input_id"));
 										idproduct = new Scanner(System.in).nextInt();
 										producto = prodDAO.search(idproduct);
 										if (producto != null) {
 											System.out.print(
-												menu.getRb().getString("input_amount") );
+													menu.getRb().getString("input_amount"));
 											stock = new Scanner(System.in).nextInt();
 											// keyboard.nextLine();
 											dos.writeInt(idproduct);
 											dos.writeInt(stock);
 										} else {
 											menu.alerta(
-												menu.getRb().getString("alert_productNotExist"), "");
+													menu.getRb().getString("alert_productNotExist"), "");
 										}
 										System.out.println(
-											menu.getRb().getString("input_continue") );
+												menu.getRb().getString("input_continue"));
 										inputResponse = new Scanner(System.in).nextLine();
 									} while (inputResponse.equalsIgnoreCase("S"));
 									dos.close();
 									break;
 								case 9: // Catálogo
 									menu.titulo(
-										menu.getRb().getString("showCatalogueTitle") );
+											menu.getRb().getString("showCatalogueTitle"));
 									// Pedir fecha o pulsar tecla si es dia de hoy
 									LocalDate fecha = prodDAO.pedirFecha("fromDate").get(0);
 									// Mostrar productos descatalogados
@@ -321,7 +322,7 @@ public class Controller {
 									break;
 								default:
 									menu.alerta(
-										menu.getRb().getString("alert_wrongOption"), "");
+											menu.getRb().getString("alert_wrongOption"), "");
 									break;
 							}
 							if (option2 != 0)
@@ -350,7 +351,7 @@ public class Controller {
 		} finally {
 			ProductDAO.guardarFichero();
 			menu.sistema(
-				menu.getRb().getString("info_save_ok") );
+					menu.getRb().getString("info_save_ok"));
 			menu.mostrar("productos", prodDAO);
 		}
 	}
@@ -361,22 +362,22 @@ public class Controller {
 	public void empleados() {
 		int option = menu.show("empleados");
 		System.out.print(
-			menu.getRb().getString("input_id") );
+				menu.getRb().getString("input_id"));
 		int idEmpleado = new Scanner(System.in).nextInt();
 		switch (option) {
 			case 1: // Fichar entrada
 				menu.sistema(
-					menu.getRb().getString("employeeEntryTitle") );
+						menu.getRb().getString("employeeEntryTitle"));
 				presenciaDAO.ficharEntrada(idEmpleado);
 				break;
 			case 2: // Fichar salida
 				menu.sistema(
-					menu.getRb().getString("employeeExitTitle") );
+						menu.getRb().getString("employeeExitTitle"));
 				presenciaDAO.ficharSalida(idEmpleado);
 				break;
 			case 3: // Consultar
 				menu.sistema(
-					menu.getRb().getString("employeeConsultTitle") );
+						menu.getRb().getString("employeeConsultTitle"));
 				presenciaDAO.consultaDia(idEmpleado);
 				break;
 			default:
@@ -422,7 +423,7 @@ public class Controller {
 						Client client = (Client) clie.search(idperson);
 						System.out.println(client.toString());
 					} else {
-						menu.alerta("El cliente no existe","");
+						menu.alerta("El cliente no existe", "");
 					}
 					break;
 				case 3: // Modificar cliente
@@ -540,7 +541,7 @@ public class Controller {
 						Supplier proveidor = (Supplier) prov.search(idperson);
 						System.out.println(proveidor.toString());
 					} else {
-						menu.alerta("El proveedor no existeix","");
+						menu.alerta("El proveedor no existeix", "");
 					}
 					break;
 				case 4: // Eliminar proveedor
@@ -560,5 +561,5 @@ public class Controller {
 				menu.pulsaParaContinuar();
 		} while (option2 != 0);
 	}
-	
+
 }

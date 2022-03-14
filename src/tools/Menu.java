@@ -16,96 +16,135 @@ import dao.ProductDAO;
  */
 public class Menu {
 
-    private Locale localeDisplay;
-    private static ResourceBundle rb;
+	private Locale localeDisplay;
+	private static ResourceBundle rb;
 
-    public Menu(){
-       this.localeDisplay = Locale.getDefault(Category.DISPLAY); 
-       this.rb = ResourceBundle.getBundle("i18n/Texts", localeDisplay); // Fetch data from this property
-    }
+	public Menu() {
+		this.localeDisplay = Locale.getDefault(Category.DISPLAY);
+		this.rb = ResourceBundle.getBundle("i18n/Texts", localeDisplay); // Fetch data from this property
+		System.out.println(localeDisplay);
+	}
 
-    public Locale getLocaleDisplay() {
-        return localeDisplay;
-    }
+	public Locale getLocaleDisplay() {
+		return localeDisplay;
+	}
 
-    public void setLocaleDisplay(Locale localeDisplay) {
-        this.localeDisplay = localeDisplay;
-    }
+	public void setLocaleDisplay(Locale localeDisplay) {
+		this.localeDisplay = localeDisplay;
+	}
 
-    public ResourceBundle getRb() {
-        return rb;
-    }
+	public ResourceBundle getRb() {
+		return rb;
+	}
 
-    public void setRb(ResourceBundle rb) {
-        this.rb = rb;
-    }
+	public void setRb(ResourceBundle rb) {
+		this.rb = rb;
+	}
 
 	////////////////////////////////////////////////////////////////////////
 	// VISTA
-	//////////    
-    public int show(String type) {
+	//////////
+	public int show(String type) {
 		Scanner sc = new Scanner(System.in);
 		int seleccion;
 		switch (type) {
 			case "inicial":
-				titulo("BOTIGA");
+				titulo(
+						getRb().getString("botigaTitle"));
 				System.out.println("+----+");
-				System.out.println("1. Productos");
-				System.out.println("2. Clientes");
-				System.out.println("3. Proveedores");
-				System.out.println("4. Empleados");
+				System.out.println(
+						getRb().getString("ppal_productOption"));
+				System.out.println(
+						getRb().getString("ppal_clientOption"));
+				System.out.println(
+						getRb().getString("ppal_providerOption"));
+				System.out.println(
+						getRb().getString("ppal_employeeOption"));
 				break;
 			case "productos":
-				titulo("PRODUCTOS/PACKS < BOTIGA");
+				titulo(
+						getRb().getString("prodTitle"));
 				System.out.println("+----------------+");
-				System.out.println("1. Agregar");
-				System.out.println("2. Buscar");
-				System.out.println("3. Modificar producto");
-				System.out.println("4. Eliminar");
-				System.out.println("5. Mostrar productos");
-				System.out.println("6. Agregar stock");
-				System.out.println("7. Quitar stock");
-				System.out.println("8. Mantenimiento de producto");
-				System.out.println("9. Mostrar descatalogados");
+				System.out.println(
+						getRb().getString("comm_add_option"));
+				System.out.println(
+						getRb().getString("comm_search_option"));
+				System.out.println(
+						getRb().getString("comm_modify_option"));
+				System.out.println(
+						getRb().getString("comm_delete_option"));
+				System.out.println(
+						getRb().getString("comm_show_option"));
+				System.out.println(
+						getRb().getString("prod_AddStock_option"));
+				System.out.println(
+						getRb().getString("prod_DelStock_option"));
+				System.out.println(
+						getRb().getString("prod_ManageProd_option"));
+				System.out.println(
+						getRb().getString("prod_ShowDiscontinued_option"));
 				break;
 			case "clientes":
-				titulo("CLIENTES < BOTIGA");
+				titulo(
+						getRb().getString("clientsTitle"));
 				System.out.println("+----------------+");
-				System.out.println("1. Agregar");
-				System.out.println("2. Buscar");
-				System.out.println("3. Modificar");
-				System.out.println("4. Eliminar");
-				System.out.println("5. Mostrar todo");
+				System.out.println(
+						getRb().getString("comm_add_option"));
+				System.out.println(
+						getRb().getString("comm_search_option"));
+				System.out.println(
+						getRb().getString("comm_modify_option"));
+				System.out.println(
+						getRb().getString("comm_delete_option"));
+				System.out.println(
+						getRb().getString("comm_show_option"));
 				break;
 			case "proveedores":
-				titulo("PROVEEDORES < BOTIGA");
+				titulo(
+						getRb().getString("providersTitle") );
 				System.out.println("+----------------+");
-				System.out.println("1. Agregar");
-				System.out.println("2. Buscar");
-				System.out.println("3. Modificar");
-				System.out.println("4. Eliminar");
-				System.out.println("5. Mostrar todo");
+				System.out.println(
+						getRb().getString("comm_add_option"));
+				System.out.println(
+						getRb().getString("comm_search_option"));
+				System.out.println(
+						getRb().getString("comm_modify_option"));
+				System.out.println(
+						getRb().getString("comm_delete_option"));
+				System.out.println(
+						getRb().getString("comm_show_option"));
 				break;
 			case "empleados":
-				titulo("EMPLEADOS < BOTIGA");
+				titulo(
+						getRb().getString("employeeTitle"));
 				System.out.println("+----------------+");
-				System.out.println("1. Fichar entrada");
-				System.out.println("2. Fichar salida");
-				System.out.println("3. Consultar");
+				System.out.println(
+						getRb().getString("empl_entry_option"));
+				System.out.println(
+						getRb().getString("empl_exit_option"));
+				System.out.println(
+						getRb().getString("empl_search_option"));
 				break;
 			case "MOSTRAR PRODUCTOS":
-				titulo("MOSTRAR PRODUCTOS");
-				System.out.println("1. ID");
-				System.out.println("2. Nombre");
-				System.out.println("3. Precio");
-				System.out.println("4. Stock");
+				titulo(
+						getRb().getString("showProductTitle"));
+				System.out.println(
+						getRb().getString("showProd_ID_option"));
+				System.out.println(
+						getRb().getString("showProd_Name_option"));
+				System.out.println(
+						getRb().getString("showProd_ID_option"));
+				System.out.println(
+						getRb().getString("showProd_ID_option"));
 				break;
 			default:
 				break;
 		}
-		System.out.println("0. Salir");
+		System.out.println(
+				getRb().getString("comm_exit"));
 		System.out.println("+------------------------------------------------+");
-		System.out.print("Selección: ");
+		System.out.print(
+				getRb().getString("input_select"));
 		seleccion = sc.nextInt();
 		sc.nextLine();
 		System.out.println("");
@@ -131,7 +170,7 @@ public class Menu {
 	}
 
 	public void titulo(String texto) {
-		System.out.println(TEXT_PURPLE + rb.getString("botigaTitle") + TEXT_RESET);
+		System.out.println(TEXT_PURPLE + texto + TEXT_RESET);
 	}
 
 	public void alerta(String texto, Object obj) {
@@ -143,7 +182,7 @@ public class Menu {
 	}
 
 	public void pulsaParaContinuar() throws IOException {
-		System.out.println(TEXT_CYAN + "Pulsa para continuar..." + TEXT_RESET);
+		System.out.println(TEXT_CYAN + getRb().getString("input_pressContinue") + TEXT_RESET);
 		System.in.read();
 	}
 
