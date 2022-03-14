@@ -231,8 +231,8 @@ public class ProductDAO<T> implements Persistable<T> {
             } else {
                 System.out.println(
                         product.getId() + "\t" +
-                        product.getPrecio() + "\t" +
-                        product.getStock() + "\t" +
+                        formateoPrecio( product.getPrecio() ) + "\t" +
+                        formateoEntero( product.getStock() ) + "\t" +
                         product.getNombre() + "\t" +
                         product.getFechaInicial() + " > " +
                         product.getFechaFinal());
@@ -247,9 +247,9 @@ public class ProductDAO<T> implements Persistable<T> {
             for (Pack pack : listaPacks) {
                 System.out.println(
                         pack.getId() + "\t" +
-                                formateoPrecio(pack.getPrecio()) + "\t" +
-                                formateoEntero(pack.getStock()) + " u\t" +
-                                formateoPorcentaje(pack.getDescuento()) + "\t\t" +
+                                formateoPrecio( pack.getPrecio() ) + "\t" +
+                                formateoEntero( pack.getStock() ) + " u\t" +
+                                formateoPorcentaje( pack.getDescuento() ) + "\t\t" +
                                 pack.getNombre() + "\t" +
                                 pack.getProductos());
             }
