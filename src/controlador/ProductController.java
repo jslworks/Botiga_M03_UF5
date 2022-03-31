@@ -10,10 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.bo.Product;
 import model.dao.ProductDAO;
@@ -38,6 +40,8 @@ public class ProductController{
 	@FXML private TextField stockTF;
 	@FXML private DatePicker fechaInicioDP;
 	@FXML private DatePicker fechaFinalDP;
+	@FXML private CheckBox packCB;
+	@FXML private AnchorPane packAP;
 
 	// Con esto conseguiremos validar los datos introducidos
 	private ValidationSupport vs;
@@ -54,6 +58,9 @@ public class ProductController{
 		vs.registerValidator(nombreTF, true, Validator.createEmptyValidator("Nom obligatori"));
 		vs.registerValidator(precioTF, true, Validator.createRegexValidator("Preu ha de ser un número", "\\d*", Severity.ERROR));
 		vs.registerValidator(stockTF, true, Validator.createRegexValidator("Stock ha de ser un número", "\\d*", Severity.ERROR));
+		
+		stockTF.setEditable(false);
+		hidePack(true);
 	}
 
 	public Stage getVentana() {
@@ -84,18 +91,20 @@ public class ProductController{
 	}
 	 
 	@FXML private void onSaveAction(ActionEvent e) throws IOException {
+		Integer saveStock = stockTF.getText().equals("") ? 0 : Integer.parseInt(stockTF.getText());
 		//verificar si les dades són vàlides				
 		if(isDatosValidos()){
 			producto = new Product(
 					Integer.parseInt(idTF.getText()),
 					nombreTF.getText(),
 					Double.parseDouble(precioTF.getText()),
-					Integer.parseInt(stockTF.getText()),
+					saveStock,
 					fechaInicioDP.getValue(),
 					fechaFinalDP.getValue() );
 
 			// Desactivar stock
-			stockTF.setEditable(false);
+			/*stockTF.setEditable(false);
+			stockTF.setDisable(true);*/
 			
 			productes.save(producto);
 			limpiarFormulario();
@@ -154,6 +163,18 @@ public class ProductController{
 		stockTF.setText("");
 		fechaInicioDP.getEditor().clear();
 		fechaFinalDP.getEditor().clear();
+	}
+	
+	@FXML private void handlePackBox(ActionEvent e) {
+		if(packCB.isSelected())
+			hidePack(false);
+		else
+			hidePack(true);
+	}
+	
+	private void hidePack(boolean action) {
+		packAP.setVisible(!action);
+		packAP.setDisable(action);
 	}
 	
 }

@@ -52,12 +52,12 @@
                                     <TextField fx:id="stockTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <DatePicker fx:id="fechaInicioDP" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                     <DatePicker fx:id="fechaFinalDP" layoutX="91.0" layoutY="120.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                    <CheckBox mnemonicParsing="false" text="Pack" GridPane.rowIndex="6" />
+                                    <CheckBox fx:id="packCB" mnemonicParsing="false" onAction="#handlePackBox" text="Pack" GridPane.rowIndex="6" />
                                  </children>
                               </GridPane>
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                      <AnchorPane fx:id="packAP" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
                               <GridPane prefHeight="190.0" prefWidth="780.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="5.0">
                                 <columnConstraints>
