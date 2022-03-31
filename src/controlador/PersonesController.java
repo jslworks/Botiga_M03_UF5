@@ -13,8 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import model.Persona;
-import model.PersonesDAO;
+import model.bo.Persona;
+import model.dao.PersonesDAO;
 
 public class PersonesController{
 

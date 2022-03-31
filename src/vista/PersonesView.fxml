@@ -24,10 +24,10 @@
         </rowConstraints>
          <children>
             <Label prefHeight="15.0" prefWidth="81.0" text="ID" />
-            <Label text="%lbl.name" GridPane.rowIndex="1" />
-            <Label text="%lbl.lastName" GridPane.rowIndex="2" />
+            <Label text="%label.name" GridPane.rowIndex="1" />
+            <Label text="%label.name" GridPane.rowIndex="2" />
             <Label text="E-mail" GridPane.rowIndex="3" />
-            <Label prefHeight="15.0" prefWidth="61.0" text="Telefon" GridPane.rowIndex="4" />
+            <Label prefHeight="15.0" prefWidth="61.0" text="%label.phone" GridPane.rowIndex="4" />
             <TextField fx:id="idTextField" onKeyPressed="#onKeyPressedId" GridPane.columnIndex="1" />
             <TextField fx:id="nomTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="cognomsTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -35,8 +35,8 @@
             <TextField fx:id="telefonTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
-      <Button layoutX="345.0" layoutY="240.0" mnemonicParsing="false" onAction="#onActionGuardar" text="Guardar" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="345.0" AnchorPane.rightAnchor="203.0" AnchorPane.topAnchor="240.0" />
-      <Button layoutX="451.0" layoutY="240.0" mnemonicParsing="false" onAction="#onActionEliminar" text="Eliminar" />
-      <Button layoutX="566.0" layoutY="240.0" mnemonicParsing="false" onAction="#onActionSortir" text="Sortir" />
+      <Button layoutX="293.0" layoutY="241.0" mnemonicParsing="false" onAction="#onActionGuardar" text="%button.save" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="293.0" AnchorPane.rightAnchor="255.0" AnchorPane.topAnchor="241.0" />
+      <Button layoutX="401.0" layoutY="241.0" mnemonicParsing="false" onAction="#onActionEliminar" text="%button.delete" />
+      <Button layoutX="534.0" layoutY="241.0" mnemonicParsing="false" onAction="#onActionSortir" text="%button.exit" />
    </children>
 </AnchorPane>

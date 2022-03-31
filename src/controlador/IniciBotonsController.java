@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import model.bo.Boton;
 
 public class IniciBotonsController extends Application {
 
@@ -21,6 +22,7 @@ public class IniciBotonsController extends Application {
 	
 	//Injecció dels panells i controls de la UI definida al fitxer fxml
 	@FXML private Button btnPersones;
+	/*@FXML private Button btnProducts;*/
 	@FXML private Button btnSortir; 
 
 	@Override
@@ -39,21 +41,31 @@ public class IniciBotonsController extends Application {
 		
 		//Li assigna la escena a la finestra inicial (primaryStage) i la mostra
 		primaryStage.setScene(fm_inici);
-		primaryStage.setTitle(texts.getString("title.agenda"));
+		primaryStage.setTitle(texts.getString("title.shop"));
 		primaryStage.show();
        
 	}
 
 	@FXML
 	private void onAction(ActionEvent e) throws Exception {
-		if(e.getSource() == btnPersones){//verifica si el botón es igual al que llamo al evento	
-			changeScene("/vista/PersonesView.fxml", "Persones");
-		}else if(e.getSource() == btnSortir){
-			Platform.exit();
+		Button btn = (Button) e.getSource();
+		
+		switch (btn.getId()) {
+			case "btnPersones":	
+				changeScene("/vista/PersonesView.fxml", Boton.Persona);
+				break;
+			/*case "btnProducts":
+				changeScene("/vista/ProductsView.fxml", Boton.Producto);
+				break;*/
+			case "btnSortir":
+				Platform.exit();
+				break;
+			default:
+				break;
 		}
 	}
 	
-	private void changeScene(String path, String title) throws IOException {
+	private void changeScene(String path, Boton title) throws IOException {
 		//Carrega el fitxer amb la interficie d'usuari
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
 		
@@ -63,11 +75,10 @@ public class IniciBotonsController extends Application {
 		//fins aquí tot igual, només falta assignar el fitxer de recursos al formulari
 		loader.setResources(texts);
 		
-		
 		//Crea una nova finestra i l'obre 
 		Stage stage = new Stage();
 		Scene fm_scene = new Scene(loader.load());
-		stage.setTitle(title);
+		stage.setTitle(title.toString());
 		stage.setScene(fm_scene);
 		stage.show();
 		

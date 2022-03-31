@@ -1,4 +1,4 @@
-package model;
+package model.dao;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,43 +7,46 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.TreeMap;
+
+import model.bo.Persona;
+import model.bo.Product;
 /**
  * Clase per gestionar la persistència de les dades de les persones
  * @author manuel
  *
  */
-public class PersonesDAO {
+public class ProductDAO {
 
-	private TreeMap<Integer, Persona> persones = new TreeMap<Integer,Persona>();
-
-	public boolean save(Persona persona){
-		persones.put(persona.getId(), persona);
+	private TreeMap<Integer, Product> mapaProductos = new TreeMap<>();
+	
+	public boolean save(Product producto){
+		mapaProductos.put(producto.getId(), producto);
 		return true;
 	}
 
 	public boolean delete(Integer id){
 
-		if (persones.containsKey(id)){
-			persones.remove(id);
+		if (mapaProductos.containsKey(id)){
+			mapaProductos.remove(id);
 			return true;
 		}
 
 		return false;
 	}
 
-	public Persona find(Integer id){
+	public Product find(Integer id){
 
 		if (id == null || id == 0){
 			return null;
 		}
 
-		return persones.get(id);
+		return mapaProductos.get(id);
 	}
 
 	public void saveAll(){
 
 		try (ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream("personas.dat"))) {
-			oo.writeObject(persones);
+			oo.writeObject(mapaProductos);
 		} catch (IOException e) {
 			System.out.println("Error escribiendo fichero");
 		}
@@ -53,10 +56,10 @@ public class PersonesDAO {
 	@SuppressWarnings("unchecked")
 	public void openAll(){
 
-		File file = new File("personas.dat");
+		File file = new File("productos.dat");
 		if (file.exists()) {
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
-				persones = (TreeMap<Integer, Persona>) ois.readObject();
+				mapaProductos = (TreeMap<Integer, Product>) ois.readObject();
 			} catch (Exception e) {
 				System.out.println("Error leyendo fichero");
 			}
@@ -66,11 +69,11 @@ public class PersonesDAO {
 	public void showAll(){
 
 		System.out.println("-------------------");
-		System.out.println("Todas los personas");
+		System.out.println("Todos los productos");
 		System.out.println("-------------------");
 		
-		for (Persona persona : persones.values()) {
-		    persona.imprimir();
+		for (Product producto : mapaProductos.values()) {
+		    System.out.println(producto);
 		    System.out.println("-------------------");
 		}
 	}
