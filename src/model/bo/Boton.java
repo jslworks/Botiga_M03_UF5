@@ -1,5 +1,5 @@
 package model.bo;
 
 public enum Boton {
-	Persona, Producto, Cliente, Proveedor
+	Persona, Producto, Cliente, Proveedor, Presencia
 }

@@ -21,9 +21,9 @@ public class IniciBotonsController extends Application {
 	private ResourceBundle texts;
 	
 	//Injecció dels panells i controls de la UI definida al fitxer fxml
-	@FXML private Button btnPersones;
-	/*@FXML private Button btnProducts;*/
-	@FXML private Button btnSortir; 
+	@FXML private Button personButton;
+	@FXML private Button productButton;
+	@FXML private Button exitButton; 
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
@@ -51,13 +51,13 @@ public class IniciBotonsController extends Application {
 		Button btn = (Button) e.getSource();
 		
 		switch (btn.getId()) {
-			case "btnPersones":	
+			case "personButton":	
 				changeScene("/vista/PersonesView.fxml", Boton.Persona);
 				break;
-			/*case "btnProducts":
+			case "productButton":
 				changeScene("/vista/ProductsView.fxml", Boton.Producto);
-				break;*/
-			case "btnSortir":
+				break;
+			case "exitButton":
 				Platform.exit();
 				break;
 			default:
@@ -82,15 +82,24 @@ public class IniciBotonsController extends Application {
 		stage.setScene(fm_scene);
 		stage.show();
 		
+		switch(title.toString()) {
+			case "Persona":
+				PersonesController personasControler = loader.getController();
+				personasControler.setVentana(stage);
+				
+				//Programem l'event que s'executará quan es tanqui la finestra
+				stage.setOnCloseRequest((WindowEvent we) -> {
+					personasControler.sortir();
+				});
+				break;
+			case "Producto":
+				
+				break;
+		}
+		
 		/************** Modificar ************/
 		//Crear un objecte de la clase PersonasController ja que necessitarem accedir al mètodes d'aquesta classe
-		PersonesController personasControler = loader.getController();
-		personasControler.setVentana(stage);
 		
-		//Programem l'event que s'executará quan es tanqui la finestra
-		stage.setOnCloseRequest((WindowEvent we) -> {
-			personasControler.sortir();
-		});
 	}
 	
 	public static void main(String[] args) {
