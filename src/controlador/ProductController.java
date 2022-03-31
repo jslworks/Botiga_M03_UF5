@@ -32,40 +32,28 @@ public class ProductController{
 	private Stage ventana;
 
 	// Elementos TableView y contenidos para su gestion
-	@FXML
-	private TextField idTF;
-	@FXML
-	private TextField nombreTF;
-	@FXML
-	private TextField precioTF;
-	@FXML
-	private TextField stockTF;
-	@FXML
-	private DatePicker fechaInicioDP;
-	@FXML
-	private DatePicker fechaFinalDP;
+	@FXML private TextField idTF;
+	@FXML private TextField nombreTF;
+	@FXML private TextField precioTF;
+	@FXML private TextField stockTF;
+	@FXML private DatePicker fechaInicioDP;
+	@FXML private DatePicker fechaFinalDP;
 
 	// Con esto conseguiremos validar los datos introducidos
 	private ValidationSupport vs;
 
-	@FXML
-	private void initialize() {
+	@FXML private void initialize() {
 		productes = new ProductDAO();
 		productes.openAll();
 
-		// Validació dades
-		// https://github.com/controlsfx/controlsfx/issues/1148
-		// produeix error si no posem a les VM arguments això:
-		// --add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED
+		//Validació dades
+		//https://github.com/controlsfx/controlsfx/issues/1148
+		//produeix error si no posem a les VM arguments això: --add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED
 		vs = new ValidationSupport();
-		/*
 		vs.registerValidator(idTF, true, Validator.createEmptyValidator("ID obligatori"));
 		vs.registerValidator(nombreTF, true, Validator.createEmptyValidator("Nom obligatori"));
-		vs.registerValidator(precioTF, true,
-				Validator.createRegexValidator("Preu ha de ser un número", "\\d*", Severity.ERROR));
-		vs.registerValidator(stockTF, true,
-				Validator.createRegexValidator("Preu ha de ser un número", "\\d*", Severity.ERROR));
-		*/
+		vs.registerValidator(precioTF, true, Validator.createRegexValidator("Preu ha de ser un número", "\\d*", Severity.ERROR));
+		vs.registerValidator(stockTF, true, Validator.createRegexValidator("Stock ha de ser un número", "\\d*", Severity.ERROR));
 	}
 
 	public Stage getVentana() {
@@ -76,10 +64,9 @@ public class ProductController{
 		this.ventana = ventana;
 	}
 
-	@FXML
-	private void onKeyPressedId(KeyEvent e) throws IOException {
+	@FXML private void onKeyPressedId(KeyEvent e) throws IOException {
 
-		if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.TAB) {
+		if ((e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.TAB)) {
 			// Comprovar si existeix la persona indicada en el control idTextField
 			producto = productes.find(Integer.parseInt(idTF.getText()));
 			if (producto != null) {
@@ -96,7 +83,7 @@ public class ProductController{
 		}
 	}
 	 
-	@FXML private void onActionGuardar(ActionEvent e) throws IOException {
+	@FXML private void onSaveAction(ActionEvent e) throws IOException {
 		//verificar si les dades són vàlides				
 		if(isDatosValidos()){
 			producto = new Product(
@@ -107,13 +94,16 @@ public class ProductController{
 					fechaInicioDP.getValue(),
 					fechaFinalDP.getValue() );
 
+			// Desactivar stock
+			stockTF.setEditable(false);
+			
 			productes.save(producto);
 			limpiarFormulario();
 			productes.showAll();
 		}
 	}
 
-	@FXML private void onActionEliminar(ActionEvent e) throws IOException {
+	@FXML private void onDeleteAction(ActionEvent e) throws IOException {
 
 		if(isDatosValidos()){
 			if(productes.delete(Integer.parseInt(idTF.getText()))){
@@ -123,14 +113,12 @@ public class ProductController{
 		}
 	}
 
-	@FXML private void onActionSortir(ActionEvent e) throws IOException {
+	@FXML private void onExitAction(ActionEvent e) throws IOException {
 
 		sortir();
 
 		ventana.close();
 	}
-
-
 
 	public void sortir(){
 		productes.saveAll();
@@ -152,9 +140,7 @@ public class ProductController{
 		
 			return false;
 		}
-
 		return true;
-
 	}
 
 	private void limpiarFormulario(){
