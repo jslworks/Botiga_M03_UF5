@@ -83,23 +83,25 @@ public class IniciBotonsController extends Application {
 		stage.show();
 		
 		switch(title.toString()) {
-			case "Persona":
-				PersonesController personasControler = loader.getController();
-				personasControler.setVentana(stage);
-				
-				//Programem l'event que s'executará quan es tanqui la finestra
-				stage.setOnCloseRequest((WindowEvent we) -> {
-					personasControler.sortir();
-				});
-				break;
-			case "Producto":
-				
-				break;
-		}
-		
-		/************** Modificar ************/
-		//Crear un objecte de la clase PersonasController ja que necessitarem accedir al mètodes d'aquesta classe
-		
+		case "Persona":
+			//Crear un objecte de la clase PersonasController ja que necessitarem accedir al mètodes d'aquesta classe
+			PersonesController personasControler = loader.getController();
+			personasControler.setVentana(stage);
+			
+			//Programem l'event que s'executará quan es tanqui la finestra
+			stage.setOnCloseRequest((WindowEvent we) -> {
+				personasControler.sortir();
+			});
+			break;
+		case "Producto":
+			ProductController productController = loader.getController();
+			productController.setVentana(stage);
+			
+			stage.setOnCloseRequest((WindowEvent we) -> {
+				productController.sortir();
+			});
+			break;
+	}
 	}
 	
 	public static void main(String[] args) {

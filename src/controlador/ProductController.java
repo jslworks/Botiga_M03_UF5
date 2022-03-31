@@ -58,12 +58,14 @@ public class ProductController{
 		// produeix error si no posem a les VM arguments això:
 		// --add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED
 		vs = new ValidationSupport();
+		/*
 		vs.registerValidator(idTF, true, Validator.createEmptyValidator("ID obligatori"));
 		vs.registerValidator(nombreTF, true, Validator.createEmptyValidator("Nom obligatori"));
 		vs.registerValidator(precioTF, true,
 				Validator.createRegexValidator("Preu ha de ser un número", "\\d*", Severity.ERROR));
 		vs.registerValidator(stockTF, true,
 				Validator.createRegexValidator("Preu ha de ser un número", "\\d*", Severity.ERROR));
+		*/
 	}
 
 	public Stage getVentana() {
