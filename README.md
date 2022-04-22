@@ -52,13 +52,12 @@ La distribución de proyecto está basada en el modelo MVC y sería la siguiente
 </ul>
 <li>lib: almacena las dependencias</li>
 <li>bin: guarda ficheros para ejecutar</li>
-
-Dentro del src, en las vistas encontraremos también los ficheros de idiomas.
-El modelo está formado por un gestor DAO (objetos de acceso de datos) y las clases que guardan datos, los BO (objetos de negocio).
-
+<br>
+<p> Dentro del src, en las vistas encontraremos también los ficheros de idiomas.</p> 
+<p>El modelo está formado por un gestor DAO (objetos de acceso de datos) y las clases que guardan datos, los BO (objetos de negocio).</p> 
 <img src="./img/estructura/estructura.png" alt="estructura de proyecto">
 
- ## Webgrafia 
+## Webgrafia 
 <ul>
 <li>Eclipse https://www.eclipse.org/downloads/</li>
 <li> Openjdk 17 o 18</li>
