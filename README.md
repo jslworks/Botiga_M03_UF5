@@ -19,7 +19,7 @@ El aplicativo consiste en una tienda dónde se pueden gestionar Personas y Produ
 ### Eclipse y JDK
 Para desarrollar vamos a utilizar el entorno de eclipse, configuraremos las dependencias y el modo de ejecución adecuado para correr JavaFX. 
 1. Instalamos eclipse a través de su página oficial ( https://www.eclipse.org/downloads/ )
-2.Luego descargamos el SDK que se ejecutará desde eclipse.
+2. Luego descargamos el SDK que se ejecutará desde eclipse.
 <img src="./img/install/1.sdk.png" alt="sdk">
 3. Una vez hecho, entramos en Eclipse y vamoss al Market para instalar la extensión de FX
 <img src="./img/install/2.extensionFX.png" alt="extensionFX">
