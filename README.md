@@ -2,7 +2,7 @@
 
 ## Contenidos
 - [Introduccion](#Introduccion)
-- [Instalacion y configuracion](#Instalacion)
+- [Instalacion y configuracion](#Instalacion-y-configuracion)
 - [Estructura](#Estructura)
 - [Desarrollo](#Desarrollo)
 - [Webgrafia](#Webgrafia)
