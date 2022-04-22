@@ -57,3 +57,16 @@ Dentro del src, en las vistas encontraremos también los ficheros de idiomas.
 El modelo está formado por un gestor DAO (objetos de acceso de datos) y las clases que guardan datos, los BO (objetos de negocio).
 
 <img src="./img/estructura/estructura.png" alt="estructura de proyecto">
+
+ ## Webgrafia 
+<ul>
+<li>Eclipse https://www.eclipse.org/downloads/</li>
+<li> Openjdk 17 o 18</li>
+<ul>
+<li>https://gluonhq.com/products/javafx/</li>
+<li>https://download2.gluonhq.com/openjfx/18/openjfx-18_linux-x64_bin-sdk.zip</li>
+<li>https://openjdk.java.net/install/</li>
+</ul>
+<li>Librería librería org.controlsfx.org https://repo1.maven.org/maven2/org/controlsfx/controlsfx/11.1.1/controlsfx-11.1.1.jar/</li>
+<li>SceneBuilder</li>
+<ul>
