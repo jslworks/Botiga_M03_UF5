@@ -2,7 +2,7 @@
 
 ## Contenidos
 - [Introduccion](#Introduccion)
-- [Instalacion](#Instalacion)
+- [Instalacion](#Instalacion y configuracion)
 - [Estructura](#Estructura)
 - [Desarrollo](#Desarrollo)
 - [Webgrafia](#Webgrafia)
@@ -15,7 +15,7 @@ El aplicativo consiste en una tienda dónde se pueden gestionar Personas y Produ
 <img src="./img/intro/2-persona.png" alt="persona">
 <img src="./img/intro/3-producto-pack.png" alt="Producto_pack">
 
-## Instalacion y configuración
+## Instalacion y configuracion
 ### Eclipse y JDK
 Para desarrollar vamos a utilizar el entorno de eclipse, configuraremos las dependencias y el modo de ejecución adecuado para correr JavaFX. 
 1. Instalamos eclipse a través de su página oficial ( https://www.eclipse.org/downloads/ )
