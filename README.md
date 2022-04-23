@@ -66,7 +66,7 @@ Por último, se mostrará cómo se internacionaliza la aplicación. </p>
 ### Vista 
 #### Inicio 
 <p> Se compone por una base que es el AnchorPane de la cual se monta en un GridPane) y se posicionan 3 botones, uno para gestionar personas, otro para productos y, el último, para salir del aplicativo.</p> 
-<img src="./img/dev/vista-inici-caracteristicas.png" alt="estructuración de la vista">
+<img src="./img/dev/vista-inici-estructura.png" alt="estructuración de la vista">
 <p> Cada elemento tiene varias características. Cogiendo como ejemplo el botón Productos, tenemos 3 secciones:</p> 
 <ul>
 <li> Properties : maneja identificador o texto a mostrar, el estilo de texto… </li>
@@ -77,7 +77,7 @@ Por último, se mostrará cómo se internacionaliza la aplicación. </p>
 <p> fx:id – identifica el elemento para que el controlador pueda reconocerlo </p>
 <p> On Action – cuando realiza una acción sobre este elemento (clicar, dado que es un botón) mandará una señal al controlador asociado </p>
 <br>
-<p> Antes de terminar, abrimos el fichero fxml desde eclipse para asociar la vista al controlador adecuado como se puede ver en la siguiente imagen.
+<p> Antes de terminar, abrimos el fichero fxml desde eclipse para asociar la vista al controlador adecuado como se puede ver en la siguiente imagen.</p>
 <img src="./img/dev/vista-inici-controller.png" alt="asociar controlador a la vista">
 
 ## Webgrafia 
