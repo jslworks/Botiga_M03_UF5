@@ -73,12 +73,12 @@ Por último, se mostrará cómo se internacionaliza la aplicación. </p>
 <li> Code: maneja diferentes eventos o acciones, identificador de código…</li>
 <li> Layout: maneja el estilo de elemento (tamaños, márgenes…)</li>
 </ul> 
-<img src="./img/dev/inici-vista-caracteristicas.png" alt="caracteristicas de la vista">
+<img src="./img/dev/vista-inici-caracteristicas.png" alt="caracteristicas de la vista">
 <p> fx:id – identifica el elemento para que el controlador pueda reconocerlo </p>
 <p> On Action – cuando realiza una acción sobre este elemento (clicar, dado que es un botón) mandará una señal al controlador asociado </p>
 <br>
 <p> Antes de terminar, abrimos el fichero fxml desde eclipse para asociar la vista al controlador adecuado como se puede ver en la siguiente imagen.
-<img src="./img/dev/inici-vista-controller.png" alt="asociar controlador a la vista">
+<img src="./img/dev/vista-inici-controller.png" alt="asociar controlador a la vista">
 
 ## Webgrafia 
 <ul>
