@@ -8,8 +8,8 @@
 - [Webgrafia](#Webgrafia)
 
 ## Introduccion
-Este es un proyecto educativo, como alumno del centro IES Badia, y tiene como objetivo para aprender a utilizar la librería JavaFX. Se considera finalizado
-El aplicativo consiste en una tienda dónde se pueden gestionar Personas y Productos o Packs. Al empezar, se accede a un menú para entrar en una de ellas. En sus pantallas se muestra un formulario para poder crear ya sean Personas o Productos. Más tarde se podría gestionar.
+<p> Este es un proyecto educativo, como alumno del centro IES Badia, y tiene como objetivo para aprender a utilizar la librería JavaFX. Se considera finalizado. </p>
+<p> El aplicativo consiste en una tienda dónde se pueden gestionar Personas y Productos o Packs. Al empezar, se accede a un menú para entrar en una de ellas. En sus pantallas se muestra un formulario para poder crear ya sean Personas o Productos. Más tarde se podría gestionar. </p>
 
 <img src="./img/intro/1-main.png" alt="main">
 <img src="./img/intro/2-persona.png" alt="persona">
@@ -56,6 +56,29 @@ La distribución de proyecto está basada en el modelo MVC y sería la siguiente
 <p> Dentro del src, en las vistas encontraremos también los ficheros de idiomas.</p> 
 <p>El modelo está formado por un gestor DAO (objetos de acceso de datos) y las clases que guardan datos, los BO (objetos de negocio).</p> 
 <img src="./img/estructura/estructura.png" alt="estructura de proyecto">
+
+## Desarrollo
+<p> Se explicará el proceso para crear una vista utilizando SceneBuilder, explicando las nociones básicas necesarias del programa. Mostraremos los identificadores de cada elemento.
+A continuación, asociaremos dicha vista, y sus elementos, con el controlador y mostraremos que métodos y cómo se manejan los eventos.
+Luego, se verá las transacciones de datos entre controlador y modelo y, cómo éste último, maneja los datos.
+Por último, se mostrará cómo se internacionaliza la aplicación. </p>
+
+### Vista 
+#### Inicio 
+<p> Se compone por una base que es el AnchorPane de la cual se monta en un GridPane) y se posicionan 3 botones, uno para gestionar personas, otro para productos y, el último, para salir del aplicativo.</p> 
+<img src="./img/dev/vista-inici-caracteristicas.png" alt="estructuración de la vista">
+<p> Cada elemento tiene varias características. Cogiendo como ejemplo el botón Productos, tenemos 3 secciones:</p> 
+<ul>
+<li> Properties : maneja identificador o texto a mostrar, el estilo de texto… </li>
+<li> Code: maneja diferentes eventos o acciones, identificador de código…</li>
+<li> Layout: maneja el estilo de elemento (tamaños, márgenes…)</li>
+</ul> 
+<img src="./img/dev/inici-vista-caracteristicas.png" alt="caracteristicas de la vista">
+<p> fx:id – identifica el elemento para que el controlador pueda reconocerlo </p>
+<p> On Action – cuando realiza una acción sobre este elemento (clicar, dado que es un botón) mandará una señal al controlador asociado </p>
+<br>
+<p> Antes de terminar, abrimos el fichero fxml desde eclipse para asociar la vista al controlador adecuado como se puede ver en la siguiente imagen.
+<img src="./img/dev/inici-vista-controller.png" alt="asociar controlador a la vista">
 
 ## Webgrafia 
 <ul>
