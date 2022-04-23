@@ -40,7 +40,7 @@ Para desarrollar vamos a utilizar el entorno de eclipse, configuraremos las depe
 ## Estructura
 La distribución de proyecto está basada en el modelo MVC y sería la siguiente:
 <ul>
-<li>src: contiene el código fuente</li>
+<li><em>src</em>: contiene el código fuente</li>
 <ul>
 <li>modelo</li>
 <ul>
@@ -50,8 +50,8 @@ La distribución de proyecto está basada en el modelo MVC y sería la siguiente
 <li>vista</li>
 <li>controlador</li>
 </ul>
-<li>lib: almacena las dependencias</li>
-<li>bin: guarda ficheros para ejecutar</li>
+<li><em>lib</em>: almacena las dependencias</li>
+<li><em>bin</em>: guarda ficheros para ejecutar</li>
 <br>
 <p> Dentro del src, en las vistas encontraremos también los ficheros de idiomas.</p> 
 <p>El modelo está formado por un gestor DAO (objetos de acceso de datos) y las clases que guardan datos, los BO (objetos de negocio).</p> 
@@ -69,13 +69,13 @@ Por último, se mostrará cómo se internacionaliza la aplicación. </p>
 <img src="./img/dev/vista-inici-estructura.png" alt="estructuración de la vista">
 <p> Cada elemento tiene varias características. Cogiendo como ejemplo el botón Productos, tenemos 3 secciones:</p> 
 <ul>
-<li> Properties : maneja identificador o texto a mostrar, el estilo de texto… </li>
-<li> Code: maneja diferentes eventos o acciones, identificador de código…</li>
-<li> Layout: maneja el estilo de elemento (tamaños, márgenes…)</li>
+<li> <em>Properties</em> : maneja identificador o texto a mostrar, el estilo de texto… </li>
+<li> <em>Code</em>: maneja diferentes eventos o acciones, identificador de código…</li>
+<li> <em>Layout</em>: maneja el estilo de elemento (tamaños, márgenes…)</li>
 </ul> 
 <img src="./img/dev/vista-inici-caracteristicas.png" alt="caracteristicas de la vista">
-<p> fx:id – identifica el elemento para que el controlador pueda reconocerlo </p>
-<p> On Action – cuando realiza una acción sobre este elemento (clicar, dado que es un botón) mandará una señal al controlador asociado </p>
+<p> <b>fx:id</b> – identifica el elemento para que el controlador pueda reconocerlo </p>
+<p> <b>On Action</b> – cuando realiza una acción sobre este elemento (clicar, dado que es un botón) mandará una señal al controlador asociado </p>
 <br>
 <p> Antes de terminar, abrimos el fichero fxml desde eclipse para asociar la vista al controlador adecuado como se puede ver en la siguiente imagen.</p>
 <img src="./img/dev/vista-inici-controller.png" alt="asociar controlador a la vista">
